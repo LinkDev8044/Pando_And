@@ -106,29 +106,24 @@ public class AyudaSugerenciaActivity extends AppCompatActivity {
             Integer valueOf;
             Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            String valueOf2 = String.valueOf(calendar.get(1));
-            String valueOf3 = String.valueOf(calendar.get(2) + 1);
-            String valueOf4 = String.valueOf(calendar.get(5));
-            String valueOf5 = String.valueOf(calendar.get(12));
-            String valueOf6 = String.valueOf(calendar.get(13));
+            String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+            String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+            String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+            String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+            String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
             Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
             Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
 
             if (valueOf7.intValue() == 0) {
-                valueOf = Integer.valueOf(valueOf8.intValue() - 12);
+                valueOf = Integer.valueOf(valueOf8.intValue() - 11);
             } else {
                 valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
-                Log.i("Prueba", String.valueOf(valueOf-6));
             }
             try {
                 this.fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
             }
-
-            Log.i("Prueba", String.valueOf(fecha));
-            Log.i("Prueba", String.valueOf(valueOf7));
-            Log.i("Prueba", String.valueOf(valueOf8));
 
             if (esAnonimo){
 
@@ -244,8 +239,8 @@ public class AyudaSugerenciaActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 //opcionTextView.setTextSize(24);
-                correoEditText.setVisibility(0);
-                mensajeEditText.setVisibility(0);
+                correoEditText.setVisibility(View.VISIBLE);
+                mensajeEditText.setVisibility(View.VISIBLE);
 
                 if (i == 0){
 
