@@ -191,6 +191,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                             correoCliente = object.getString("email");
 
                         }
+                        
 
                         ParseObject object = new ParseObject("UsuarioActivo");
                         object.put("nombreComercio", nombreComercio);
