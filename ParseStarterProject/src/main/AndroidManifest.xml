@@ -64,10 +64,14 @@
         <activity
             android:name=".AyudaYSugerencias.AyudaSugerenciaActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VistaClientes.TiendaComercio.TiendaActivity" />
-        <activity android:name=".VistaClientes.TiendaComercio.CompraTiendaActivity" />
-        <activity android:name=".VistaClientes.MisCompras.MisComprasActivity" />
-        <activity android:name=".VistaClientes.HistorialPuntos.HistorialPuntosActivity"></activity>
+        <activity android:name=".VistaClientes.TiendaComercio.TiendaActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".VistaClientes.TiendaComercio.CompraTiendaActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".VistaClientes.MisCompras.MisComprasActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".VistaClientes.HistorialPuntos.HistorialPuntosActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
