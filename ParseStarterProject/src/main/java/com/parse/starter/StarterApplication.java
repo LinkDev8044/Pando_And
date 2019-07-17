@@ -30,14 +30,15 @@ public class StarterApplication extends Application {
 
     // Add your initialization code here
     Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-            .applicationId("8b260cbb11b9d86b82cc8af7074bf5a9b775464c")
-            .clientKey("88be0047eda77b9182bb2bc720481e01e4804957")
-            .server("http://ec2-54-200-137-68.us-west-2.compute.amazonaws.com:80/parse/")
+            .applicationId("eaa7e5883605dc6c3299224d9ece5118f7401fe7")
+            .clientKey("1d6ad7ed56e589d762e3b4d62571537ae19531a0")
+            .server("http://ec2-52-14-110-25.us-east-2.compute.amazonaws.com:80/parse/")
             .build()
     );
 
+// Prueba PARSE
 
-    ParseObject object = new ParseObject("ExampleObject");
+    /*ParseObject object = new ParseObject("ExampleObject");
     object.put("myNumber", "123");
     object.put("myString", "rob");
 
@@ -50,10 +51,10 @@ public class StarterApplication extends Application {
           Log.i("Parse Result", "Failed" + ex.toString());
         }
       }
-    });
+    });*/
 
 
-    ParseUser.enableAutomaticUser();
+    //ParseUser.enableAutomaticUser();
     ParseACL defaultACL = new ParseACL();
     defaultACL.setPublicReadAccess(true);
     defaultACL.setPublicWriteAccess(true);

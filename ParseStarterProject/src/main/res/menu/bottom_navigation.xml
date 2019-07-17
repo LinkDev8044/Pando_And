@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_lista_comercios"
+        android:icon="@drawable/estoy_aqui_navigation"
+        android:title="Estoy aquí"
+        ></item>
+
+    <item
+        android:id="@+id/nav_perfil"
+        android:icon="@drawable/perfil_navigation"
+        android:title="Perfil"
+        ></item>
+
+</menu>

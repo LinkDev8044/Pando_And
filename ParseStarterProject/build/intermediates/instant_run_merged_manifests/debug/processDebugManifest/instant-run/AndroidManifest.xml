@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015-present, Parse, LLC.
+  ~ All rights reserved.
+  ~
+  ~ This source code is licensed under the BSD-style license found in the
+  ~ LICENSE file in the root directory of this source tree. An additional grant
+  ~ of patent rights can be found in the PATENTS file in the same directory.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.parse.starter"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name="com.parse.starter.StarterApplication"
+        android:allowBackup="true"
+        android:debuggable="true"
+        android:icon="@drawable/logo_pando_app"
+        android:label="Pando"
+        android:testOnly="true"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="@string/parse_app_id" />
+        <meta-data
+            android:name="com.parse.CLIENT_KEY"
+            android:value="@string/parse_client_key" />
+
+        <activity
+            android:name="com.parse.starter.MainActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.parse.starter.Inicio.inicio_Pando_Activity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.parse.starter.registro_Usuario.NombreUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.registro_Usuario.SexoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.registro_Usuario.CorreoUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.registro_Usuario.ContrasenaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.registro_Usuario.InfoInicialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.ClienteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.Inicio.LogInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.DescripcionComercio.DescripcionComercioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.AyudaYSugerencias.AyudaSugerenciaActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.parse.starter.VistaClientes.TiendaComercio.TiendaActivity" />
+        <activity android:name="com.parse.starter.VistaClientes.TiendaComercio.CompraTiendaActivity" />
+        <activity android:name="com.parse.starter.VistaClientes.MisCompras.MisComprasActivity" />
+        <activity android:name="com.parse.starter.VistaClientes.HistorialPuntos.HistorialPuntosActivity" />
+
+        <provider
+            android:name="com.android.tools.ir.server.InstantRunContentProvider"
+            android:authorities="com.parse.starter.com.android.tools.ir.server.InstantRunContentProvider"
+            android:multiprocess="true" />
+    </application>
+
+</manifest>

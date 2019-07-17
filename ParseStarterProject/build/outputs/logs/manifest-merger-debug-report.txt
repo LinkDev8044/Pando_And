@@ -1,75 +1,231 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:10:1-40:12
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
+MERGED from [com.android.support:design:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/design-25.0.0.aar/9c6f403c6b71eda4f50587b52562da29/AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:appcompat-v7:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/pro13/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/5076ac19cde82d0f0ff5bf56b4ad4bed/AndroidManifest.xml:2:1-11:12
+MERGED from [de.hdodenhof:circleimageview:3.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/circleimageview-3.0.0.aar/e930b64a92b38a76b4fa67660287e59f/AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:transition:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/transition-25.0.0.aar/3fa9f4d58c3e1c7cd1b1830bdd4d1425/AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:support-v4:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-v4-25.0.0.aar/67c70c7883ec962d606096778e353ab0/AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:animated-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-25.0.0.aar/2238e629d35074dbbd78e82b16a3153a/AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:support-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-25.0.0.aar/2e2b993c1467919abf3cad69033ab953/AndroidManifest.xml:17:1-25:12
+MERGED from [com.android.support:recyclerview-v7:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-25.0.0.aar/f39ca4ff2f455f26d462acaf82dbcddb/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-fragment-25.0.0.aar/b94c222864e1cf3ccec731ac9c294588/AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:support-media-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-media-compat-25.0.0.aar/69c1a61d58dadfd09a7b29beea4645bf/AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:support-core-utils:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-utils-25.0.0.aar/bf52e2a2b335024b0ba6506d2edc405b/AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:support-core-ui:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-ui-25.0.0.aar/7fc272d4340b4996248eaef6f7fce568/AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:support-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.0.aar/266d1577f607fffdfaa091c4e2302fd7/AndroidManifest.xml:17:1-27:12
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
 	package
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:11:5-32
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:10:5-32
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
-	xmlns:android
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:10:11-69
 	android:versionCode
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:1-73:12
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:9:11-69
 uses-permission#android.permission.INTERNET
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:13:5-67
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:12:5-67
 	android:name
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:13:22-64
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:12:22-64
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:14:5-79
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:13:5-79
 	android:name
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:14:22-76
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:13:22-76
 application
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:16:5-38:19
-MERGED from [com.android.support:appcompat-v7:22.2.0] /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:support-v4:22.2.0] /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/AndroidManifest.xml:22:5-20
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:15:5-71:19
+MERGED from [com.android.support:design:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/design-25.0.0.aar/9c6f403c6b71eda4f50587b52562da29/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:design:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/design-25.0.0.aar/9c6f403c6b71eda4f50587b52562da29/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:appcompat-v7:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:appcompat-v7:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/pro13/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/5076ac19cde82d0f0ff5bf56b4ad4bed/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/pro13/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/5076ac19cde82d0f0ff5bf56b4ad4bed/AndroidManifest.xml:9:5-20
+MERGED from [de.hdodenhof:circleimageview:3.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/circleimageview-3.0.0.aar/e930b64a92b38a76b4fa67660287e59f/AndroidManifest.xml:9:5-20
+MERGED from [de.hdodenhof:circleimageview:3.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/circleimageview-3.0.0.aar/e930b64a92b38a76b4fa67660287e59f/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support:transition:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/transition-25.0.0.aar/3fa9f4d58c3e1c7cd1b1830bdd4d1425/AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:transition:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/transition-25.0.0.aar/3fa9f4d58c3e1c7cd1b1830bdd4d1425/AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-v4-25.0.0.aar/67c70c7883ec962d606096778e353ab0/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-v4:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-v4-25.0.0.aar/67c70c7883ec962d606096778e353ab0/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:animated-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-25.0.0.aar/2238e629d35074dbbd78e82b16a3153a/AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:animated-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-25.0.0.aar/2238e629d35074dbbd78e82b16a3153a/AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-25.0.0.aar/2e2b993c1467919abf3cad69033ab953/AndroidManifest.xml:23:5-20
+MERGED from [com.android.support:support-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-25.0.0.aar/2e2b993c1467919abf3cad69033ab953/AndroidManifest.xml:23:5-20
+MERGED from [com.android.support:support-fragment:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-fragment-25.0.0.aar/b94c222864e1cf3ccec731ac9c294588/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-fragment:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-fragment-25.0.0.aar/b94c222864e1cf3ccec731ac9c294588/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-media-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-media-compat-25.0.0.aar/69c1a61d58dadfd09a7b29beea4645bf/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-media-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-media-compat-25.0.0.aar/69c1a61d58dadfd09a7b29beea4645bf/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-utils:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-utils-25.0.0.aar/bf52e2a2b335024b0ba6506d2edc405b/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-utils:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-utils-25.0.0.aar/bf52e2a2b335024b0ba6506d2edc405b/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-ui:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-ui-25.0.0.aar/7fc272d4340b4996248eaef6f7fce568/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-ui:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-ui-25.0.0.aar/7fc272d4340b4996248eaef6f7fce568/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.0.aar/266d1577f607fffdfaa091c4e2302fd7/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.0.aar/266d1577f607fffdfaa091c4e2302fd7/AndroidManifest.xml:25:5-20
 	android:label
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:20:9-41
-	android:allowBackup
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:18:9-35
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:19:9-30
 	android:icon
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:19:9-43
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:18:9-48
+	android:allowBackup
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:17:9-35
 	android:theme
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:21:9-40
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:20:9-40
 	android:name
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:17:9-43
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:16:9-43
 meta-data#com.parse.APPLICATION_ID
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:22:9-24:52
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:21:9-23:52
 	android:value
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:24:13-49
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:23:13-49
 	android:name
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:23:13-52
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:22:13-52
 meta-data#com.parse.CLIENT_KEY
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:25:9-27:56
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:24:9-26:56
 	android:value
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:27:13-53
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:26:13-53
 	android:name
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:26:13-48
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:25:13-48
 activity#com.parse.starter.MainActivity
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:29:9-37:20
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:28:9-30:48
 	android:label
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:31:13-45
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:30:13-45
 	android:name
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:30:13-41
-intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:32:13-36:29
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:29:13-41
+activity#com.parse.starter.Inicio.inicio_Pando_Activity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:31:9-39:20
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:33:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:32:13-57
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:34:13-38:29
 action#android.intent.action.MAIN
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:33:17-69
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:35:17-69
 	android:name
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:33:25-66
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:35:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:35:17-77
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:37:17-77
 	android:name
-		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:35:27-74
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:37:27-74
+activity#com.parse.starter.registro_Usuario.NombreUserActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:40:9-42:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:42:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:41:13-64
+activity#com.parse.starter.registro_Usuario.SexoActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:43:9-45:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:45:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:44:13-58
+activity#com.parse.starter.registro_Usuario.CorreoUserActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:46:9-48:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:48:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:47:13-64
+activity#com.parse.starter.registro_Usuario.ContrasenaActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:49:9-51:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:51:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:50:13-64
+activity#com.parse.starter.registro_Usuario.InfoInicialActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:52:9-54:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:54:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:53:13-65
+activity#com.parse.starter.VistaClientes.ClienteActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:55:9-57:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:57:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:56:13-58
+activity#com.parse.starter.Inicio.LogInActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:58:9-60:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:60:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:59:13-49
+activity#com.parse.starter.VistaClientes.DescripcionComercio.DescripcionComercioActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:61:9-63:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:63:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:62:13-90
+activity#com.parse.starter.AyudaYSugerencias.AyudaSugerenciaActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:64:9-66:52
+	android:screenOrientation
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:66:13-49
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:65:13-70
+activity#com.parse.starter.VistaClientes.TiendaComercio.TiendaActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:67:9-81
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:67:19-78
+activity#com.parse.starter.VistaClientes.TiendaComercio.CompraTiendaActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:68:9-87
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:68:19-84
+activity#com.parse.starter.VistaClientes.MisCompras.MisComprasActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:69:9-81
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:69:19-78
+activity#com.parse.starter.VistaClientes.HistorialPuntos.HistorialPuntosActivity
+ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:70:9-100
+	android:name
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml:70:19-88
 uses-sdk
 INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml reason: use-sdk injection requested
-MERGED from [com.android.support:appcompat-v7:22.2.0] /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-v4:22.2.0] /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/AndroidManifest.xml:20:5-43
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+MERGED from [com.android.support:design:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/design-25.0.0.aar/9c6f403c6b71eda4f50587b52562da29/AndroidManifest.xml:21:5-23:62
+MERGED from [com.android.support:design:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/design-25.0.0.aar/9c6f403c6b71eda4f50587b52562da29/AndroidManifest.xml:21:5-23:62
+MERGED from [com.android.support:appcompat-v7:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:appcompat-v7:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/pro13/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/5076ac19cde82d0f0ff5bf56b4ad4bed/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/pro13/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/5076ac19cde82d0f0ff5bf56b4ad4bed/AndroidManifest.xml:5:5-7:41
+MERGED from [de.hdodenhof:circleimageview:3.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/circleimageview-3.0.0.aar/e930b64a92b38a76b4fa67660287e59f/AndroidManifest.xml:5:5-7:41
+MERGED from [de.hdodenhof:circleimageview:3.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/circleimageview-3.0.0.aar/e930b64a92b38a76b4fa67660287e59f/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:transition:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/transition-25.0.0.aar/3fa9f4d58c3e1c7cd1b1830bdd4d1425/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/transition-25.0.0.aar/3fa9f4d58c3e1c7cd1b1830bdd4d1425/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-v4-25.0.0.aar/67c70c7883ec962d606096778e353ab0/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-v4:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-v4-25.0.0.aar/67c70c7883ec962d606096778e353ab0/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:animated-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-25.0.0.aar/2238e629d35074dbbd78e82b16a3153a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-25.0.0.aar/2238e629d35074dbbd78e82b16a3153a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-25.0.0.aar/2e2b993c1467919abf3cad69033ab953/AndroidManifest.xml:21:5-43
+MERGED from [com.android.support:support-vector-drawable:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-25.0.0.aar/2e2b993c1467919abf3cad69033ab953/AndroidManifest.xml:21:5-43
+MERGED from [com.android.support:recyclerview-v7:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-25.0.0.aar/f39ca4ff2f455f26d462acaf82dbcddb/AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:recyclerview-v7:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-25.0.0.aar/f39ca4ff2f455f26d462acaf82dbcddb/AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-fragment:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-fragment-25.0.0.aar/b94c222864e1cf3ccec731ac9c294588/AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-fragment:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-fragment-25.0.0.aar/b94c222864e1cf3ccec731ac9c294588/AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-media-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-media-compat-25.0.0.aar/69c1a61d58dadfd09a7b29beea4645bf/AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-media-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-media-compat-25.0.0.aar/69c1a61d58dadfd09a7b29beea4645bf/AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-utils:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-utils-25.0.0.aar/bf52e2a2b335024b0ba6506d2edc405b/AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:support-core-utils:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-utils-25.0.0.aar/bf52e2a2b335024b0ba6506d2edc405b/AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:support-core-ui:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-ui-25.0.0.aar/7fc272d4340b4996248eaef6f7fce568/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-ui:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-core-ui-25.0.0.aar/7fc272d4340b4996248eaef6f7fce568/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.0.aar/266d1577f607fffdfaa091c4e2302fd7/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-compat:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.0.aar/266d1577f607fffdfaa091c4e2302fd7/AndroidManifest.xml:21:5-23:58
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+	tools:overrideLibrary
+		ADDED from [com.android.support:design:25.0.0] /Users/pro13/.gradle/caches/transforms-1/files-1.1/design-25.0.0.aar/9c6f403c6b71eda4f50587b52562da29/AndroidManifest.xml:23:9-59
 	android:targetSdkVersion
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
+		ADDED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
 		INJECTED from /Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/src/main/AndroidManifest.xml
