@@ -138,7 +138,8 @@ public class CompraTiendaActivity extends AppCompatActivity {
                                                     for (ParseObject object : objects) {
 
                                                         object.put("fechaModificacion", fecha);
-                                                        object.put("puntos", object.getDouble("puntos") - Double.valueOf(precioSelec));
+                                                        Double puntosForSave = Double.valueOf(String.format("%.2f", object.getDouble("puntos") - Double.valueOf(precioSelec)));
+                                                        object.put("puntos", puntosForSave);
                                                         object.saveInBackground(new SaveCallback() {
                                                             @Override
                                                             public void done(ParseException e) {

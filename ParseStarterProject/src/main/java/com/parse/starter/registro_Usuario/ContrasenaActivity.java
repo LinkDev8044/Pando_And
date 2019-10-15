@@ -48,6 +48,8 @@ public class ContrasenaActivity extends AppCompatActivity implements TextWatcher
 
     private void registroUsuario(){
 
+        Log.i("Prueba", "Que");
+
         iniciarSppiner();
         ParseUser parseUser = new ParseUser();
         parseUser.setUsername(correoUsuario);
@@ -62,7 +64,11 @@ public class ContrasenaActivity extends AppCompatActivity implements TextWatcher
             @Override
             public void done(ParseException e) {
 
+                Log.i("Prueba", "Aqui");
+
                 if (e == null){
+
+                    Log.i("Prueba", "Pasa");
 
                     goToInfoBienvenida();
 
@@ -152,19 +158,19 @@ public class ContrasenaActivity extends AppCompatActivity implements TextWatcher
 
         if (contrasena.matches("") || confirmacion.matches("")){
 
-            siguienteTextView.setVisibility(4);
+            siguienteTextView.setVisibility(View.INVISIBLE);
             return;
 
         }
 
         if (contrasena.matches(confirmacion)){
 
-            siguienteTextView.setVisibility(0);
+            siguienteTextView.setVisibility(View.VISIBLE);
             return;
 
         }
 
-        siguienteTextView.setVisibility(4);
+        siguienteTextView.setVisibility(View.INVISIBLE);
 
     }
 

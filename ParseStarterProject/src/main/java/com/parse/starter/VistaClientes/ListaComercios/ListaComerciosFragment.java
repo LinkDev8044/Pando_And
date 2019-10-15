@@ -2,10 +2,13 @@ package com.parse.starter.VistaClientes.ListaComercios;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +19,28 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.starter.R;
 import com.parse.starter.VistaClientes.DescripcionComercio.DescripcionComercioActivity;
 
+import net.glxn.qrgen.android.QRCode;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListaComerciosFragment extends Fragment {
+
+    String usuarioId;
+
+    TextView goToQRCodeTextView;
 
     ListView listaComercioListView;
 
@@ -47,14 +61,7 @@ public class ListaComerciosFragment extends Fragment {
         this.progressDialog.dismiss();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.fragment_lista_comercios, container, false);
-
-        iniciarSppiner();
-
-        listaComercioListView = (ListView) inflate.findViewById(R.id.listaComListView);
+    private void cargarComercios() {
 
         final CustomAdapter customAdapter = new CustomAdapter();
 
@@ -85,6 +92,73 @@ public class ListaComerciosFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View inflate = inflater.inflate(R.layout.fragment_lista_comercios, container, false);
+
+        listaComercioListView = (ListView) inflate.findViewById(R.id.listaComListView);
+        goToQRCodeTextView = (TextView) inflate.findViewById(R.id.verCodigoTextView);
+
+        usuarioId = ParseUser.getCurrentUser().getObjectId();
+
+        Bitmap myBitmap = QRCode.from(usuarioId).withSize(600, 600).bitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] bitmapBytes = stream.toByteArray();
+        final ParseFile image = new ParseFile("QRCliente.png", bitmapBytes);
+
+        iniciarSppiner();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("CodigoQRCliente");
+        query.whereEqualTo("usuarioId", usuarioId);
+        query.setLimit(1);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+
+                    if (objects.size() > 0){
+
+                        cargarComercios();
+
+                    } else {
+
+                        ParseObject object = new ParseObject("CodigoQRCliente");
+                        object.put("usuarioId", usuarioId);
+                        object.put("correoCliente", ParseUser.getCurrentUser().getEmail());
+                        object.put("codigoQRCliente", image);
+                        object.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+
+                                if (e == null){
+
+                                    cargarComercios();
+
+                                } else {
+
+                                    terminarSppiner();
+
+                                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
+                    }
+
+                } else {
+
+                    terminarSppiner();
+
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
 
         listaComercioListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -92,14 +166,19 @@ public class ListaComerciosFragment extends Fragment {
 
                 Intent intent = new Intent(getContext(), DescripcionComercioActivity.class);
                 intent.putExtra("nombreComercio", COMERCIOS.get(i));
+                intent.putExtra("usarQR", false);
                 startActivity(intent);
 
-                /*FragmentManager fragmentManager = getFragmentManager();
-                Fragment descripcionFragment = new DescripcionComercioFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("nombreComercio", COMERCIOS.get(i));
-                descripcionFragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, descripcionFragment).addToBackStack(null).commit();*/
+            }
+        });
+
+        goToQRCodeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getContext(), DescripcionComercioActivity.class);
+                intent.putExtra("usarQR", true);
+                startActivity(intent);
 
             }
         });

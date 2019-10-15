@@ -17,7 +17,8 @@
         android:allowBackup="true"
         android:icon="@drawable/logo_pando_app"
         android:label="Pando"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/parse_app_id" />
@@ -64,14 +65,23 @@
         <activity
             android:name=".AyudaYSugerencias.AyudaSugerenciaActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VistaClientes.TiendaComercio.TiendaActivity"
+        <activity
+            android:name=".VistaClientes.TiendaComercio.TiendaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.TiendaComercio.CompraTiendaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.MisCompras.MisComprasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.HistorialPuntos.HistorialPuntosActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".VistaClientes.Encuestas.PreguntaCaritasActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".VistaClientes.TiendaComercio.CompraTiendaActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".VistaClientes.MisCompras.MisComprasActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".VistaClientes.HistorialPuntos.HistorialPuntosActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".VistaClientes.Encuestas.PreguntaSliderActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

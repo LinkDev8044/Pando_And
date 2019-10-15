@@ -43,6 +43,8 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
 
     private void goToContrasena(){
 
+        Log.i("Prueba", "Aqui");
+
         Intent intent = new Intent(getApplicationContext(), ContrasenaActivity.class);
         intent.putExtra("nombreUsuario", nombreUsuario);
         intent.putExtra("apellidoUsuario", apellidoUsuario);
@@ -59,6 +61,8 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
 
         iniciarSppiner();
 
+        Log.i("Prueba", "Que");
+
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("email", correoUsuario);
         query.setLimit(1);
@@ -66,9 +70,15 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
 
+                Log.i("Prueba", "Esta");
+
                 if (e == null){
 
+                    Log.i("Prueba", "What");
+
                     if (objects.size() > 0){
+
+                        Log.i("Prueba", "Pasando");
 
                         terminarSppiner();
 
@@ -79,6 +89,10 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
                         goToContrasena();
 
                     }
+                } else {
+
+                    Log.i("Prueba", "Error");
+                    Log.i("Prueba", e.getMessage());
                 }
             }
         });
@@ -159,11 +173,11 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
 
         if (correoEditText.getText().toString().matches("")){
 
-            siguienteTextView.setVisibility(4);
+            siguienteTextView.setVisibility(View.INVISIBLE);
 
         } else {
 
-            siguienteTextView.setVisibility(0);
+            siguienteTextView.setVisibility(View.VISIBLE);
 
         }
     }

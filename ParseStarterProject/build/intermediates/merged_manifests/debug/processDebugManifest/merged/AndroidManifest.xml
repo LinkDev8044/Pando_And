@@ -8,13 +8,13 @@
   ~ of patent rights can be found in the PATENTS file in the same directory.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.parse.starter"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="com.parse.pandoapp"
+    android:versionCode="9"
+    android:versionName="1.2.7" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="23" />
+        android:targetSdkVersion="28" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -26,7 +26,8 @@
         android:icon="@drawable/logo_pando_app"
         android:label="Pando"
         android:testOnly="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true" >
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/parse_app_id" />
@@ -73,10 +74,25 @@
         <activity
             android:name="com.parse.starter.AyudaYSugerencias.AyudaSugerenciaActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.parse.starter.VistaClientes.TiendaComercio.TiendaActivity" />
-        <activity android:name="com.parse.starter.VistaClientes.TiendaComercio.CompraTiendaActivity" />
-        <activity android:name="com.parse.starter.VistaClientes.MisCompras.MisComprasActivity" />
-        <activity android:name="com.parse.starter.VistaClientes.HistorialPuntos.HistorialPuntosActivity" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.TiendaComercio.TiendaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.TiendaComercio.CompraTiendaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.MisCompras.MisComprasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.HistorialPuntos.HistorialPuntosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.Encuestas.PreguntaCaritasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.Encuestas.PreguntaSliderActivity"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
