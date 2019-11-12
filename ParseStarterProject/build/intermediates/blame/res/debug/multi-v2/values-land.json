@@ -4,7 +4,17 @@
             "outputFile": "/Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/incremental/mergeDebugResources/merged.dir/values-land/values-land.xml",
             "map": [
                 {
-                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/design-25.0.0.aar/9c6f403c6b71eda4f50587b52562da29/res/values-land/values-land.xml",
+                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.0.aar/de3e0359510999aa5208bf6ff296178b/res/values-land/values-land.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,125,189,260",
+                        "endColumns": "69,63,70,67",
+                        "endOffsets": "120,184,255,323"
+                    }
+                },
+                {
+                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/design-27.1.0.aar/7bc9814663da5f48796c9104831f1b29/res/values-land/values-land.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -20,16 +30,6 @@
                         "endLines": "9",
                         "endColumns": "12",
                         "endOffsets": "505"
-                    }
-                },
-                {
-                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/res/values-land/values-land.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,125,189,260",
-                        "endColumns": "69,63,70,67",
-                        "endOffsets": "120,184,255,323"
                     }
                 }
             ]

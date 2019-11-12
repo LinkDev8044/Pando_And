@@ -4,7 +4,7 @@
             "outputFile": "/Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/incremental/mergeDebugResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml",
             "map": [
                 {
-                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.0.aar/de3e0359510999aa5208bf6ff296178b/res/values-hdpi-v4/values-hdpi-v4.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -12,6 +12,24 @@
                         "endLines": "6",
                         "endColumns": "13",
                         "endOffsets": "327"
+                    },
+                    "to": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "169",
+                        "endLines": "8",
+                        "endColumns": "13",
+                        "endOffsets": "441"
+                    }
+                },
+                {
+                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/core-1.9.13.aar/50731a71215a8e2039c2066594a53152/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,113",
+                        "endColumns": "57,55",
+                        "endOffsets": "108,164"
                     }
                 }
             ]

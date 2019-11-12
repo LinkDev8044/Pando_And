@@ -4,13 +4,30 @@
             "outputFile": "/Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/incremental/mergeDebugResources/merged.dir/values-large-v4/values-large-v4.xml",
             "map": [
                 {
-                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/res/values-large-v4/values-large-v4.xml",
+                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.0.aar/de3e0359510999aa5208bf6ff296178b/res/values-large-v4/values-large-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
                         "startColumns": "4,4,4,4,4,4,4,4,4",
                         "startOffsets": "55,114,185,256,326,396,464,532,636",
                         "endColumns": "58,70,70,69,69,67,67,103,115",
                         "endOffsets": "109,180,251,321,391,459,527,631,747"
+                    }
+                },
+                {
+                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/material-1.0.0.aar/ce5d5dd3fffe83781e18095364084175/res/values-large-v4/values-large-v4.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,177",
+                        "endColumns": "121,133",
+                        "endOffsets": "172,306"
+                    },
+                    "to": {
+                        "startLines": "11,12",
+                        "startColumns": "4,4",
+                        "startOffsets": "752,874",
+                        "endColumns": "121,133",
+                        "endOffsets": "869,1003"
                     }
                 }
             ]

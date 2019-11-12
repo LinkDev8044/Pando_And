@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.starter.R;
+import com.parse.starter.RegisrtroAdministrador.NombreComercioActivity;
 
 import java.sql.Date;
 import java.util.List;
@@ -30,8 +32,13 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
     String correoUsuario;
     String nombreUsuario;
     String apellidoUsuario;
+    String comercioId;
+    String nombreComercio;
 
     Boolean isMan;
+    Boolean esRegistroAdmin;
+    Boolean usuarioToAdmin;
+    Boolean esRegistroColaborador;
 
     java.util.Date fechaNacimiento = new java.util.Date();
 
@@ -43,14 +50,19 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
 
     private void goToContrasena(){
 
-        Log.i("Prueba", "Aqui");
-
         Intent intent = new Intent(getApplicationContext(), ContrasenaActivity.class);
         intent.putExtra("nombreUsuario", nombreUsuario);
         intent.putExtra("apellidoUsuario", apellidoUsuario);
         intent.putExtra("isMan", isMan);
         intent.putExtra("fechaNacimiento", fechaNacimiento.getTime());
         intent.putExtra("correoUsuario", correoUsuario);
+
+        if (esRegistroAdmin){
+
+            intent.putExtra("esRegistroAdmin", esRegistroAdmin);
+
+        }
+
         terminarSppiner();
 
         startActivity(intent);
@@ -61,8 +73,6 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
 
         iniciarSppiner();
 
-        Log.i("Prueba", "Que");
-
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("email", correoUsuario);
         query.setLimit(1);
@@ -70,29 +80,116 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
 
-                Log.i("Prueba", "Esta");
-
                 if (e == null){
-
-                    Log.i("Prueba", "What");
 
                     if (objects.size() > 0){
 
-                        Log.i("Prueba", "Pasando");
+                        if (esRegistroAdmin || esRegistroColaborador){
 
-                        terminarSppiner();
+                            correoUsuario = correoEditText.getText().toString();
 
-                        Toast.makeText(CorreoUserActivity.this, "Parece que este correo ya esta registrado en nuestra base de datos", Toast.LENGTH_SHORT).show();
+                            for (ParseObject object : objects){
+
+                                nombreUsuario = object.getString("nombre");
+                                apellidoUsuario = object.getString("apellido");
+
+                            }
+
+                            ParseQuery<ParseObject> query = ParseQuery.getQuery("EncuestasAplicadas");
+                            query.whereEqualTo("correoColaborador", correoEditText.getText().toString());
+                            query.whereEqualTo("esAdministrador", true);
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+
+                                    if (objects.size() > 0){
+
+                                        terminarSppiner();
+
+                                        Toast.makeText(CorreoUserActivity.this, "Parece que el correo ya esta registrado como administrador", Toast.LENGTH_SHORT).show();
+
+                                    } else {
+
+                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("EncuestasAplicadas");
+                                        query.whereEqualTo("correoColaborador", correoEditText.getText().toString());
+                                        query.whereEqualTo("esAdministrador", false);
+                                        query.findInBackground(new FindCallback<ParseObject>() {
+                                            @Override
+                                            public void done(List<ParseObject> objects, ParseException e) {
+
+                                                if (objects.size() > 0){
+
+                                                    terminarSppiner();
+
+                                                    Toast.makeText(CorreoUserActivity.this, "Parece que el correo ya esta registrado como colaborador", Toast.LENGTH_SHORT).show();
+
+                                                } else {
+
+                                                    usuarioToAdmin = true;
+
+                                                    terminarSppiner();
+
+                                                    if (esRegistroColaborador){
+
+                                                        Intent intent = new Intent(getApplicationContext(), ContrasenaActivity.class);
+                                                        intent.putExtra("correoUsuario", correoEditText.getText().toString());
+                                                        intent.putExtra("usuarioToAdmin", usuarioToAdmin);
+                                                        intent.putExtra("esRegistroColaborador", esRegistroColaborador);
+                                                        intent.putExtra("nombreUsuario", nombreUsuario);
+                                                        intent.putExtra("apellidoUsuario", apellidoUsuario);
+                                                        intent.putExtra("nombreComercio", nombreComercio);
+                                                        intent.putExtra("comercioId", comercioId);
+                                                        startActivity(intent);
+
+                                                    } else {
+
+                                                        Intent intent = new Intent(getApplicationContext(), NombreComercioActivity.class);
+                                                        intent.putExtra("correoUsuario", correoEditText.getText().toString());
+                                                        intent.putExtra("usuarioToAdmin", usuarioToAdmin);
+                                                        intent.putExtra("nombreUsuario", nombreUsuario);
+                                                        intent.putExtra("apellidoUsuario", apellidoUsuario);
+                                                        startActivity(intent);
+
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+
+                        } else {
+
+                            terminarSppiner();
+
+                            Toast.makeText(CorreoUserActivity.this, "Parece que este correo ya esta registrado en nuestra base de datos", Toast.LENGTH_SHORT).show();
+
+                        }
 
                     } else {
 
-                        goToContrasena();
+                        if (esRegistroAdmin || esRegistroColaborador){
 
+                            Intent intent = new Intent(getApplicationContext(), NombreUserActivity.class);
+                            intent.putExtra("esRegistroAdmin", esRegistroAdmin);
+                            intent.putExtra("esRegistroColaborador", esRegistroColaborador);
+                            intent.putExtra("correoUsuario", correoEditText.getText().toString());
+                            intent.putExtra("comercioId", comercioId);
+                            intent.putExtra("nombreComercio", nombreComercio);
+                            terminarSppiner();
+                            startActivity(intent);
+
+                        } else {
+
+                            goToContrasena();
+
+                        }
                     }
+
                 } else {
 
-                    Log.i("Prueba", "Error");
                     Log.i("Prueba", e.getMessage());
+
                 }
             }
         });
@@ -149,6 +246,8 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
 
         getWindow().setSoftInputMode(20);
 
+        usuarioToAdmin = false;
+
         correoEditText = (EditText) findViewById(R.id.correoRegistroEditText);
         siguienteTextView = (TextView) findViewById(R.id.sigCorreoRegTextView);
 
@@ -157,6 +256,10 @@ public class CorreoUserActivity extends AppCompatActivity implements TextWatcher
         apellidoUsuario = intent.getStringExtra("apellidoUsuario");
         isMan = Boolean.valueOf(intent.getBooleanExtra("isMan", false));
         fechaNacimiento.setTime(intent.getLongExtra("fechaNacimiento", -1));
+        esRegistroAdmin = intent.getBooleanExtra("esRegistroAdmin", false);
+        esRegistroColaborador = intent.getBooleanExtra("esRegistroColaborador", false);
+        nombreComercio = intent.getStringExtra("nombreComercio");
+        comercioId = intent.getStringExtra("comercioId");
 
         correoEditText.addTextChangedListener(this);
         correoEditText.setOnKeyListener(this);

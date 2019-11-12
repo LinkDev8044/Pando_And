@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="verde_Pando">#78bd3a</color>
-    <color name="dark_gray">#505050</color>
+    <color name="dark_gray">#4f4f4f</color>
     <color name="morado_Pando">#931e90</color>
+    <color name="azul_pie">#6C1EE0</color>
+    <color name="rojo_pie">#E12A7E</color>
+    <color name="gris_oscuro_pando">#e6575757</color>
 </resources>

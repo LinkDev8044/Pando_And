@@ -18,10 +18,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name="com.parse.starter.StarterApplication"
         android:allowBackup="true"
+        android:appComponentFactory="android.support.v4.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@drawable/logo_pando_app"
         android:label="Pando"
@@ -91,8 +93,52 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.parse.starter.VistaClientes.Encuestas.PreguntaSliderActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.RegisrtroAdministrador.InicioPandoNegociosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.Inicio.SeleccionPerfilActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.RegisrtroAdministrador.NombreComercioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.RegisrtroAdministrador.CodigoComercioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.Administrador.AdministradorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.EditarComercio.EditarComercioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.Colaborador.ColaboradorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.Administrador.ReporteGeneralActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.Administrador.DetalleReporteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.ClientesActivos.ClientesActivosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.EnviarEncuesta.EnviarEncuestaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.EnviarPuntos.EnviarPuntosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.ProductosCliente.ProductosClienteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.ProductosCliente.CanjearProductosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.QRCodeReader.QRCodeReaderActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="com.android.tools.ir.server.InstantRunContentProvider"

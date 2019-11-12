@@ -4,7 +4,26 @@
             "outputFile": "/Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.0.0.aar/bb37f65427ad72348f6a2b5984398293/res/values-v16/values-v16.xml",
+                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.0.aar/de3e0359510999aa5208bf6ff296178b/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "5",
+                        "endColumns": "12",
+                        "endOffsets": "223"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "121",
+                        "endLines": "6",
+                        "endColumns": "12",
+                        "endOffsets": "289"
+                    }
+                },
+                {
+                    "source": "/Users/pro13/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/f4b1f8f770c5202af8f8a98db4c36a11/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

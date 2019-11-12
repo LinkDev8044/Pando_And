@@ -23,13 +23,37 @@ public class NombreUserActivity extends AppCompatActivity implements TextWatcher
 
     String nombreUsuario;
     String apellidoUsuario;
+    String correoUsuario;
+    String comercioId;
+    String nombreComercio;
 
-    public void siguiente(View view){
+    Boolean esRegistroColaborador;
+
+    Boolean esRegistroAdmin;
+
+    private void goToSexo(){
 
         Intent intent = new Intent(getApplicationContext(), SexoActivity.class);
         intent.putExtra("nombreUsuario", nombreUsuario);
         intent.putExtra("apellidoUsuario", apellidoUsuario);
+
+        if (esRegistroAdmin || esRegistroColaborador){
+
+            intent.putExtra("esRegistroAdmin", esRegistroAdmin);
+            intent.putExtra("esRegistroColaborador", esRegistroColaborador);
+            intent.putExtra("correoUsuario", correoUsuario);
+            intent.putExtra("comercioId", comercioId);
+            intent.putExtra("nombreComercio", nombreComercio);
+
+        }
+
         startActivity(intent);
+
+    }
+
+    public void siguiente(View view){
+
+        goToSexo();
 
     }
 
@@ -51,6 +75,18 @@ public class NombreUserActivity extends AppCompatActivity implements TextWatcher
         nombreEditText = (EditText) findViewById(R.id.op1_Reg_EditText);
         apellidoEditText = (EditText) findViewById(R.id.op2_Reg_EditText);
         siguienteTextView = (TextView) findViewById(R.id.sig_nom_TextView);
+
+        Intent intent = getIntent();
+        esRegistroAdmin = intent.getBooleanExtra("esRegistroAdmin", false);
+        esRegistroColaborador = intent.getBooleanExtra("esRegistroColaborador", false);
+
+        if (esRegistroAdmin || esRegistroColaborador){
+
+            correoUsuario = intent.getStringExtra("correoUsuario");
+            nombreComercio = intent.getStringExtra("nombreComercio");
+            comercioId = intent.getStringExtra("comercioId");
+
+        }
 
         nombreEditText.addTextChangedListener(this);
         apellidoEditText.addTextChangedListener(this);
@@ -100,10 +136,7 @@ public class NombreUserActivity extends AppCompatActivity implements TextWatcher
 
             } else {
 
-                Intent intent = new Intent(getApplicationContext(), SexoActivity.class);
-                intent.putExtra("nombreUsuario", nombreUsuario);
-                intent.putExtra("apellidoUsuario", apellidoUsuario);
-                startActivity(intent);
+                goToSexo();
 
             }
 

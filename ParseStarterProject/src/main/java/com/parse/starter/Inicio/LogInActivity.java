@@ -14,11 +14,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.starter.R;
 import com.parse.starter.VistaClientes.ClienteActivity;
+
+import java.util.List;
 
 public class LogInActivity extends AppCompatActivity implements TextWatcher, View.OnKeyListener {
 
@@ -63,17 +68,38 @@ public class LogInActivity extends AppCompatActivity implements TextWatcher, Vie
 
                     if (e == null){
 
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("EncuestasAplicadas");
+                        query.whereEqualTo("colaboradorId", ParseUser.getCurrentUser().getObjectId());
+                        query.setLimit(1);
+                        query.findInBackground(new FindCallback<ParseObject>() {
+                            @Override
+                            public void done(List<ParseObject> objects, ParseException e) {
+
+                                if (objects.size() > 0){
+
+                                    Intent intent = new Intent(getApplicationContext(), SeleccionPerfilActivity.class);
+                                    startActivity(intent);
+
+                                } else {
+
+                                    goToUsuario();
+
+                                }
+
+                                terminarSppiner();
+
+                                return;
+
+                            }
+                        });
+
+                    } else {
+
                         terminarSppiner();
 
-                        goToUsuario();
-
-                        return;
+                        Toast.makeText(LogInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
-
-                    terminarSppiner();
-
-                    Toast.makeText(LogInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -135,19 +161,19 @@ public class LogInActivity extends AppCompatActivity implements TextWatcher, Vie
 
         if (correo.matches("") || contrasena.matches("")){
 
-            siguienteTextView.setVisibility(4);
+            siguienteTextView.setVisibility(View.INVISIBLE);
             return;
 
         }
 
         if (isValidEmail(correo)){
 
-            siguienteTextView.setVisibility(0);
+            siguienteTextView.setVisibility(View.VISIBLE);
 
             return;
         }
 
-        siguienteTextView.setVisibility(4);
+        siguienteTextView.setVisibility(View.INVISIBLE);
 
     }
 

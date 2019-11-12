@@ -9,13 +9,13 @@ anim abc_slide_in_bottom
 anim abc_slide_in_top
 anim abc_slide_out_bottom
 anim abc_slide_out_top
-anim design_appbar_state_list_animator
+anim abc_tooltip_enter
+anim abc_tooltip_exit
 anim design_bottom_sheet_slide_in
 anim design_bottom_sheet_slide_out
-anim design_fab_in
-anim design_fab_out
 anim design_snackbar_in
 anim design_snackbar_out
+animator design_appbar_state_list_animator
 attr actionBarDivider
 attr actionBarItemBackground
 attr actionBarPopupTheme
@@ -56,9 +56,15 @@ attr alertDialogStyle
 attr alertDialogTheme
 attr allowStacking
 attr alpha
+attr alphabeticModifiers
 attr arrowHeadLength
 attr arrowShaftLength
 attr autoCompleteTextViewStyle
+attr autoSizeMaxTextSize
+attr autoSizeMinTextSize
+attr autoSizePresetSizes
+attr autoSizeStepGranularity
+attr autoSizeTextType
 attr background
 attr backgroundSplit
 attr backgroundStacked
@@ -72,6 +78,9 @@ attr behavior_hideable
 attr behavior_overlapTop
 attr behavior_peekHeight
 attr behavior_skipCollapsed
+attr borderAlpha
+attr borderColor
+attr borderLength
 attr borderWidth
 attr borderlessButtonStyle
 attr bottomSheetDialogTheme
@@ -82,6 +91,7 @@ attr buttonBarNeutralButtonStyle
 attr buttonBarPositiveButtonStyle
 attr buttonBarStyle
 attr buttonGravity
+attr buttonIconDimen
 attr buttonPanelSideLayout
 attr buttonStyle
 attr buttonStyleSmall
@@ -107,6 +117,7 @@ attr colorButtonNormal
 attr colorControlActivated
 attr colorControlHighlight
 attr colorControlNormal
+attr colorError
 attr colorPrimary
 attr colorPrimaryDark
 attr colorSwitchThumbNormal
@@ -114,6 +125,7 @@ attr commitIcon
 attr constraintSet
 attr constraint_referenced_ids
 attr content
+attr contentDescription
 attr contentInsetEnd
 attr contentInsetEndWithActions
 attr contentInsetLeft
@@ -122,6 +134,8 @@ attr contentInsetStart
 attr contentInsetStartWithNavigation
 attr contentScrim
 attr controlBackground
+attr coordinatorLayoutStyle
+attr cornerRadius
 attr counterEnabled
 attr counterMaxLength
 attr counterOverflowTextAppearance
@@ -155,7 +169,25 @@ attr expandedTitleMarginEnd
 attr expandedTitleMarginStart
 attr expandedTitleMarginTop
 attr expandedTitleTextAppearance
+attr fabCustomSize
 attr fabSize
+attr fastScrollEnabled
+attr fastScrollHorizontalThumbDrawable
+attr fastScrollHorizontalTrackDrawable
+attr fastScrollVerticalThumbDrawable
+attr fastScrollVerticalTrackDrawable
+attr finderOffset
+attr font
+attr fontFamily
+attr fontProviderAuthority
+attr fontProviderCerts
+attr fontProviderFetchStrategy
+attr fontProviderFetchTimeout
+attr fontProviderPackage
+attr fontProviderQuery
+attr fontStyle
+attr fontVariationSettings
+attr fontWeight
 attr foregroundInsidePadding
 attr gapBetweenBars
 attr goIcon
@@ -168,6 +200,8 @@ attr hintTextAppearance
 attr homeAsUpIndicator
 attr homeLayout
 attr icon
+attr iconTint
+attr iconTintMode
 attr iconifiedByDefault
 attr imageButtonStyle
 attr indeterminateProgressStyle
@@ -180,6 +214,8 @@ attr itemPadding
 attr itemTextAppearance
 attr itemTextColor
 attr keylines
+attr laserColor
+attr laserEnabled
 attr layout
 attr layoutManager
 attr layout_anchor
@@ -255,6 +291,7 @@ attr listPreferredItemPaddingLeft
 attr listPreferredItemPaddingRight
 attr logo
 attr logoDescription
+attr maskColor
 attr maxActionInlineWidth
 attr maxButtonHeight
 attr measureWithLargestChild
@@ -263,9 +300,12 @@ attr multiChoiceItemLayout
 attr navigationContentDescription
 attr navigationIcon
 attr navigationMode
+attr numericModifiers
 attr overlapAnchor
+attr paddingBottomNoButtons
 attr paddingEnd
 attr paddingStart
+attr paddingTopNoTitle
 attr panelBackground
 attr panelMenuListTheme
 attr panelMenuListWidth
@@ -289,6 +329,7 @@ attr ratingBarStyleIndicator
 attr ratingBarStyleSmall
 attr reverseLayout
 attr rippleColor
+attr roundedCorner
 attr scrimAnimationDuration
 attr scrimVisibleHeightTrigger
 attr searchHintIcon
@@ -297,15 +338,18 @@ attr searchViewStyle
 attr seekBarStyle
 attr selectableItemBackground
 attr selectableItemBackgroundBorderless
+attr shouldScaleToFill
 attr showAsAction
 attr showDividers
 attr showText
+attr showTitle
 attr singleChoiceItemLayout
 attr spanCount
 attr spinBars
 attr spinnerDropDownItemStyle
 attr spinnerStyle
 attr splitTrack
+attr squaredFinder
 attr srcCompat
 attr stackFromEnd
 attr state_above_anchor
@@ -343,6 +387,7 @@ attr tabTextColor
 attr textAllCaps
 attr textAppearanceLargePopupMenu
 attr textAppearanceListItem
+attr textAppearanceListItemSecondary
 attr textAppearanceListItemSmall
 attr textAppearancePopupMenuHeader
 attr textAppearanceSearchResultSubtitle
@@ -359,6 +404,8 @@ attr thumbTintMode
 attr tickMark
 attr tickMarkTint
 attr tickMarkTintMode
+attr tint
+attr tintMode
 attr title
 attr titleEnabled
 attr titleMargin
@@ -373,10 +420,15 @@ attr titleTextStyle
 attr toolbarId
 attr toolbarNavigationButtonStyle
 attr toolbarStyle
+attr tooltipForegroundColor
+attr tooltipFrameBackground
+attr tooltipText
 attr track
 attr trackTint
 attr trackTintMode
+attr ttcIndex
 attr useCompatPadding
+attr viewInflaterClass
 attr voiceIcon
 attr windowActionBar
 attr windowActionBarOverlay
@@ -391,11 +443,11 @@ attr windowNoTitle
 bool abc_action_bar_embed_tabs
 bool abc_allow_stacked_button_bar
 bool abc_config_actionMenuItemAllCaps
-bool abc_config_closeDialogWhenTouchOutside
 bool abc_config_showMenuShortcutsWhenKeyboardPresent
 color abc_background_cache_hint_selector_material_dark
 color abc_background_cache_hint_selector_material_light
 color abc_btn_colored_borderless_text_material
+color abc_btn_colored_text_material
 color abc_color_highlight_material
 color abc_hint_foreground_material_dark
 color abc_hint_foreground_material_light
@@ -415,10 +467,10 @@ color abc_tint_default
 color abc_tint_edittext
 color abc_tint_seek_thumb
 color abc_tint_spinner
-color abc_tint_switch_thumb
 color abc_tint_switch_track
 color accent_material_dark
 color accent_material_light
+color azul_pie
 color background_floating_material_dark
 color background_floating_material_light
 color background_material_dark
@@ -432,6 +484,7 @@ color bright_foreground_material_light
 color button_material_dark
 color button_material_light
 color dark_gray
+color design_bottom_navigation_shadow_color
 color design_error
 color design_fab_shadow_end_color
 color design_fab_shadow_mid_color
@@ -441,15 +494,15 @@ color design_fab_stroke_end_outer_color
 color design_fab_stroke_top_inner_color
 color design_fab_stroke_top_outer_color
 color design_snackbar_background_color
-color design_textinput_error_color_dark
-color design_textinput_error_color_light
 color design_tint_password_toggle
 color dim_foreground_disabled_material_dark
 color dim_foreground_disabled_material_light
 color dim_foreground_material_dark
 color dim_foreground_material_light
+color error_color_material
 color foreground_material_dark
 color foreground_material_light
+color gris_oscuro_pando
 color highlighted_text_material_dark
 color highlighted_text_material_light
 color material_blue_grey_800
@@ -478,6 +531,7 @@ color primary_text_disabled_material_dark
 color primary_text_disabled_material_light
 color ripple_material_dark
 color ripple_material_light
+color rojo_pie
 color secondary_text_default_material_dark
 color secondary_text_default_material_light
 color secondary_text_disabled_material_dark
@@ -488,7 +542,12 @@ color switch_thumb_material_dark
 color switch_thumb_material_light
 color switch_thumb_normal_material_dark
 color switch_thumb_normal_material_light
+color tooltip_background_dark
+color tooltip_background_light
 color verde_Pando
+color viewfinder_border
+color viewfinder_laser
+color viewfinder_mask
 dimen abc_action_bar_content_inset_material
 dimen abc_action_bar_content_inset_with_nav
 dimen abc_action_bar_default_height_material
@@ -507,6 +566,7 @@ dimen abc_action_button_min_height_material
 dimen abc_action_button_min_width_material
 dimen abc_action_button_min_width_overflow_material
 dimen abc_alert_dialog_button_bar_height
+dimen abc_alert_dialog_button_dimen
 dimen abc_button_inset_horizontal_material
 dimen abc_button_inset_vertical_material
 dimen abc_button_padding_horizontal_material
@@ -520,11 +580,13 @@ dimen abc_dialog_fixed_height_major
 dimen abc_dialog_fixed_height_minor
 dimen abc_dialog_fixed_width_major
 dimen abc_dialog_fixed_width_minor
-dimen abc_dialog_list_padding_vertical_material
+dimen abc_dialog_list_padding_bottom_no_buttons
+dimen abc_dialog_list_padding_top_no_title
 dimen abc_dialog_min_width_major
 dimen abc_dialog_min_width_minor
 dimen abc_dialog_padding_material
 dimen abc_dialog_padding_top_material
+dimen abc_dialog_title_divider_material
 dimen abc_disabled_alpha_material_dark
 dimen abc_disabled_alpha_material_light
 dimen abc_dropdownitem_icon_width
@@ -563,13 +625,22 @@ dimen abc_text_size_title_material
 dimen abc_text_size_title_material_toolbar
 dimen activity_horizontal_margin
 dimen activity_vertical_margin
+dimen compat_button_inset_horizontal_material
+dimen compat_button_inset_vertical_material
+dimen compat_button_padding_horizontal_material
+dimen compat_button_padding_vertical_material
+dimen compat_control_corner_material
+dimen compat_notification_large_icon_max_height
+dimen compat_notification_large_icon_max_width
 dimen design_appbar_elevation
 dimen design_bottom_navigation_active_item_max_width
 dimen design_bottom_navigation_active_text_size
+dimen design_bottom_navigation_elevation
 dimen design_bottom_navigation_height
 dimen design_bottom_navigation_item_max_width
 dimen design_bottom_navigation_item_min_width
 dimen design_bottom_navigation_margin
+dimen design_bottom_navigation_shadow_height
 dimen design_bottom_navigation_text_size
 dimen design_bottom_sheet_modal_elevation
 dimen design_bottom_sheet_peek_height_min
@@ -601,6 +672,9 @@ dimen design_tab_text_size
 dimen design_tab_text_size_2line
 dimen disabled_alpha_material_dark
 dimen disabled_alpha_material_light
+dimen fastscroll_default_thickness
+dimen fastscroll_margin
+dimen fastscroll_minimum_range
 dimen highlight_alpha_material_colored
 dimen highlight_alpha_material_dark
 dimen highlight_alpha_material_light
@@ -626,6 +700,18 @@ dimen notification_small_icon_size_as_large
 dimen notification_subtext_size
 dimen notification_top_pad
 dimen notification_top_pad_large_text
+dimen subtitle_corner_radius
+dimen subtitle_outline_width
+dimen subtitle_shadow_offset
+dimen subtitle_shadow_radius
+dimen tooltip_corner_radius
+dimen tooltip_horizontal_padding
+dimen tooltip_margin
+dimen tooltip_precise_anchor_extra_offset
+dimen tooltip_precise_anchor_threshold
+dimen tooltip_vertical_padding
+dimen tooltip_y_offset_non_touch
+dimen tooltip_y_offset_touch
 drawable abc_ab_share_pack_mtrl_alpha
 drawable abc_action_bar_item_background_material
 drawable abc_btn_borderless_material
@@ -709,20 +795,31 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable avd_hide_password
+drawable avd_show_password
 drawable back
+drawable bar_chart
 drawable calendarclicked
 drawable cerrar_sesion
 drawable chef
 drawable configurar_recompensas
+drawable consumo_cliente
 drawable contorno_textview
 drawable design_bottom_navigation_item_background
 drawable design_fab_background
 drawable design_ic_visibility
+drawable design_ic_visibility_off
+drawable design_password_eye
 drawable design_snackbar_background
 drawable download
+drawable enviar_encuesta
+drawable enviar_puntos
 drawable estoy_aqui_navigation
 drawable happy
 drawable happy_clicked
+drawable ic_camera_white
+drawable ir_a_administrador
+drawable ir_a_modo_colaborador
 drawable list
 drawable logo_gd_grueso
 drawable logo_pando_app
@@ -745,8 +842,11 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable pando_empresa
+drawable pando_normal
 drawable percentage
 drawable perfil_navigation
+drawable perfil_provisional
 drawable puntos_de_recompensa
 drawable qr_code
 drawable sad
@@ -755,9 +855,17 @@ drawable shop
 drawable store
 drawable success
 drawable support
+drawable tooltip_frame_dark
+drawable tooltip_frame_light
 drawable welcome
 drawable woman
 drawable womanclicked
+id ALT
+id CTRL
+id FUNCTION
+id META
+id SHIFT
+id SYM
 id action0
 id action_bar
 id action_bar_activity_content
@@ -779,20 +887,26 @@ id action_text
 id actions
 id activity_chooser_view_content
 id add
+id administradorListView
 id alertTitle
 id all
 id always
+id async
 id auto
 id ayudaConstraintLayout
 id backAyudaImageView
 id barrier
 id beginning
+id blocking
 id bottom
 id bottom_navigation
 id button
 id button2
 id buttonPanel
+id camera_icon
 id cancel_action
+id canjearListView
+id canjearTextView
 id caritasConstraintLayout
 id center
 id center_horizontal
@@ -800,14 +914,19 @@ id center_vertical
 id chains
 id checkbox
 id chronometer
+id clientesActListView
+id clientesActrefreshLayout
 id clip_horizontal
 id clip_vertical
+id colaboradorListView
 id collapseActionView
 id compraListView
 id confirmContraEditText
+id container
 id contentPanel
 id contraLogInEditText
 id contraRegEditText
+id coordinator
 id correoAyudaTextEdit
 id correoLogInEditText
 id correoRegistroEditText
@@ -822,6 +941,8 @@ id design_menu_item_action_area
 id design_menu_item_action_area_stub
 id design_menu_item_text
 id design_navigation_view
+id detalleEnviarPtsConstraintLayout
+id detalleRepListView
 id dimensions
 id direct
 id disableHome
@@ -830,6 +951,9 @@ id end
 id end_padder
 id enterAlways
 id enterAlwaysCollapsed
+id enviarEncRefreshLayout
+id enviarEncuestaListView
+id enviarPtsConstraintLayout
 id estoyAquiTextView
 id exitUntilCollapsed
 id expand_activities_button
@@ -839,7 +963,10 @@ id fill
 id fill_horizontal
 id fill_vertical
 id fixed
+id forever
 id fragment_container
+id ghost_view
+id goToNegociosTextView
 id gone
 id groups
 id historialListView
@@ -851,17 +978,25 @@ id icon_group
 id ifRoom
 id image
 id imageView
+id imageView10
 id imageView11
+id imageView12
 id imageView13
+id imageView14
+id imageView15
+id imageView16
+id imageView17
 id imageView2
 id imageView3
 id imageView4
 id imageView5
 id imageView6
 id imageView7
+id imageView8
 id imageView9
 id info
 id invisible
+id italic
 id item_touch_helper_previous_elevation
 id largeLabel
 id left
@@ -872,9 +1007,11 @@ id list_item
 id listaComListView
 id logoBienImageView
 id manImageView
+id masked
 id media_actions
 id mensajeCompraTextView
 id mensajeEditText
+id message
 id middle
 id mini
 id misComprasListView
@@ -884,54 +1021,113 @@ id nav_lista_comercios
 id nav_perfil
 id navigation_header_container
 id never
+id nombreComEditText
 id nombrePerfilTextView
 id none
 id normal
 id notification_background
 id notification_main_column
 id notification_main_column_container
+id op10EnviarPtsTexttView
+id op11EnviarPtsTexttView
+id op1AdminCell1ImageView
+id op1AdminCell1textView
+id op1CanjearProdImageView
+id op1CanjearProdTextView
 id op1CaritasEditText
 id op1CaritasImageView
 id op1CaritasTextView
+id op1CodComEditText
+id op1CodComTextView
+id op1ColCell1TextView
 id op1CompraTextView
+id op1ContratextView
 id op1DescImageView
 id op1DescTexxtView
+id op1EditarComEditText
+id op1EditarComImageView
+id op1EditarTextView
+id op1EnviarEncImageView
+id op1EnviarEncTextView
+id op1EnviarPtsEditText
+id op1EnviarPtsImageView
+id op1EnviarPtsTexttView
 id op1GeneralTextView
 id op1HistTextView
 id op1MisCompTextView
+id op1NegociosButton
+id op1NegociosTextView
+id op1NomComTextView
+id op1PieChart
+id op1ProdCteImageView
+id op1ProdCteTextView
 id op1QRImageView
+id op1RepCel2TextView
+id op1ReporteTextView
 id op1SliderEditText
 id op1SliderTextView
 id op1TiendaTextview
 id op1_Reg_EditText
+id op2AdminCell1textView
+id op2CanjearProdTextView
 id op2CaritasImageView
 id op2CaritasTextView
+id op2ColCell1TextView
 id op2CompraTextView
 id op2DescImageView
+id op2EditarTextView
+id op2EnviarEncTextView
+id op2EnviarPtsTexttView
 id op2GeneralTextView
 id op2HistTextView
 id op2MisCompTextView
+id op2NegociosButton
+id op2ProdCteTextView
 id op2QRImageView
+id op2RepCel2TextView
 id op2SliderTextView
 id op2TiendaTextView
 id op2_Reg_EditText
+id op3AdminCell1textView
+id op3CanjearProdTextView
 id op3CaritasImageView
 id op3CaritasTextView
+id op3ColCell1TextView
 id op3CompraTextView
 id op3DescImageView
 id op3DescTextView
+id op3EnviarEncTextView
+id op3EnviarPtsTexttView
 id op3HistTextView
 id op3MisCompTextView
+id op3ProdCteTextView
+id op3RepCel2TextView
 id op3SliderTextView
 id op3TiendaTextView
+id op4CanjearProdTextView
 id op4CompraTextView
+id op4EnviarEncTextView
+id op4EnviarPtsTexttView
 id op4HistTextView
 id op4MisCompTextView
+id op4ProdCteTextView
+id op4RepCel2TextView
 id op4SliderTextView
+id op5CanjearProdTextView
+id op5EnviarEncTextView
+id op5EnviarPtsTexttView
 id op5HistTextView
 id op5MisCompTextView
+id op5ProdCteTextView
+id op5RepCel2TextView
 id op5SliderTextView
+id op6EnviarPtsTexttView
+id op6ProdCteTextView
+id op6RepCel2TextView
 id op6SliderTextView
+id op7EnviarPtsTexttView
+id op8EnviarPtsTexttView
+id op9EnviarPtsTexttView
 id opc1ImaImageView
 id opc1ImaTextView
 id opc2ImaTextView
@@ -942,9 +1138,12 @@ id packed
 id parallax
 id parent
 id parentPanel
+id parent_matrix
 id percent
 id perfilListView
+id periodoSpinner
 id pin
+id productosListView
 id progress_circular
 id progress_horizontal
 id pruebaTextView
@@ -952,9 +1151,13 @@ id puntosClienteTextView
 id puntosHistTextView
 id radio
 id refreshDescLayout
+id reporteListView
 id right
 id right_icon
 id right_side
+id save_image_matrix
+id save_non_transition_alpha
+id save_scale_type
 id screen
 id scroll
 id scrollIndicatorDown
@@ -978,6 +1181,7 @@ id showHome
 id showTitle
 id sigCorreoRegTextView
 id sigLogInTextView
+id sigNomComTextView
 id sigSexoTexView
 id sig_nom_TextView
 id siguienteAyudaTextView
@@ -1003,9 +1207,13 @@ id status_bar_latest_event_content
 id submenuarrow
 id submit_area
 id tabMode
+id tag_transition_group
+id tag_unhandled_key_event_manager
+id tag_unhandled_key_listeners
 id text
 id text2
 id textSpacerNoButtons
+id textSpacerNoTitle
 id textView
 id textView10
 id textView11
@@ -1032,44 +1240,69 @@ id textView3
 id textView30
 id textView31
 id textView32
+id textView33
 id textView34
+id textView35
 id textView36
+id textView37
+id textView38
+id textView39
 id textView4
+id textView40
+id textView41
+id textView42
+id textView43
+id textView44
+id textView45
+id textView46
 id textView5
 id textView6
 id textView7
 id textView8
 id textView9
 id text_input_password_toggle
+id textinput_counter
+id textinput_error
 id tiendaListView
 id tiendaRefreshLayout
 id time
 id title
+id titleDividerNoCustom
 id title_template
 id tituloBienTextView
 id top
 id topPanel
 id touch_outside
 id transition_current_scene
+id transition_layout_save
+id transition_position
 id transition_scene_layoutid_cache
+id transition_transform
+id uniform
 id up
 id useLogo
 id verCodigoTextView
 id view_offset_helper
+id visible
 id withText
 id womanImageView
 id wrap
 id wrap_content
+id zxscan
 integer abc_config_activityDefaultDur
 integer abc_config_activityShortDur
 integer app_bar_elevation_anim_duration
 integer bottom_sheet_slide_duration
 integer cancel_button_image_alpha
+integer config_tooltipAnimTime
 integer design_snackbar_text_max_lines
+integer hide_password_duration
+integer show_password_duration
 integer status_bar_notification_info_maxnum
+integer viewfinder_border_length
+integer viewfinder_border_width
 layout abc_action_bar_title_item
 layout abc_action_bar_up_container
-layout abc_action_bar_view_list_nav_layout
 layout abc_action_menu_item_layout
 layout abc_action_menu_layout
 layout abc_action_mode_bar
@@ -1078,6 +1311,7 @@ layout abc_activity_chooser_view
 layout abc_activity_chooser_view_list_item
 layout abc_alert_dialog_button_bar_material
 layout abc_alert_dialog_material
+layout abc_alert_dialog_title_material
 layout abc_dialog_title_material
 layout abc_expanded_menu_layout
 layout abc_list_menu_item_checkbox
@@ -1093,23 +1327,43 @@ layout abc_screen_toolbar
 layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
+layout abc_tooltip
+layout activity_administrador
 layout activity_ayuda_sugerencia
+layout activity_canjear_productos
 layout activity_cliente
+layout activity_clientes_activos
+layout activity_codigo_comercio
+layout activity_colaborador
 layout activity_compra_tienda
 layout activity_contrasena
 layout activity_correo_user
 layout activity_descripcion_comercio
+layout activity_detalle_reporte
+layout activity_editar_comercio
+layout activity_enviar_encuesta
+layout activity_enviar_puntos
 layout activity_historial_puntos
 layout activity_info_inicial
 layout activity_inicio__pando_
+layout activity_inicio_pando_negocios
 layout activity_log_in
 layout activity_main
 layout activity_mis_compras
+layout activity_nombre_comercio
 layout activity_nombre_user
 layout activity_pregunta_caritas
 layout activity_pregunta_slider
+layout activity_productos_cliente
+layout activity_qrcode_reader
+layout activity_reporte_general
+layout activity_seleccion_perfil
 layout activity_sexo
 layout activity_tienda
+layout administrador_cell_1
+layout canjear_productos_cell_1
+layout canjear_productos_cell_2
+layout colaborador_cell_1
 layout compra_tienda_cell_1
 layout descripcion_comercio_cell_1
 layout descripcion_comercio_cell_2
@@ -1128,8 +1382,10 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_password_icon
 layout detalle_ayuda_sugerencia
+layout detalle_enviar_puntos
 layout detalle_pregunta_caritas
 layout detalle_pregunta_slider
+layout enviar_encuesta_cell_1
 layout fragment_descripcion_comercio
 layout fragment_lista_comercios
 layout fragment_perfil_usuario
@@ -1153,7 +1409,10 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout productos_cliente_cell_1
 layout prueba_1
+layout reporte_general_cell_1
+layout reporte_general_cell_2
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
@@ -1162,10 +1421,9 @@ layout tienda_cell_1
 layout una_opcion_con_flecha
 layout una_opcion_con_imagen
 menu bottom_navigation
+menu main_camera
 mipmap ic_launcher
 string abc_action_bar_home_description
-string abc_action_bar_home_description_format
-string abc_action_bar_home_subtitle_description_format
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description
 string abc_action_mode_done
@@ -1202,18 +1460,25 @@ string character_counter_pattern
 string hello_world
 string parse_app_id
 string parse_client_key
+string password_toggle_content_description
+string path_password_eye
+string path_password_eye_mask_strike_through
+string path_password_eye_mask_visible
+string path_password_strike_through
 string search_menu_title
 string status_bar_notification_info_overflow
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog
 style Animation_AppCompat_DropDownUp
+style Animation_AppCompat_Tooltip
 style Animation_Design_BottomSheetDialog
 style AppTheme
 style Base_AlertDialog_AppCompat
 style Base_AlertDialog_AppCompat_Light
 style Base_Animation_AppCompat_Dialog
 style Base_Animation_AppCompat_DropDownUp
+style Base_Animation_AppCompat_Tooltip
 style Base_DialogWindowTitle_AppCompat
 style Base_DialogWindowTitleBackground_AppCompat
 style Base_TextAppearance_AppCompat
@@ -1243,6 +1508,7 @@ style Base_TextAppearance_AppCompat_Subhead
 style Base_TextAppearance_AppCompat_Subhead_Inverse
 style Base_TextAppearance_AppCompat_Title
 style Base_TextAppearance_AppCompat_Title_Inverse
+style Base_TextAppearance_AppCompat_Tooltip
 style Base_TextAppearance_AppCompat_Widget_ActionBar_Menu
 style Base_TextAppearance_AppCompat_Widget_ActionBar_Subtitle
 style Base_TextAppearance_AppCompat_Widget_ActionBar_Subtitle_Inverse
@@ -1251,6 +1517,8 @@ style Base_TextAppearance_AppCompat_Widget_ActionBar_Title_Inverse
 style Base_TextAppearance_AppCompat_Widget_ActionMode_Subtitle
 style Base_TextAppearance_AppCompat_Widget_ActionMode_Title
 style Base_TextAppearance_AppCompat_Widget_Button
+style Base_TextAppearance_AppCompat_Widget_Button_Borderless_Colored
+style Base_TextAppearance_AppCompat_Widget_Button_Colored
 style Base_TextAppearance_AppCompat_Widget_Button_Inverse
 style Base_TextAppearance_AppCompat_Widget_DropDownItem
 style Base_TextAppearance_AppCompat_Widget_PopupMenu_Header
@@ -1282,20 +1550,21 @@ style Base_ThemeOverlay_AppCompat_Dark_ActionBar
 style Base_ThemeOverlay_AppCompat_Dialog
 style Base_ThemeOverlay_AppCompat_Dialog_Alert
 style Base_ThemeOverlay_AppCompat_Light
-style Base_V11_Theme_AppCompat_Dialog
-style Base_V11_Theme_AppCompat_Light_Dialog
-style Base_V11_ThemeOverlay_AppCompat_Dialog
-style Base_V12_Widget_AppCompat_AutoCompleteTextView
-style Base_V12_Widget_AppCompat_EditText
+style Base_V14_Widget_Design_AppBarLayout
 style Base_V21_Theme_AppCompat
 style Base_V21_Theme_AppCompat_Dialog
 style Base_V21_Theme_AppCompat_Light
 style Base_V21_Theme_AppCompat_Light_Dialog
 style Base_V21_ThemeOverlay_AppCompat_Dialog
+style Base_V21_Widget_Design_AppBarLayout
 style Base_V22_Theme_AppCompat
 style Base_V22_Theme_AppCompat_Light
 style Base_V23_Theme_AppCompat
 style Base_V23_Theme_AppCompat_Light
+style Base_V26_Theme_AppCompat
+style Base_V26_Theme_AppCompat_Light
+style Base_V26_Widget_AppCompat_Toolbar
+style Base_V26_Widget_Design_AppBarLayout
 style Base_V7_Theme_AppCompat
 style Base_V7_Theme_AppCompat_Dialog
 style Base_V7_Theme_AppCompat_Light
@@ -1303,6 +1572,7 @@ style Base_V7_Theme_AppCompat_Light_Dialog
 style Base_V7_ThemeOverlay_AppCompat_Dialog
 style Base_V7_Widget_AppCompat_AutoCompleteTextView
 style Base_V7_Widget_AppCompat_EditText
+style Base_V7_Widget_AppCompat_Toolbar
 style Base_Widget_AppCompat_ActionBar
 style Base_Widget_AppCompat_ActionBar_Solid
 style Base_Widget_AppCompat_ActionBar_TabBar
@@ -1367,10 +1637,6 @@ style Platform_AppCompat_Light
 style Platform_ThemeOverlay_AppCompat
 style Platform_ThemeOverlay_AppCompat_Dark
 style Platform_ThemeOverlay_AppCompat_Light
-style Platform_V11_AppCompat
-style Platform_V11_AppCompat_Light
-style Platform_V14_AppCompat
-style Platform_V14_AppCompat_Light
 style Platform_V21_AppCompat
 style Platform_V21_AppCompat_Light
 style Platform_V25_AppCompat
@@ -1410,16 +1676,6 @@ style TextAppearance_AppCompat_Light_Widget_PopupMenu_Small
 style TextAppearance_AppCompat_Medium
 style TextAppearance_AppCompat_Medium_Inverse
 style TextAppearance_AppCompat_Menu
-style TextAppearance_AppCompat_Notification
-style TextAppearance_AppCompat_Notification_Info
-style TextAppearance_AppCompat_Notification_Info_Media
-style TextAppearance_AppCompat_Notification_Line2
-style TextAppearance_AppCompat_Notification_Line2_Media
-style TextAppearance_AppCompat_Notification_Media
-style TextAppearance_AppCompat_Notification_Time
-style TextAppearance_AppCompat_Notification_Time_Media
-style TextAppearance_AppCompat_Notification_Title
-style TextAppearance_AppCompat_Notification_Title_Media
 style TextAppearance_AppCompat_SearchResult_Subtitle
 style TextAppearance_AppCompat_SearchResult_Title
 style TextAppearance_AppCompat_Small
@@ -1428,6 +1684,7 @@ style TextAppearance_AppCompat_Subhead
 style TextAppearance_AppCompat_Subhead_Inverse
 style TextAppearance_AppCompat_Title
 style TextAppearance_AppCompat_Title_Inverse
+style TextAppearance_AppCompat_Tooltip
 style TextAppearance_AppCompat_Widget_ActionBar_Menu
 style TextAppearance_AppCompat_Widget_ActionBar_Subtitle
 style TextAppearance_AppCompat_Widget_ActionBar_Subtitle_Inverse
@@ -1438,6 +1695,8 @@ style TextAppearance_AppCompat_Widget_ActionMode_Subtitle_Inverse
 style TextAppearance_AppCompat_Widget_ActionMode_Title
 style TextAppearance_AppCompat_Widget_ActionMode_Title_Inverse
 style TextAppearance_AppCompat_Widget_Button
+style TextAppearance_AppCompat_Widget_Button_Borderless_Colored
+style TextAppearance_AppCompat_Widget_Button_Colored
 style TextAppearance_AppCompat_Widget_Button_Inverse
 style TextAppearance_AppCompat_Widget_DropDownItem
 style TextAppearance_AppCompat_Widget_PopupMenu_Header
@@ -1445,6 +1704,16 @@ style TextAppearance_AppCompat_Widget_PopupMenu_Large
 style TextAppearance_AppCompat_Widget_PopupMenu_Small
 style TextAppearance_AppCompat_Widget_Switch
 style TextAppearance_AppCompat_Widget_TextView_SpinnerItem
+style TextAppearance_Compat_Notification
+style TextAppearance_Compat_Notification_Info
+style TextAppearance_Compat_Notification_Info_Media
+style TextAppearance_Compat_Notification_Line2
+style TextAppearance_Compat_Notification_Line2_Media
+style TextAppearance_Compat_Notification_Media
+style TextAppearance_Compat_Notification_Time
+style TextAppearance_Compat_Notification_Time_Media
+style TextAppearance_Compat_Notification_Title
+style TextAppearance_Compat_Notification_Title_Media
 style TextAppearance_Design_CollapsingToolbar_Expanded
 style TextAppearance_Design_Counter
 style TextAppearance_Design_Counter_Overflow
@@ -1452,11 +1721,6 @@ style TextAppearance_Design_Error
 style TextAppearance_Design_Hint
 style TextAppearance_Design_Snackbar_Message
 style TextAppearance_Design_Tab
-style TextAppearance_StatusBar_EventContent
-style TextAppearance_StatusBar_EventContent_Info
-style TextAppearance_StatusBar_EventContent_Line2
-style TextAppearance_StatusBar_EventContent_Time
-style TextAppearance_StatusBar_EventContent_Title
 style TextAppearance_Widget_AppCompat_ExpandedMenu_Item
 style TextAppearance_Widget_AppCompat_Toolbar_Subtitle
 style TextAppearance_Widget_AppCompat_Toolbar_Title
@@ -1547,8 +1811,6 @@ style Widget_AppCompat_ListPopupWindow
 style Widget_AppCompat_ListView
 style Widget_AppCompat_ListView_DropDown
 style Widget_AppCompat_ListView_Menu
-style Widget_AppCompat_NotificationActionContainer
-style Widget_AppCompat_NotificationActionText
 style Widget_AppCompat_PopupMenu
 style Widget_AppCompat_PopupMenu_Overflow
 style Widget_AppCompat_PopupWindow
@@ -1568,6 +1830,8 @@ style Widget_AppCompat_Spinner_Underlined
 style Widget_AppCompat_TextView_SpinnerItem
 style Widget_AppCompat_Toolbar
 style Widget_AppCompat_Toolbar_Button_Navigation
+style Widget_Compat_NotificationActionContainer
+style Widget_Compat_NotificationActionText
 style Widget_Design_AppBarLayout
 style Widget_Design_BottomNavigationView
 style Widget_Design_BottomSheet_Modal
@@ -1579,22 +1843,24 @@ style Widget_Design_ScrimInsetsFrameLayout
 style Widget_Design_Snackbar
 style Widget_Design_TabLayout
 style Widget_Design_TextInputLayout
+style Widget_Support_CoordinatorLayout
 styleable ActionBar background backgroundSplit backgroundStacked contentInsetEnd contentInsetEndWithActions contentInsetLeft contentInsetRight contentInsetStart contentInsetStartWithNavigation customNavigationLayout displayOptions divider elevation height hideOnContentScroll homeAsUpIndicator homeLayout icon indeterminateProgressStyle itemPadding logo navigationMode popupTheme progressBarPadding progressBarStyle subtitle subtitleTextStyle title titleTextStyle
 styleable ActionBarLayout android_layout_gravity
 styleable ActionMenuItemView android_minWidth
 styleable ActionMenuView
 styleable ActionMode background backgroundSplit closeItemLayout height subtitleTextStyle titleTextStyle
 styleable ActivityChooserView expandActivityOverflowButtonDrawable initialActivityCount
-styleable AlertDialog android_layout buttonPanelSideLayout listItemLayout listLayout multiChoiceItemLayout singleChoiceItemLayout
-styleable AppBarLayout android_background elevation expanded
+styleable AlertDialog android_layout buttonIconDimen buttonPanelSideLayout listItemLayout listLayout multiChoiceItemLayout showTitle singleChoiceItemLayout
+styleable AppBarLayout android_background android_touchscreenBlocksFocus android_keyboardNavigationCluster elevation expanded
 styleable AppBarLayoutStates state_collapsed state_collapsible
 styleable AppBarLayout_Layout layout_scrollFlags layout_scrollInterpolator
-styleable AppCompatImageView android_src srcCompat
+styleable AppCompatImageView android_src srcCompat tint tintMode
 styleable AppCompatSeekBar android_thumb tickMark tickMarkTint tickMarkTintMode
 styleable AppCompatTextHelper android_textAppearance android_drawableTop android_drawableBottom android_drawableLeft android_drawableRight android_drawableStart android_drawableEnd
-styleable AppCompatTextView android_textAppearance textAllCaps
-styleable AppCompatTheme android_windowIsFloating android_windowAnimationStyle actionBarDivider actionBarItemBackground actionBarPopupTheme actionBarSize actionBarSplitStyle actionBarStyle actionBarTabBarStyle actionBarTabStyle actionBarTabTextStyle actionBarTheme actionBarWidgetTheme actionButtonStyle actionDropDownStyle actionMenuTextAppearance actionMenuTextColor actionModeBackground actionModeCloseButtonStyle actionModeCloseDrawable actionModeCopyDrawable actionModeCutDrawable actionModeFindDrawable actionModePasteDrawable actionModePopupWindowStyle actionModeSelectAllDrawable actionModeShareDrawable actionModeSplitBackground actionModeStyle actionModeWebSearchDrawable actionOverflowButtonStyle actionOverflowMenuStyle activityChooserViewStyle alertDialogButtonGroupStyle alertDialogCenterButtons alertDialogStyle alertDialogTheme autoCompleteTextViewStyle borderlessButtonStyle buttonBarButtonStyle buttonBarNegativeButtonStyle buttonBarNeutralButtonStyle buttonBarPositiveButtonStyle buttonBarStyle buttonStyle buttonStyleSmall checkboxStyle checkedTextViewStyle colorAccent colorBackgroundFloating colorButtonNormal colorControlActivated colorControlHighlight colorControlNormal colorPrimary colorPrimaryDark colorSwitchThumbNormal controlBackground dialogPreferredPadding dialogTheme dividerHorizontal dividerVertical dropDownListViewStyle dropdownListPreferredItemHeight editTextBackground editTextColor editTextStyle homeAsUpIndicator imageButtonStyle listChoiceBackgroundIndicator listDividerAlertDialog listMenuViewStyle listPopupWindowStyle listPreferredItemHeight listPreferredItemHeightLarge listPreferredItemHeightSmall listPreferredItemPaddingLeft listPreferredItemPaddingRight panelBackground panelMenuListTheme panelMenuListWidth popupMenuStyle popupWindowStyle radioButtonStyle ratingBarStyle ratingBarStyleIndicator ratingBarStyleSmall searchViewStyle seekBarStyle selectableItemBackground selectableItemBackgroundBorderless spinnerDropDownItemStyle spinnerStyle switchStyle textAppearanceLargePopupMenu textAppearanceListItem textAppearanceListItemSmall textAppearancePopupMenuHeader textAppearanceSearchResultSubtitle textAppearanceSearchResultTitle textAppearanceSmallPopupMenu textColorAlertDialogListItem textColorSearchUrl toolbarNavigationButtonStyle toolbarStyle windowActionBar windowActionBarOverlay windowActionModeOverlay windowFixedHeightMajor windowFixedHeightMinor windowFixedWidthMajor windowFixedWidthMinor windowMinWidthMajor windowMinWidthMinor windowNoTitle
-styleable BottomNavigationView itemBackground itemIconTint itemTextColor menu
+styleable AppCompatTextView android_textAppearance autoSizeMaxTextSize autoSizeMinTextSize autoSizePresetSizes autoSizeStepGranularity autoSizeTextType fontFamily textAllCaps
+styleable AppCompatTheme android_windowIsFloating android_windowAnimationStyle actionBarDivider actionBarItemBackground actionBarPopupTheme actionBarSize actionBarSplitStyle actionBarStyle actionBarTabBarStyle actionBarTabStyle actionBarTabTextStyle actionBarTheme actionBarWidgetTheme actionButtonStyle actionDropDownStyle actionMenuTextAppearance actionMenuTextColor actionModeBackground actionModeCloseButtonStyle actionModeCloseDrawable actionModeCopyDrawable actionModeCutDrawable actionModeFindDrawable actionModePasteDrawable actionModePopupWindowStyle actionModeSelectAllDrawable actionModeShareDrawable actionModeSplitBackground actionModeStyle actionModeWebSearchDrawable actionOverflowButtonStyle actionOverflowMenuStyle activityChooserViewStyle alertDialogButtonGroupStyle alertDialogCenterButtons alertDialogStyle alertDialogTheme autoCompleteTextViewStyle borderlessButtonStyle buttonBarButtonStyle buttonBarNegativeButtonStyle buttonBarNeutralButtonStyle buttonBarPositiveButtonStyle buttonBarStyle buttonStyle buttonStyleSmall checkboxStyle checkedTextViewStyle colorAccent colorBackgroundFloating colorButtonNormal colorControlActivated colorControlHighlight colorControlNormal colorError colorPrimary colorPrimaryDark colorSwitchThumbNormal controlBackground dialogPreferredPadding dialogTheme dividerHorizontal dividerVertical dropDownListViewStyle dropdownListPreferredItemHeight editTextBackground editTextColor editTextStyle homeAsUpIndicator imageButtonStyle listChoiceBackgroundIndicator listDividerAlertDialog listMenuViewStyle listPopupWindowStyle listPreferredItemHeight listPreferredItemHeightLarge listPreferredItemHeightSmall listPreferredItemPaddingLeft listPreferredItemPaddingRight panelBackground panelMenuListTheme panelMenuListWidth popupMenuStyle popupWindowStyle radioButtonStyle ratingBarStyle ratingBarStyleIndicator ratingBarStyleSmall searchViewStyle seekBarStyle selectableItemBackground selectableItemBackgroundBorderless spinnerDropDownItemStyle spinnerStyle switchStyle textAppearanceLargePopupMenu textAppearanceListItem textAppearanceListItemSecondary textAppearanceListItemSmall textAppearancePopupMenuHeader textAppearanceSearchResultSubtitle textAppearanceSearchResultTitle textAppearanceSmallPopupMenu textColorAlertDialogListItem textColorSearchUrl toolbarNavigationButtonStyle toolbarStyle tooltipForegroundColor tooltipFrameBackground viewInflaterClass windowActionBar windowActionBarOverlay windowActionModeOverlay windowFixedHeightMajor windowFixedHeightMinor windowFixedWidthMajor windowFixedWidthMinor windowMinWidthMajor windowMinWidthMinor windowNoTitle
+styleable BarcodeScannerView borderAlpha borderColor borderLength borderWidth cornerRadius finderOffset laserColor laserEnabled maskColor roundedCorner shouldScaleToFill squaredFinder
+styleable BottomNavigationView elevation itemBackground itemIconTint itemTextColor menu
 styleable BottomSheetBehavior_Layout behavior_hideable behavior_peekHeight behavior_skipCollapsed
 styleable ButtonBarLayout allowStacking
 styleable CircleImageView civ_border_color civ_border_overlay civ_border_width civ_circle_background_color
@@ -1609,20 +1875,25 @@ styleable CoordinatorLayout keylines statusBarBackground
 styleable CoordinatorLayout_Layout android_layout_gravity layout_anchor layout_anchorGravity layout_behavior layout_dodgeInsetEdges layout_insetEdge layout_keyline
 styleable DesignTheme bottomSheetDialogTheme bottomSheetStyle textColorError
 styleable DrawerArrowToggle arrowHeadLength arrowShaftLength barLength color drawableSize gapBetweenBars spinBars thickness
-styleable FloatingActionButton backgroundTint backgroundTintMode borderWidth elevation fabSize pressedTranslationZ rippleColor useCompatPadding
+styleable FloatingActionButton backgroundTint backgroundTintMode borderWidth elevation fabCustomSize fabSize pressedTranslationZ rippleColor useCompatPadding
 styleable FloatingActionButton_Behavior_Layout behavior_autoHide
+styleable FontFamily fontProviderAuthority fontProviderCerts fontProviderFetchStrategy fontProviderFetchTimeout fontProviderPackage fontProviderQuery
+styleable FontFamilyFont android_font android_fontWeight android_fontStyle android_ttcIndex android_fontVariationSettings font fontStyle fontVariationSettings fontWeight ttcIndex
 styleable ForegroundLinearLayout android_foreground android_foregroundGravity foregroundInsidePadding
+styleable GradientColor android_startColor android_endColor android_type android_centerX android_centerY android_gradientRadius android_tileMode android_centerColor android_startX android_startY android_endX android_endY
+styleable GradientColorItem android_color android_offset
 styleable LinearConstraintLayout android_orientation
 styleable LinearLayoutCompat android_gravity android_orientation android_baselineAligned android_baselineAlignedChildIndex android_weightSum divider dividerPadding measureWithLargestChild showDividers
 styleable LinearLayoutCompat_Layout android_layout_gravity android_layout_width android_layout_height android_layout_weight
 styleable ListPopupWindow android_dropDownHorizontalOffset android_dropDownVerticalOffset
 styleable MenuGroup android_enabled android_id android_visible android_menuCategory android_orderInCategory android_checkableBehavior
-styleable MenuItem android_icon android_enabled android_id android_checked android_visible android_menuCategory android_orderInCategory android_title android_titleCondensed android_alphabeticShortcut android_numericShortcut android_checkable android_onClick actionLayout actionProviderClass actionViewClass showAsAction
+styleable MenuItem android_icon android_enabled android_id android_checked android_visible android_menuCategory android_orderInCategory android_title android_titleCondensed android_alphabeticShortcut android_numericShortcut android_checkable android_onClick actionLayout actionProviderClass actionViewClass alphabeticModifiers contentDescription iconTint iconTintMode numericModifiers showAsAction tooltipText
 styleable MenuView android_windowAnimationStyle android_itemTextAppearance android_horizontalDivider android_verticalDivider android_headerBackground android_itemBackground android_itemIconDisabledAlpha preserveIconSpacing subMenuArrow
 styleable NavigationView android_background android_fitsSystemWindows android_maxWidth elevation headerLayout itemBackground itemIconTint itemTextAppearance itemTextColor menu
 styleable PopupWindow android_popupBackground android_popupAnimationStyle overlapAnchor
 styleable PopupWindowBackgroundState state_above_anchor
-styleable RecyclerView android_orientation android_descendantFocusability layoutManager reverseLayout spanCount stackFromEnd
+styleable RecycleListView paddingBottomNoButtons paddingTopNoTitle
+styleable RecyclerView android_orientation android_descendantFocusability fastScrollEnabled fastScrollHorizontalThumbDrawable fastScrollHorizontalTrackDrawable fastScrollVerticalThumbDrawable fastScrollVerticalTrackDrawable layoutManager reverseLayout spanCount stackFromEnd
 styleable ScrimInsetsFrameLayout insetForeground
 styleable ScrollingViewBehavior_Layout behavior_overlapTop
 styleable SearchView android_focusable android_maxWidth android_inputType android_imeOptions closeIcon commitIcon defaultQueryHint goIcon iconifiedByDefault layout queryBackground queryHint searchHintIcon searchIcon submitBackground suggestionRowLayout voiceIcon
@@ -1631,7 +1902,7 @@ styleable Spinner android_entries android_popupBackground android_prompt android
 styleable SwitchCompat android_textOn android_textOff android_thumb showText splitTrack switchMinWidth switchPadding switchTextAppearance thumbTextPadding thumbTint thumbTintMode track trackTint trackTintMode
 styleable TabItem android_icon android_layout android_text
 styleable TabLayout tabBackground tabContentStart tabGravity tabIndicatorColor tabIndicatorHeight tabMaxWidth tabMinWidth tabMode tabPadding tabPaddingBottom tabPaddingEnd tabPaddingStart tabPaddingTop tabSelectedTextColor tabTextAppearance tabTextColor
-styleable TextAppearance android_textSize android_typeface android_textStyle android_textColor android_textColorHint android_shadowColor android_shadowDx android_shadowDy android_shadowRadius textAllCaps
+styleable TextAppearance android_textSize android_typeface android_textStyle android_textColor android_textColorHint android_textColorLink android_shadowColor android_shadowDx android_shadowDy android_shadowRadius android_fontFamily fontFamily textAllCaps
 styleable TextInputLayout android_textColorHint android_hint counterEnabled counterMaxLength counterOverflowTextAppearance counterTextAppearance errorEnabled errorTextAppearance hintAnimationEnabled hintEnabled hintTextAppearance passwordToggleContentDescription passwordToggleDrawable passwordToggleEnabled passwordToggleTint passwordToggleTintMode
 styleable Toolbar android_gravity android_minHeight buttonGravity collapseContentDescription collapseIcon contentInsetEnd contentInsetEndWithActions contentInsetLeft contentInsetRight contentInsetStart contentInsetStartWithNavigation logo logoDescription maxButtonHeight navigationContentDescription navigationIcon popupTheme subtitle subtitleTextAppearance subtitleTextColor title titleMargin titleMarginBottom titleMarginEnd titleMarginStart titleMarginTop titleMargins titleTextAppearance titleTextColor
 styleable View android_theme android_focusable paddingEnd paddingStart theme

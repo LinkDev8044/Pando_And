@@ -39,7 +39,7 @@
         android:background="#d6d6d6"
         android:text="TextView" />
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/op1ContratextView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_above="@+id/textView11"
@@ -49,7 +49,7 @@
         android:id="@+id/textView13"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/textView12"
+        android:layout_above="@+id/op1ContratextView"
         android:background="#ebebeb"
         android:text="TextView" />
     <TextView

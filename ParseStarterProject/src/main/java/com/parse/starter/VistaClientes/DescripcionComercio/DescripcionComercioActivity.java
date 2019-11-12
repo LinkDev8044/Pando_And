@@ -1437,6 +1437,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     } else {
 
                         logoImageView.setImageResource(R.drawable.store);
+
                     }
 
                     return view;

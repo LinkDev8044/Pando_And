@@ -7,10 +7,12 @@
   ~ of patent rights can be found in the PATENTS file in the same directory.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.parse.starter">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
 
     <application
         android:name=".StarterApplication"
@@ -77,11 +79,56 @@
         <activity
             android:name=".VistaClientes.HistorialPuntos.HistorialPuntosActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VistaClientes.Encuestas.PreguntaCaritasActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".VistaClientes.Encuestas.PreguntaSliderActivity"
-            android:screenOrientation="portrait">
-        </activity>
+        <activity
+            android:name=".VistaClientes.Encuestas.PreguntaCaritasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.Encuestas.PreguntaSliderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisrtroAdministrador.InicioPandoNegociosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Inicio.SeleccionPerfilActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisrtroAdministrador.NombreComercioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisrtroAdministrador.CodigoComercioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.Administrador.AdministradorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.EditarComercio.EditarComercioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.Colaborador.ColaboradorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.Administrador.ReporteGeneralActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.Administrador.DetalleReporteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.ClientesActivos.ClientesActivosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.EnviarEncuesta.EnviarEncuestaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.EnviarPuntos.EnviarPuntosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.ProductosCliente.ProductosClienteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.ProductosCliente.CanjearProductosActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".VistaComercio.QRCodeReader.QRCodeReaderActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

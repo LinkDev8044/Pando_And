@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.starter.R;
+import com.parse.starter.RegisrtroAdministrador.NombreComercioActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,6 +29,9 @@ public class SexoActivity extends AppCompatActivity implements DatePickerDialog.
 
     String nombreUsuario;
     String apellidoUsuario;
+    String correoUsuario;
+    String comercioId;
+    String nombreComercio;
 
     ImageView manImageView;
     ImageView womanImageView;
@@ -40,18 +44,50 @@ public class SexoActivity extends AppCompatActivity implements DatePickerDialog.
     Boolean fechaSelect;
     Boolean isMan;
     Boolean isWoman;
+    Boolean esRegistroAdmin;
+    Boolean esRegistroColaborador;
 
     ProgressDialog progressDialog;
 
     public void siguiente(View view){
 
-        Intent intent = new Intent(getApplicationContext(), CorreoUserActivity.class);
-        intent.putExtra("nombreUsuario", nombreUsuario);
-        intent.putExtra("apellidoUsuario", apellidoUsuario);
-        intent.putExtra("isMan", isMan);
-        intent.putExtra("fechaNacimiento", fechaNacimiento.getTime());
-        startActivity(intent);
+        if (esRegistroColaborador){
 
+            Intent intent = new Intent(getApplicationContext(), ContrasenaActivity.class);
+            intent.putExtra("nombreUsuario", nombreUsuario);
+            intent.putExtra("apellidoUsuario", apellidoUsuario);
+            intent.putExtra("isMan", isMan);
+            intent.putExtra("fechaNacimiento", fechaNacimiento.getTime());
+            intent.putExtra("correoUsuario", correoUsuario);
+            intent.putExtra("esRegistroAdmin", esRegistroAdmin);
+            intent.putExtra("esRegistroColaborador", esRegistroColaborador);
+            intent.putExtra("comercioId", comercioId);
+            intent.putExtra("nombreComercio", nombreComercio);
+
+            startActivity(intent);
+
+
+        } else if (esRegistroAdmin){
+
+            Intent intent = new Intent(getApplicationContext(), NombreComercioActivity.class);
+            intent.putExtra("nombreUsuario", nombreUsuario);
+            intent.putExtra("apellidoUsuario", apellidoUsuario);
+            intent.putExtra("isMan", isMan);
+            intent.putExtra("fechaNacimiento", fechaNacimiento.getTime());
+            intent.putExtra("correoUsuario", correoUsuario);
+            intent.putExtra("esRegistroAdmin", esRegistroAdmin);
+            startActivity(intent);
+
+        } else {
+
+           Intent intent = new Intent(getApplicationContext(), CorreoUserActivity.class);
+           intent.putExtra("nombreUsuario", nombreUsuario);
+           intent.putExtra("apellidoUsuario", apellidoUsuario);
+           intent.putExtra("isMan", isMan);
+           intent.putExtra("fechaNacimiento", fechaNacimiento.getTime());
+           startActivity(intent);
+
+        }
     }
 
     public void iniciarSppiner() {
@@ -77,7 +113,7 @@ public class SexoActivity extends AppCompatActivity implements DatePickerDialog.
 
         if (fechaSelect){
 
-            siguienteTextView.setVisibility(0);
+            siguienteTextView.setVisibility(View.VISIBLE);
 
         }
     }
@@ -86,7 +122,7 @@ public class SexoActivity extends AppCompatActivity implements DatePickerDialog.
 
         fechaSelect = true;
 
-        mensajeTextView.setVisibility(0);
+        mensajeTextView.setVisibility(View.VISIBLE);
 
         mensajeTextView.setText(DateFormat.getDateInstance(2).format(calendar.getTime()));
         String i = String.valueOf(calendar.get(1));
@@ -105,7 +141,7 @@ public class SexoActivity extends AppCompatActivity implements DatePickerDialog.
 
         if ((isMan && !isWoman || !isMan && isWoman)){
 
-            siguienteTextView.setVisibility(0);
+            siguienteTextView.setVisibility(View.VISIBLE);
 
         }
 
@@ -158,6 +194,16 @@ public void datePicker(View view){
         Intent intent = getIntent();
         nombreUsuario = intent.getStringExtra("nombreUsuario");
         apellidoUsuario = intent.getStringExtra("apellidoUsuario");
+        esRegistroAdmin = intent.getBooleanExtra("esRegistroAdmin", false);
+        esRegistroColaborador = intent.getBooleanExtra("esRegistroColaborador", false);
+
+        if (esRegistroAdmin || esRegistroColaborador){
+
+            correoUsuario = intent.getStringExtra("correoUsuario");
+            nombreComercio = intent.getStringExtra("nombreComercio");
+            comercioId = intent.getStringExtra("comercioId");
+
+        }
 
         fechaSelect = false;
         isMan = false;

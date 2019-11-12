@@ -48,7 +48,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="80dp"
         android:background="@android:color/white"
         android:onClick="goToLogIn"
         android:text="ya tengo cuenta"
@@ -104,4 +104,19 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/goToNegociosTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:height="50dp"
+        android:background="@color/verde_Pando"
+        android:gravity="center"
+        android:onClick="goToNegocios"
+        android:text="Si tienes o trabajas en un negocio y quieres usar Pando para negocios, presiona aquí"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
