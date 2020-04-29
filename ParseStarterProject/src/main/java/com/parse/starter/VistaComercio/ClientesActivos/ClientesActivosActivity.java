@@ -370,6 +370,13 @@ public class ClientesActivosActivity extends AppCompatActivity implements SwipeR
             case R.id.camera_icon:
 
                 Intent intent = new Intent(getApplicationContext(), QRCodeReaderActivity.class);
+                intent.putExtra("comercioId", comercioId);
+                intent.putExtra("nombreComercio", nombreComercio);
+                intent.putExtra("encuestaActiva", encuestaActiva);
+                intent.putExtra("encuestaActivaId", encuestaActivaId);
+                intent.putExtra("numeroDePreguntas", numeroDePreguntas);
+                intent.putExtra("nombreCompletoAdmin", nombreCompletoAdmin);
+                intent.putExtra("recompensaActiva", recompensaActiva);
                 startActivity(intent);
 
                 return true;

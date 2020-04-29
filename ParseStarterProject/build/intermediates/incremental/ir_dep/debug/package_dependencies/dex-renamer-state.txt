@@ -1,4 +1,4 @@
-#Mon Nov 11 19:28:06 CST 2019
+#Wed Feb 19 11:48:38 CST 2020
 base.0=/Users/pro13/Documentos/Pando/App/Android/Versiones/2.2_Puntos/ParseStarterProject/build/intermediates/transforms/dexMerger/debug/10
 path.0=classes.dex
 renamed.0=classes.dex

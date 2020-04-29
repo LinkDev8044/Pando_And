@@ -73,6 +73,14 @@ public class ContrasenaActivity extends AppCompatActivity implements TextWatcher
 
         ParseObject object = new ParseObject("Comercios");
         object.put("nombreComercio", nombreComercio);
+        object.put("slogan", "");
+        object.put("consumoPromedio", 0);
+        object.put("visa", false);
+        object.put("mastercard", false);
+        object.put("american", false);
+        object.put("numeroContacto", 0);
+        object.put("horario", "");
+
         object.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

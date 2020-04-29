@@ -68,20 +68,20 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="40dp"
-        android:src="@drawable/configurar_recompensas"
+        android:src="@drawable/vip"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/op1DescImageView" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/op4DescTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="46dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Recompensas por contestar encuestas de servicio"
+        android:text="VIP nivel"
         android:textColor="@color/gris_oscuro_pando"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/op2DescImageView"
@@ -105,13 +105,15 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/puntos_de_recompensa"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView13" />
 
     <TextView
-        android:id="@+id/textView24"
+        android:id="@+id/op5DescTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -122,19 +124,9 @@
         android:text="Puntos por consumo"
         android:textColor="@color/gris_oscuro_pando"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/op3DescImageView"
-        app:layout_constraintStart_toEndOf="@+id/imageView11"
-        app:layout_constraintTop_toBottomOf="@+id/textView22" />
-
-    <ImageView
-        android:id="@+id/op3DescImageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/op2DescImageView" />
+        app:layout_constraintEnd_toStartOf="@+id/op6DescTextView"
+        app:layout_constraintStart_toEndOf="@+id/imageView13"
+        app:layout_constraintTop_toBottomOf="@+id/op4DescTextView" />
 
     <ImageView
         android:id="@+id/imageView13"
@@ -142,39 +134,49 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="24dp"
         android:src="@drawable/percentage"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView11" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
     <TextView
-        android:id="@+id/textView25"
+        android:id="@+id/op7DescTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Porcentaje en puntos"
+        android:text="# Visitas | Últimos 30 días"
         android:textColor="@color/gris_oscuro_pando"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/op3DescTextView"
-        app:layout_constraintStart_toEndOf="@+id/imageView13"
-        app:layout_constraintTop_toBottomOf="@+id/textView24" />
+        app:layout_constraintEnd_toStartOf="@+id/op8DescTextView"
+        app:layout_constraintStart_toEndOf="@+id/imageView11"
+        app:layout_constraintTop_toBottomOf="@+id/op5DescTextView" />
 
     <TextView
-        android:id="@+id/op3DescTextView"
+        android:id="@+id/op8DescTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:textColor="@color/verde_Pando"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/op3DescImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/op6DescTextView" />
+
+    <TextView
+        android:id="@+id/op6DescTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:textColor="@color/verde_Pando"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/op2DescImageView" />
 
 </android.support.constraint.ConstraintLayout>

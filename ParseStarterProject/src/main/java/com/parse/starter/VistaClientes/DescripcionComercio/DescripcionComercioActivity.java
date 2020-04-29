@@ -41,7 +41,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Queue;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -59,6 +58,16 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
     String nombreColaborador;
     String colaboradorId;
     String correoColaborador;
+    String direccion;
+    String horario;
+
+    Boolean ofreceVIP;
+    Boolean esVIP;
+    Boolean visa;
+    Boolean american;
+    Boolean mastercard;
+
+    Calendar fechaInicioMes;
 
     ArrayList<String> consumoEnviadoArray = new ArrayList();
 
@@ -69,9 +78,17 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
     ArrayList<Double> puntosEnviadosArray = new ArrayList();
 
-    int porcentajeValor;
+    int porcentajeNivel1;
+    int porcentajeNivel2;
+    int porcentajeNivel3;
     int numeroDePreguntas;
     int contadorPuntos;
+    int nivel1;
+    int nivel2;
+    int nivel3;
+    int visitasCliente;
+    int consumoPromedio;
+    int numeroContacto;
 
     int[] IMAGES = {R.drawable.shop, R.drawable.configurar_recompensas, R.drawable.list};
 
@@ -93,6 +110,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
     Date fecha;
     Date fechaComparacion;
+    Date fechaComparacionVisitas;
 
     ListView descripcionListView;
 
@@ -234,22 +252,6 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
     private void cargaDatosComercio(){
 
-        tieneLogo = false;
-        usuarioActivo = false;
-        ofreceRecompensa = false;
-        tieneDescripcion = false;
-        tieneTienda = false;
-        clienteTieneProduc = false;
-        tieneHistorial = false;
-        encuestaPendiente = false;
-        visitaRegistrada = false;
-        contadorPuntos = 0;
-
-        consumoEnviadoArray.clear();
-        puntosEnviadosArray.clear();
-
-        descripcionCom = "(Sin descripción)";
-
         iniciarSppiner();
 
         Integer valueOf;
@@ -274,6 +276,38 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
             e.printStackTrace();
         }
 
+        //fecha 30 días antes
+        fechaInicioMes = Calendar.getInstance();
+        fechaInicioMes.set(Calendar.DATE, -30);
+
+        tieneLogo = false;
+        usuarioActivo = false;
+        ofreceRecompensa = false;
+        tieneDescripcion = false;
+        tieneTienda = false;
+        clienteTieneProduc = false;
+        tieneHistorial = false;
+        encuestaPendiente = false;
+        visitaRegistrada = false;
+        contadorPuntos = 0;
+        ofreceVIP = false;
+        esVIP = false;
+        visitasCliente = 0;
+        ofrecePuntos = false;
+        porcentajeNivel1 = 0;
+        consumoPromedio = 0;
+        american = false;
+        visa = false;
+        mastercard = false;
+        numeroContacto = 0;
+        direccion = "";
+        horario = "";
+
+        consumoEnviadoArray.clear();
+        puntosEnviadosArray.clear();
+
+        descripcionCom = "(Sin descripción)";
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comercios");
         query.whereEqualTo("nombreComercio", nombreComercio);
         query.setLimit(1);
@@ -286,6 +320,13 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     for (ParseObject object : objects){
 
                         comercioId = object.getObjectId();
+                        consumoPromedio = object.getInt("consumoPromedio");
+                        visa = object.getBoolean("visa");
+                        mastercard = object.getBoolean("mastercard");
+                        american = object.getBoolean("american");
+                        numeroContacto = object.getInt("numeroContacto");
+                        direccion = object.getString("direccion");
+                        horario = object.getString("horario");
 
                     }
 
@@ -404,9 +445,9 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                         }
 
-                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("RecompensaActiva");
+                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("ClubVIP");
                                                         query.whereEqualTo("comercioId", comercioId);
-                                                        query.whereNotEqualTo("recompensaActiva", "noRecompensa");
+                                                        query.whereEqualTo("activo", true);
                                                         query.setLimit(1);
                                                         query.findInBackground(new FindCallback<ParseObject>() {
                                                             @Override
@@ -416,13 +457,18 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                     if (objects.size() > 0){
 
-                                                                        ofreceRecompensa = true;
+                                                                        ofreceVIP = true;
 
-                                                                    } else {
+                                                                        for (ParseObject object : objects){
 
-                                                                        ofreceRecompensa = false;
+                                                                            nivel1 = object.getInt("nivel1");
+                                                                            nivel2 = object.getInt("nivel2");
+                                                                            nivel3 = object.getInt("nivel3");
 
+                                                                        }
                                                                     }
+
+                                                                    Log.i("prueba", String.valueOf(ofreceVIP));
 
                                                                     ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosActivos");
                                                                     query.whereEqualTo("comercioId", comercioId);
@@ -442,20 +488,12 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                                         if (ofrecePuntos){
 
-                                                                                            porcentajeValor = object.getInt("porcentaje");
-
-                                                                                        } else {
-
-                                                                                            porcentajeValor = 0;
+                                                                                            porcentajeNivel1 = object.getInt("porcentaje");
+                                                                                            porcentajeNivel2 = object.getInt("porcentaje2");
+                                                                                            porcentajeNivel3 = object.getInt("porcentaje3");
 
                                                                                         }
                                                                                     }
-
-                                                                                } else {
-
-                                                                                    ofrecePuntos = false;
-                                                                                    porcentajeValor = 0;
-
                                                                                 }
 
                                                                                 ParseQuery<ParseObject> query = ParseQuery.getQuery("DescripcionComercio");
@@ -608,9 +646,11 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                                                                                                                     }
 
-                                                                                                                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ImagenComercio");
+                                                                                                                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
                                                                                                                                                                     query.whereEqualTo("comercioId", comercioId);
-                                                                                                                                                                    query.setLimit(1);
+                                                                                                                                                                    query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                                                                                                                                                                    query.whereGreaterThanOrEqualTo("fechaCreacion", fechaInicioMes.getTime());
+                                                                                                                                                                    query.orderByDescending("fechaCreacion");
                                                                                                                                                                     query.findInBackground(new FindCallback<ParseObject>() {
                                                                                                                                                                         @Override
                                                                                                                                                                         public void done(List<ParseObject> objects, ParseException e) {
@@ -619,48 +659,98 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                                                                                                                                 if (objects.size() > 0){
 
-                                                                                                                                                                                    tieneLogo = true;
+                                                                                                                                                                                    esVIP = true;
 
                                                                                                                                                                                     for (ParseObject object : objects){
 
-                                                                                                                                                                                        ParseFile parseFile = (ParseFile) object.get("imagenPerfil");
-                                                                                                                                                                                        parseFile.getDataInBackground(new GetDataCallback() {
-                                                                                                                                                                                            @Override
-                                                                                                                                                                                            public void done(byte[] data, ParseException e) {
+                                                                                                                                                                                        if (visitasCliente == 0){
 
-                                                                                                                                                                                                if (e == null){
+                                                                                                                                                                                            fechaComparacionVisitas = object.getDate("fechaCreacion");
 
-                                                                                                                                                                                                    logoComercio = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                                                                                                                                                                            visitasCliente = visitasCliente + 1;
 
-                                                                                                                                                                                                    descripcionListView.setAdapter(customAdapter);
+                                                                                                                                                                                        } else {
 
-                                                                                                                                                                                                    swipeRefreshLayout.setRefreshing(false);
+                                                                                                                                                                                            long diff = fechaComparacionVisitas.getTime() - object.getDate("fechaCreacion").getTime();
+                                                                                                                                                                                            long diffInDays = TimeUnit.MILLISECONDS.toHours(diff);
 
-                                                                                                                                                                                                    terminarSppiner();
+                                                                                                                                                                                            if (diffInDays >= 8){
 
+                                                                                                                                                                                                visitasCliente = visitasCliente + 1;
 
-                                                                                                                                                                                                } else {
-
-                                                                                                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                    terminarSppiner();
-
-                                                                                                                                                                                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                                                }
                                                                                                                                                                                             }
-                                                                                                                                                                                        });
+
+                                                                                                                                                                                            fechaComparacionVisitas = object.getDate("fechaCreacion");
+
+                                                                                                                                                                                        }
                                                                                                                                                                                     }
-
-                                                                                                                                                                                } else {
-
-                                                                                                                                                                                    descripcionListView.setAdapter(customAdapter);
-
-                                                                                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                    terminarSppiner();
-
                                                                                                                                                                                 }
+
+                                                                                                                                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ImagenComercio");
+                                                                                                                                                                                query.whereEqualTo("comercioId", comercioId);
+                                                                                                                                                                                query.setLimit(1);
+                                                                                                                                                                                query.findInBackground(new FindCallback<ParseObject>() {
+                                                                                                                                                                                    @Override
+                                                                                                                                                                                    public void done(List<ParseObject> objects, ParseException e) {
+
+                                                                                                                                                                                        if (e == null){
+
+                                                                                                                                                                                            if (objects.size() > 0){
+
+                                                                                                                                                                                                tieneLogo = true;
+
+                                                                                                                                                                                                for (ParseObject object : objects){
+
+                                                                                                                                                                                                    ParseFile parseFile = (ParseFile) object.get("imagenPerfil");
+                                                                                                                                                                                                    parseFile.getDataInBackground(new GetDataCallback() {
+                                                                                                                                                                                                        @Override
+                                                                                                                                                                                                        public void done(byte[] data, ParseException e) {
+
+                                                                                                                                                                                                            if (e == null){
+
+                                                                                                                                                                                                                logoComercio = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                                                                                                                                                                                                                descripcionListView.setAdapter(customAdapter);
+
+                                                                                                                                                                                                                swipeRefreshLayout.setRefreshing(false);
+
+                                                                                                                                                                                                                terminarSppiner();
+
+
+                                                                                                                                                                                                            } else {
+
+                                                                                                                                                                                                                swipeRefreshLayout.setRefreshing(false);
+
+                                                                                                                                                                                                                terminarSppiner();
+
+                                                                                                                                                                                                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    });
+                                                                                                                                                                                                }
+
+                                                                                                                                                                                            } else {
+
+                                                                                                                                                                                                descripcionListView.setAdapter(customAdapter);
+
+                                                                                                                                                                                                swipeRefreshLayout.setRefreshing(false);
+
+                                                                                                                                                                                                terminarSppiner();
+
+                                                                                                                                                                                            }
+
+                                                                                                                                                                                        } else {
+
+                                                                                                                                                                                            swipeRefreshLayout.setRefreshing(false);
+
+                                                                                                                                                                                            terminarSppiner();
+
+                                                                                                                                                                                            Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                });
 
                                                                                                                                                                             } else {
 
@@ -669,6 +759,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                                                                                                                                                                                 terminarSppiner();
 
                                                                                                                                                                                 Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
 
                                                                                                                                                                             }
                                                                                                                                                                         }
@@ -688,6 +779,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                                                                                                     } else {
 
+                                                                                                                                                        swipeRefreshLayout.setRefreshing(false);
+
                                                                                                                                                         terminarSppiner();
 
                                                                                                                                                         Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
@@ -698,6 +791,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
 
                                                                                                                                         } else {
+
+                                                                                                                                            swipeRefreshLayout.setRefreshing(false);
 
                                                                                                                                             terminarSppiner();
 
@@ -1019,7 +1114,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
         @Override
         public int getViewTypeCount() {
-            return 7;
+            return 8;
 
         }
 
@@ -1355,6 +1450,24 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     if (usuarioActivoQR){
 
+                        return 7;
+
+                    }
+
+                    return 3;
+
+                }
+
+                return 7;
+
+            }
+
+            if (position == 12){
+
+                if (usarQR){
+
+                    if (usuarioActivoQR){
+
                         return 2;
 
                     }
@@ -1364,7 +1477,6 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                 }
 
                 return 2;
-
             }
 
             return 1;
@@ -1373,7 +1485,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
         @Override
         public int getCount() {
-            return 12;
+            return 13;
         }
 
         @Override
@@ -1401,32 +1513,80 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     TextView nombreComTexetView = (TextView) view.findViewById(R.id.op1DescTexxtView);
                     TextView puntosClienteTextView = (TextView) view.findViewById(R.id.op2GeneralTextView);
-                    TextView porcentajeTextView = (TextView) view.findViewById(R.id.op3DescTextView);
                     ImageView logoImageView = (ImageView) view.findViewById(R.id.op1DescImageView);
-                    ImageView recompensaImageView = (ImageView) view.findViewById(R.id.op2DescImageView);
-                    ImageView puntosImageView = (ImageView) view.findViewById(R.id.op3DescImageView);
+                    ImageView op1ImageView = (ImageView) view.findViewById(R.id.op2DescImageView);
+                    TextView op1TextView = (TextView) view.findViewById(R.id.op4DescTextView);
+                    TextView op2TextView = (TextView) view.findViewById(R.id.op5DescTextView);
+                    TextView op3TextView = (TextView) view.findViewById(R.id.op6DescTextView);
+                    TextView op4TextView = (TextView) view.findViewById(R.id.op7DescTextView);
+                    TextView op5TextView = (TextView) view.findViewById(R.id.op8DescTextView);
 
                     nombreComTexetView.setText(nombreComercio);
                     puntosClienteTextView.setText(String.valueOf(puntosCliente));
-                    porcentajeTextView.setText(String.valueOf(porcentajeValor) + "%");
+                    op5TextView.setText(String.valueOf(visitasCliente));
 
-                    if (ofreceRecompensa) {
+                    if (ofreceVIP){
 
-                        recompensaImageView.setImageResource(R.drawable.success);
+                        if (esVIP) {
+
+                            if (visitasCliente >= nivel3){
+
+                                op1ImageView.setImageResource(R.drawable.pando_nivel3);
+                                op1TextView.setText("VIP Nivel 3 Titanium");
+                                op3TextView.setText(String.valueOf(porcentajeNivel3) + "%");
+
+
+                            } else {
+
+                                if (visitasCliente >= nivel2){
+
+                                    op1ImageView.setImageResource(R.drawable.pando_nivel2);
+                                    op1TextView.setText("VIP Nivel 2 Platino");
+                                    op3TextView.setText(String.valueOf(porcentajeNivel2) + "%");
+
+                                } else {
+
+                                    op1ImageView.setImageResource(R.drawable.pando_nivel1);
+                                    op1TextView.setText("VIP Nivel 1 Oro");
+                                    op3TextView.setText(String.valueOf(porcentajeNivel1) + "%");
+
+                                }
+                            }
+
+
+                        } else {
+
+                            op1ImageView.setImageResource(R.drawable.pando_nivel1);
+                            op1TextView.setText("VIP Nivel 1 Oro");
+                            op3TextView.setText(String.valueOf(porcentajeNivel1) + "%");
+
+                        }
 
                     } else {
 
-                        recompensaImageView.setImageResource(R.drawable.nop);
+                        op1ImageView.setImageResource(R.drawable.nop);
+                        op1TextView.setText("Programa niveles VIP");
+                        op3TextView.setText(String.valueOf(porcentajeNivel1) + "%");
 
                     }
 
                     if (ofrecePuntos) {
 
-                        puntosImageView.setImageResource(R.drawable.success);
+                        op2TextView.setText("Puntos por consumo");
+
+                        if (porcentajeNivel3 > 0) {
+
+
+                        } else {
+
+                            op3TextView.setText(String.valueOf(porcentajeNivel1) + "%");
+
+                        }
 
                     } else {
 
-                        puntosImageView.setImageResource(R.drawable.nop);
+                        op2TextView.setText("No programa de puntos");
+                        op3TextView.setText("0 %");
 
                     }
 
@@ -1530,145 +1690,354 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     return view;
 
-                }
-            }
+                } else if (itemViewType == 7){
 
-            if (itemViewType == 0) {
+                    view = mInflater.inflate(R.layout.descripcion_comercio_cell_3, null);
 
-                view = mInflater.inflate(R.layout.descripcion_comercio_cell_1, null);
+                    TextView op1TextView = (TextView) view.findViewById(R.id.op1DescCell3TextView);
+                    TextView op2TextView = (TextView) view.findViewById(R.id.op2DescCell3TextView);
+                    TextView op3TextView = (TextView) view.findViewById(R.id.op3DescCell3TextView);
+                    TextView op4TextView = (TextView) view.findViewById(R.id.op4DescCell3TextView);
+                    ImageView op1ImageView = (ImageView) view.findViewById(R.id.op1DescCell3ImageView);
+                    ImageView op2ImageView = (ImageView) view.findViewById(R.id.op2DescCell3ImageView);
+                    ImageView op3ImageView = (ImageView) view.findViewById(R.id.op3DescCell3ImageView);
 
-                view.setEnabled(false);
+                    if (consumoPromedio > 0){
 
-                TextView nombreComTexetView = (TextView) view.findViewById(R.id.op1DescTexxtView);
-                TextView puntosClienteTextView = (TextView) view.findViewById(R.id.op2GeneralTextView);
-                TextView porcentajeTextView = (TextView) view.findViewById(R.id.op3DescTextView);
-                ImageView logoImageView = (ImageView) view.findViewById(R.id.op1DescImageView);
-                ImageView recompensaImageView = (ImageView) view.findViewById(R.id.op2DescImageView);
-                ImageView puntosImageView = (ImageView) view.findViewById(R.id.op3DescImageView);
+                        op1TextView.setText(String.valueOf(consumoPromedio));
 
-                nombreComTexetView.setText(nombreComercio);
-                puntosClienteTextView.setText(String.valueOf(puntosCliente));
-                porcentajeTextView.setText(String.valueOf(porcentajeValor) + "%");
+                    } else {
 
-                if (ofreceRecompensa) {
+                        op1TextView.setText("N/A");
 
-                    recompensaImageView.setImageResource(R.drawable.success);
+                    }
 
-                } else {
+                    if (!visa && !mastercard && !american){
 
-                    recompensaImageView.setImageResource(R.drawable.nop);
+                        op3ImageView.setImageResource(R.drawable.nop);
 
-                }
+                    } else {
 
-                if (ofrecePuntos) {
+                        if (american){
 
-                    puntosImageView.setImageResource(R.drawable.success);
+                            op1ImageView.setImageResource(R.drawable.american_express);
 
-                } else {
+                        }
 
-                    puntosImageView.setImageResource(R.drawable.nop);
+                        if (mastercard){
 
-                }
+                            op2ImageView.setImageResource(R.drawable.mastercard);
 
-                if (tieneLogo) {
+                        }
 
-                    logoImageView.setImageBitmap(logoComercio);
+                        if (visa){
 
-                } else {
+                            op3ImageView.setImageResource(R.drawable.visa);
 
-                    logoImageView.setImageResource(R.drawable.store);
-                }
+                        }
+                    }
 
-                return view;
+                    if (numeroContacto > 0){
 
-            } else if (itemViewType == 1){
+                        op2TextView.setText(String.valueOf(numeroContacto));
 
-                int pos = i - 8;
+                    } else {
 
-                view = mInflater.inflate(R.layout.una_opcion_con_imagen, null);
+                        op2TextView.setText("N/A");
 
-                TextView opcion1TextView = (TextView) view.findViewById(R.id.opc1ImaTextView);
-                TextView opcion2TextView = (TextView) view.findViewById(R.id.opc2ImaTextView);
-                ImageView opcion1ImageView = (ImageView) view.findViewById(R.id.opc1ImaImageView);
+                    }
 
-                opcion1TextView.setText(TITULOS[pos]);
-                opcion2TextView.setText(DESCRIPCIONES[pos]);
-                opcion1ImageView.setImageResource(IMAGES[pos]);
+                    if (direccion.matches("")){
 
-                return view;
+                        op3TextView.setText("Sin dirección");
 
-            } else if (itemViewType == 2){
+                    } else {
 
-                view = mInflater.inflate(R.layout.general_titulo_descripcion, null);
+                        op3TextView.setText(direccion);
 
-                view.setEnabled(false);
+                    }
 
-                TextView opcion1TextView = (TextView) view.findViewById(R.id.op1GeneralTextView);
-                TextView opcion2TextView = (TextView) view.findViewById(R.id.op2GeneralTextView);
+                    if (horario.matches("")){
 
-                opcion1TextView.setText("Descripción");
-                opcion2TextView.setText(descripcionCom);
+                        op4TextView.setText("N/A");
 
-                if (!tieneDescripcion){
+                    } else {
 
-                    opcion2TextView.setTypeface(null, Typeface.ITALIC);
+                        op4TextView.setText(horario);
+
+                    }
+
+                    return view;
 
                 }
-            } else if (itemViewType == 3){
 
-                view = mInflater.inflate(R.layout.general_celda_vacia, null);
+            } else {
 
-                return view;
+                if (itemViewType == 0) {
 
-            } else if (itemViewType == 4){
+                    view = mInflater.inflate(R.layout.descripcion_comercio_cell_1, null);
 
-                view = mInflater.inflate(R.layout.general_una_opcion_sola, null);
+                    view.setEnabled(false);
 
-                TextView tituloTextView = (TextView) view.findViewById(R.id.opcionSolaTextView);
+                    TextView nombreComTexetView = (TextView) view.findViewById(R.id.op1DescTexxtView);
+                    TextView puntosClienteTextView = (TextView) view.findViewById(R.id.op2GeneralTextView);
+                    ImageView logoImageView = (ImageView) view.findViewById(R.id.op1DescImageView);
+                    ImageView op1ImageView = (ImageView) view.findViewById(R.id.op2DescImageView);
+                    TextView op1TextView = (TextView) view.findViewById(R.id.op4DescTextView);
+                    TextView op2TextView = (TextView) view.findViewById(R.id.op5DescTextView);
+                    TextView op3TextView = (TextView) view.findViewById(R.id.op6DescTextView);
+                    TextView op4TextView = (TextView) view.findViewById(R.id.op7DescTextView);
+                    TextView op5TextView = (TextView) view.findViewById(R.id.op8DescTextView);
 
-                tituloTextView.setText("Contestar ENCUESTA de servicio AQUÍ");
-                tituloTextView.setBackgroundColor(getResources().getColor(R.color.morado_Pando));
-                tituloTextView.setTextColor(Color.WHITE);
+                    nombreComTexetView.setText(nombreComercio);
+                    puntosClienteTextView.setText(String.valueOf(puntosCliente));
+                    op5TextView.setText(String.valueOf(visitasCliente));
 
-                return view;
+                    if (ofreceVIP){
 
-            } else if (itemViewType == 5){
+                        if (esVIP) {
 
-                int pos = i - 3;
+                            if (visitasCliente >= nivel3){
 
-                view = mInflater.inflate(R.layout.historial_puntos_cell_1, null);
+                                op1ImageView.setImageResource(R.drawable.pando_nivel3);
+                                op1TextView.setText("VIP Nivel 3 Titanium");
+                                op3TextView.setText(String.valueOf(porcentajeNivel3) + "%");
 
-                TextView op1TextView = (TextView) view.findViewById(R.id.op1HistTextView);
-                TextView op2TextView = (TextView) view.findViewById(R.id.op4HistTextView);
-                TextView op3TextView = (TextView) view.findViewById(R.id.op2HistTextView);
-                TextView op4TextView = (TextView) view.findViewById(R.id.op5HistTextView);
-                TextView op5TextView = (TextView) view.findViewById(R.id.op3HistTextView);
 
-                op1TextView.setTextColor(getResources().getColor(R.color.morado_Pando));
-                op1TextView.setTypeface(null, Typeface.BOLD);
-                op3TextView.setTextColor(getResources().getColor(R.color.verde_Pando));
-                op5TextView.setTextColor(Color.BLACK);
+                            } else {
 
-                op1TextView.setText("Nuevo");
-                op2TextView.setText("Puntos recibidos");
-                op3TextView.setText(String.valueOf(puntosEnviadosArray.get(pos)));
-                op4TextView.setText("Consumo");
-                op5TextView.setText("$ " + consumoEnviadoArray.get(pos));
+                                if (visitasCliente >= nivel2){
 
-                return view;
+                                    op1ImageView.setImageResource(R.drawable.pando_nivel2);
+                                    op1TextView.setText("VIP Nivel 2 Platino");
+                                    op3TextView.setText(String.valueOf(porcentajeNivel2) + "%");
 
-            } else if (itemViewType == 6){
+                                } else {
 
-                view = mInflater.inflate(R.layout.descripcion_comercio_cell_2, null);
+                                    op1ImageView.setImageResource(R.drawable.pando_nivel1);
+                                    op1TextView.setText("VIP Nivel 1 Oro");
+                                    op3TextView.setText(String.valueOf(porcentajeNivel1) + "%");
 
-                ImageView op1ImageView = (ImageView) view.findViewById(R.id.op1QRImageView);
-                ImageView op2ImageView = (ImageView) view.findViewById(R.id.op2QRImageView);
+                                }
+                            }
 
-                op1ImageView.setImageBitmap(qrClienteImage);
-                op2ImageView.setImageResource(R.drawable.download);
 
-                return view;
+                        } else {
 
+                            op1ImageView.setImageResource(R.drawable.pando_nivel1);
+                            op1TextView.setText("VIP Nivel 1 Oro");
+                            op3TextView.setText(String.valueOf(porcentajeNivel1) + "%");
+
+                        }
+
+                    } else {
+
+                        op1ImageView.setImageResource(R.drawable.nop);
+                        op1TextView.setText("Programa niveles VIP");
+                        op3TextView.setText(String.valueOf(porcentajeNivel1) + "%");
+
+                    }
+
+                    if (ofrecePuntos) {
+
+                        op2TextView.setText("Puntos por consumo");
+
+                        if (porcentajeNivel3 > 0) {
+
+
+                        } else {
+
+                            op3TextView.setText(String.valueOf(porcentajeNivel1) + "%");
+
+                        }
+
+                    } else {
+
+                        op2TextView.setText("No rograma de puntos");
+                        op3TextView.setText("0 %");
+
+                    }
+
+                    if (tieneLogo) {
+
+                        logoImageView.setImageBitmap(logoComercio);
+
+                    } else {
+
+                        logoImageView.setImageResource(R.drawable.store);
+
+                    }
+
+                    return view;
+
+                } else if (itemViewType == 1){
+
+                    int pos = i - 8;
+
+                    view = mInflater.inflate(R.layout.una_opcion_con_imagen, null);
+
+                    TextView opcion1TextView = (TextView) view.findViewById(R.id.opc1ImaTextView);
+                    TextView opcion2TextView = (TextView) view.findViewById(R.id.opc2ImaTextView);
+                    ImageView opcion1ImageView = (ImageView) view.findViewById(R.id.opc1ImaImageView);
+
+                    opcion1TextView.setText(TITULOS[pos]);
+                    opcion2TextView.setText(DESCRIPCIONES[pos]);
+                    opcion1ImageView.setImageResource(IMAGES[pos]);
+
+                    return view;
+
+                } else if (itemViewType == 2){
+
+                    view = mInflater.inflate(R.layout.general_titulo_descripcion, null);
+
+                    view.setEnabled(false);
+
+                    TextView opcion1TextView = (TextView) view.findViewById(R.id.op1GeneralTextView);
+                    TextView opcion2TextView = (TextView) view.findViewById(R.id.op2GeneralTextView);
+
+                    opcion1TextView.setText("Descripción");
+                    opcion2TextView.setText(descripcionCom);
+
+                    if (!tieneDescripcion){
+
+                        opcion2TextView.setTypeface(null, Typeface.ITALIC);
+
+                    }
+                } else if (itemViewType == 3){
+
+                    view = mInflater.inflate(R.layout.general_celda_vacia, null);
+
+                    return view;
+
+                } else if (itemViewType == 4){
+
+                    view = mInflater.inflate(R.layout.general_una_opcion_sola, null);
+
+                    TextView tituloTextView = (TextView) view.findViewById(R.id.opcionSolaTextView);
+
+                    tituloTextView.setText("Contestar ENCUESTA de servicio AQUÍ");
+                    tituloTextView.setBackgroundColor(getResources().getColor(R.color.morado_Pando));
+                    tituloTextView.setTextColor(Color.WHITE);
+
+                    return view;
+
+                } else if (itemViewType == 5){
+
+                    int pos = i - 3;
+
+                    view = mInflater.inflate(R.layout.historial_puntos_cell_1, null);
+
+                    TextView op1TextView = (TextView) view.findViewById(R.id.op1HistTextView);
+                    TextView op2TextView = (TextView) view.findViewById(R.id.op4HistTextView);
+                    TextView op3TextView = (TextView) view.findViewById(R.id.op2HistTextView);
+                    TextView op4TextView = (TextView) view.findViewById(R.id.op5HistTextView);
+                    TextView op5TextView = (TextView) view.findViewById(R.id.op3HistTextView);
+
+                    op1TextView.setTextColor(getResources().getColor(R.color.morado_Pando));
+                    op1TextView.setTypeface(null, Typeface.BOLD);
+                    op3TextView.setTextColor(getResources().getColor(R.color.verde_Pando));
+                    op5TextView.setTextColor(Color.BLACK);
+
+                    op1TextView.setText("Nuevo");
+                    op2TextView.setText("Puntos recibidos");
+                    op3TextView.setText(String.valueOf(puntosEnviadosArray.get(pos)));
+                    op4TextView.setText("Consumo");
+                    op5TextView.setText("$ " + consumoEnviadoArray.get(pos));
+
+                    return view;
+
+                } else if (itemViewType == 6){
+
+                    view = mInflater.inflate(R.layout.descripcion_comercio_cell_2, null);
+
+                    ImageView op1ImageView = (ImageView) view.findViewById(R.id.op1QRImageView);
+                    ImageView op2ImageView = (ImageView) view.findViewById(R.id.op2QRImageView);
+
+                    op1ImageView.setImageBitmap(qrClienteImage);
+                    op2ImageView.setImageResource(R.drawable.download);
+
+                    return view;
+
+                } else if (itemViewType == 7){
+
+                    view = mInflater.inflate(R.layout.descripcion_comercio_cell_3, null);
+
+                    TextView op1TextView = (TextView) view.findViewById(R.id.op1DescCell3TextView);
+                    TextView op2TextView = (TextView) view.findViewById(R.id.op2DescCell3TextView);
+                    TextView op3TextView = (TextView) view.findViewById(R.id.op3DescCell3TextView);
+                    TextView op4TextView = (TextView) view.findViewById(R.id.op4DescCell3TextView);
+                    ImageView op1ImageView = (ImageView) view.findViewById(R.id.op1DescCell3ImageView);
+                    ImageView op2ImageView = (ImageView) view.findViewById(R.id.op2DescCell3ImageView);
+                    ImageView op3ImageView = (ImageView) view.findViewById(R.id.op3DescCell3ImageView);
+
+                    if (consumoPromedio > 0){
+
+                        op1TextView.setText(String.valueOf(consumoPromedio));
+
+                    } else {
+
+                        op1TextView.setText("N/A");
+
+                    }
+
+                    if (!visa && !mastercard && !american){
+
+                        op3ImageView.setImageResource(R.drawable.nop);
+
+                    } else {
+
+                        if (american){
+
+                            op1ImageView.setImageResource(R.drawable.american_express);
+
+                        }
+
+                        if (mastercard){
+
+                            op2ImageView.setImageResource(R.drawable.mastercard);
+
+                        }
+
+                        if (visa){
+
+                            op3ImageView.setImageResource(R.drawable.visa);
+
+                        }
+                    }
+
+                    if (numeroContacto > 0){
+
+                        op2TextView.setText(String.valueOf(numeroContacto));
+
+                    } else {
+
+                        op2TextView.setText("N/A");
+
+                    }
+
+                    if (direccion.matches("")){
+
+                        op3TextView.setText("Sin dirección");
+
+                    } else {
+
+                        op3TextView.setText(direccion);
+
+                    }
+
+                    if (horario.matches("")){
+
+                        op4TextView.setText("N/A");
+
+                    } else {
+
+                        op4TextView.setText(horario);
+
+                    }
+
+                    return view;
+
+                }
             }
 
             return view;

@@ -432,6 +432,8 @@ public class EnviarPuntosActivity extends AppCompatActivity implements View.OnKe
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        iniciarSppiner();
+
         setTitle("Enviar puntos");
 
         constraintLayout = (ConstraintLayout) findViewById(R.id.enviarPtsConstraintLayout);
@@ -465,6 +467,7 @@ public class EnviarPuntosActivity extends AppCompatActivity implements View.OnKe
         usuarioId = intent.getStringExtra("usuarioId");
         correoCliente = intent.getStringExtra("correoCliente");
         recompensaActiva = intent.getStringExtra("recompensaActiva");
+        porcentaje = intent.getDoubleExtra("porcentaje", 0.0);
 
         verificarEncuesta();
         buttonDisabled();
@@ -504,12 +507,25 @@ public class EnviarPuntosActivity extends AppCompatActivity implements View.OnKe
         int maxLength = 8;
         enviarPtsEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
 
-        iniciarSppiner();
-
-        porcentaje = 0.0;
         contador = 0;
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosActivos");
+        op9TextView.setText(String.valueOf(porcentaje.intValue()) + "%");
+
+        Double puntosEjemplo = 100 * (porcentaje / 100);
+
+        if ((puntosEjemplo % 1) == 0){
+
+            op11TextView.setText(String.valueOf(puntosEjemplo.intValue()) + " pts");
+
+        } else {
+
+            op11TextView.setText(String.format("%.2f", puntosEjemplo) + " pts");
+
+        }
+
+        terminarSppiner();
+
+        /*ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosActivos");
         query.whereEqualTo("comercioId", comercioId);
         query.whereEqualTo("eliminado", false);
         query.setLimit(1);
@@ -549,7 +565,7 @@ public class EnviarPuntosActivity extends AppCompatActivity implements View.OnKe
 
                 }
             }
-        });
+        });*/
 
     }
 

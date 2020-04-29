@@ -10,9 +10,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.parse.starter">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
 
     <application
         android:name=".StarterApplication"
@@ -127,7 +127,10 @@
         <activity
             android:name=".VistaComercio.ProductosCliente.CanjearProductosActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VistaComercio.QRCodeReader.QRCodeReaderActivity"
+        <activity
+            android:name=".VistaComercio.QRCodeReader.QRCodeReaderActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".VistaClientes.ValidarPuntos.ValidarPuntosActivity"
             android:screenOrientation="portrait"></activity>
     </application>
 

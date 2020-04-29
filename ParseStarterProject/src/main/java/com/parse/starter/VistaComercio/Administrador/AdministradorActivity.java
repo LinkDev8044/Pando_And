@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,12 +43,13 @@ public class AdministradorActivity extends AppCompatActivity {
     String nombreComercio;
     String comercioId;
 
-    String[] TITULOS = {"Reporte general", "Ir a modo Colaborador"};
-    String[] DESCRIPCIONES = {"", "Enviar/Canjear puntos\nValidar compras"};
+    String[] TITULOS = {"Reporte general", "Ir a modo Colaborador", "Cerrar sesión"};
+    String[] DESCRIPCIONES = {"", "Enviar/Canjear puntos\nValidar compras", ""};
 
-    int[] IMAGES = {R.drawable.bar_chart, R.drawable.ir_a_modo_colaborador};
+    int[] IMAGES = {R.drawable.bar_chart, R.drawable.ir_a_modo_colaborador, R.drawable.cerrar_sesion};
 
     Boolean tieneLogo;
+    Boolean isLogOut;
 
     Bitmap logoComercio;
 
@@ -126,10 +128,37 @@ public class AdministradorActivity extends AppCompatActivity {
 
                     }
 
+                    if (position == 3){
+
+                        if (isLogOut){
+
+                            ParseUser.logOut();
+                            startActivity(new Intent(getApplicationContext(), inicio_Pando_Activity.class));
+
+                        } else {
+
+                            isLogOut = true;
+
+                            Toast.makeText(AdministradorActivity.this, "Presiona de nuevo para CONFIRMAR cerrar sesión", Toast.LENGTH_SHORT).show();
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    isLogOut = false;
+
+                                }
+                            }, 5000);
+                        }
+
+                    }
+
                 }
             });
 
             customAdapter = new CustomAdapter();
+
+            isLogOut = false;
 
             ParseQuery<ParseObject> query = ParseQuery.getQuery("EncuestasAplicadas");
             query.whereEqualTo("colaboradorId", ParseUser.getCurrentUser().getObjectId());
@@ -246,7 +275,7 @@ public class AdministradorActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
