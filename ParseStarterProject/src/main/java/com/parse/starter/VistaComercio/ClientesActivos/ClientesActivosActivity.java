@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -47,10 +49,19 @@ public class ClientesActivosActivity extends AppCompatActivity implements SwipeR
     String recompensaActiva;
 
     int numeroDePreguntas;
+    int contador2;
 
     ArrayList<String> USUARIOArray = new ArrayList();
     ArrayList<String> USUARIOIdArray = new ArrayList();
     ArrayList<String> CORREOUsuarioArray = new ArrayList();
+    ArrayList<String> distanciaComArray = new ArrayList();
+    ArrayList<Boolean> esVecinoArray = new ArrayList();
+
+    Map<Integer,String> usuarioIdDic =  new HashMap<Integer, String>();
+    Map<Integer,Integer> tiempoDic =  new HashMap<Integer, Integer>();
+    Map<Integer,Date> fechaDic =  new HashMap<Integer, Date>();
+    Map<String,Boolean> usuarioIdBorrarDic =  new HashMap<String, Boolean>();
+    Map<String,Boolean> letrasVerdesDic =  new HashMap<String, Boolean>();
 
     Date fecha;
 
@@ -73,6 +84,245 @@ public class ClientesActivosActivity extends AppCompatActivity implements SwipeR
     public void terminarSppiner() {
         getWindow().clearFlags(16);
         this.progressDialog.dismiss();
+    }
+
+    private void cargarTabla(){
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("UsuarioActivo");
+        query.whereEqualTo("comercioId", comercioId);
+        query.whereEqualTo("activo", true);
+        query.orderByDescending("fechaCreacion");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+
+                    USUARIOArray.clear();
+                    USUARIOIdArray.clear();
+                    CORREOUsuarioArray.clear();
+                    distanciaComArray.clear();
+                    esVecinoArray.clear();
+
+                    for (ParseObject object : objects){
+
+                        USUARIOArray.add(object.getString("nombreUsuario"));
+                        USUARIOIdArray.add(object.getString("usuarioId"));
+                        CORREOUsuarioArray.add(object.getString("email"));
+
+                        if (object.getString("distanciaComercio") == null){
+
+                            distanciaComArray.add("N/A");
+                            esVecinoArray.add(false);
+
+                        } else  {
+
+                            distanciaComArray.add(object.getString("distanciaComercio"));
+                            esVecinoArray.add(object.getBoolean("esVecino"));
+
+                        }
+                    }
+
+                    clientesListView.setAdapter(customAdapter);
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                } else {
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                    Toast.makeText(ClientesActivosActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+    }
+
+    private void filtrarUsuarios(){
+
+        Integer valueOf;
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+        String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+        String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+        String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
+        Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
+        Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
+
+        if (valueOf7.intValue() == 0) {
+            valueOf = Integer.valueOf(valueOf8.intValue() - 11);
+        } else {
+            valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
+        }
+        try {
+            this.fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        contador2 = 0;
+
+        for (Map.Entry<Integer, String> entry : usuarioIdDic.entrySet()){
+
+            final Integer key = entry.getKey();
+            final String value = entry.getValue();
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("UsuarioActivo");
+            query.whereEqualTo("comercioId", comercioId);
+            query.whereEqualTo("activo", true);
+            query.whereEqualTo("usuarioId", value);
+            query.setLimit(1);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+
+                    if (e == null){
+
+                        for (ParseObject object : objects) {
+
+                            if (usuarioIdBorrarDic.get(value)) {
+
+                                object.put("activo", false);
+                                object.put("fechaEncuestaTerminada", fecha);
+                                object.saveInBackground();
+
+                            }
+
+                            contador2 = contador2 + 1;
+
+                            if (contador2 >= usuarioIdDic.size()){
+
+                                cargarTabla();
+
+                            }
+                        }
+
+                    } else {
+
+                        swipeRefreshLayout.setRefreshing(false);
+
+                        terminarSppiner();
+
+                        Toast.makeText(ClientesActivosActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
+        }
+    }
+
+    private void validarPuntosEnviados(){
+
+        Integer valueOf;
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+        String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+        String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+        String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
+        Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
+        Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
+
+        if (valueOf7.intValue() == 0) {
+            valueOf = Integer.valueOf(valueOf8.intValue() - 11);
+        } else {
+            valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
+        }
+        try {
+            this.fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        usuarioIdBorrarDic.clear();
+        letrasVerdesDic.clear();
+
+        for (Map.Entry<Integer, String> entry : usuarioIdDic.entrySet()){
+
+            final Integer key = entry.getKey();
+            String value = entry.getValue();
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
+            query.whereEqualTo("usuarioId", value);
+            query.whereEqualTo("comercioId", comercioId);
+            query.whereGreaterThanOrEqualTo("fechaCreacion", fechaDic.get(key));
+            query.orderByDescending("fechaCreacion");
+            query.setLimit(1);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+
+                    if (e == null){
+
+                        if (objects.size() > 0){
+
+                            letrasVerdesDic.put(usuarioIdDic.get(key), true);
+
+                            for (ParseObject object : objects){
+
+                                long diff = fecha.getTime() - object.getDate("fechaCreacion").getTime();
+                                long diffInHours = TimeUnit.MILLISECONDS.toMinutes(diff);
+
+                                if (diffInHours >= 60){
+
+                                    usuarioIdBorrarDic.put(usuarioIdDic.get(key), true);
+
+                                } else {
+
+                                    usuarioIdBorrarDic.put(usuarioIdDic.get(key), false);
+
+                                }
+
+                                if (usuarioIdBorrarDic.size() >= usuarioIdDic.size()){
+
+                                    filtrarUsuarios();
+
+                                }
+
+                            }
+
+                        } else {
+
+                            letrasVerdesDic.put(usuarioIdDic.get(key), false);
+
+                            if (tiempoDic.get(key) >= 1440){
+
+                                usuarioIdBorrarDic.put(usuarioIdDic.get(key), true);
+
+                            } else {
+
+                                usuarioIdBorrarDic.put(usuarioIdDic.get(key), false);
+
+                            }
+
+                            if (usuarioIdBorrarDic.size() >= usuarioIdDic.size()){
+
+                                filtrarUsuarios();
+
+                            }
+                        }
+
+
+
+                    } else {
+
+                        swipeRefreshLayout.setRefreshing(false);
+
+                        terminarSppiner();
+
+                        Toast.makeText(ClientesActivosActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
+        }
     }
 
     private void reloadData(){
@@ -106,41 +356,34 @@ public class ClientesActivosActivity extends AppCompatActivity implements SwipeR
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UsuarioActivo");
         query.whereEqualTo("comercioId", comercioId);
         query.whereEqualTo("activo", true);
+        query.orderByDescending("fechaCreacion");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
 
                 if (e == null){
 
-                    USUARIOArray.clear();
-                    USUARIOIdArray.clear();
-                    CORREOUsuarioArray.clear();
+                    usuarioIdDic.clear();
+                    tiempoDic.clear();
+                    fechaDic.clear();
+                    int contador = 0;
 
                     for (ParseObject object : objects){
 
                         long diff = fecha.getTime() - object.getDate("fechaCreacion").getTime();
                         long diffInHours = TimeUnit.MILLISECONDS.toMinutes(diff);
 
-                        if (diffInHours >= 40){
+                        usuarioIdDic.put(contador, object.getString("usuarioId"));
+                        tiempoDic.put(contador, Integer.valueOf((int) diffInHours));
+                        fechaDic.put(contador, object.getDate("fechaCreacion"));
+                        contador = contador + 1;
 
-                            object.put("activo", false);
-                            object.put("fechaEncuestaTerminada", fecha);
-                            object.saveInBackground();
+                        if (contador >= usuarioIdDic.size()){
 
-                        } else {
-
-                            USUARIOArray.add(object.getString("nombreUsuario"));
-                            USUARIOIdArray.add(object.getString("usuarioId"));
-                            CORREOUsuarioArray.add(object.getString("email"));
+                            validarPuntosEnviados();
 
                         }
                     }
-
-                    clientesListView.setAdapter(customAdapter);
-
-                    swipeRefreshLayout.setRefreshing(false);
-
-                    terminarSppiner();
 
                 } else {
 
@@ -194,6 +437,8 @@ public class ClientesActivosActivity extends AppCompatActivity implements SwipeR
                 intent.putExtra("nombreCompletoAdmin", nombreCompletoAdmin);
                 intent.putExtra("correoCliente", CORREOUsuarioArray.get(position));
                 intent.putExtra("recompensaActiva", recompensaActiva);
+                intent.putExtra("distanciaComSelec", distanciaComArray.get(position));
+                intent.putExtra("esVecinoSelec", esVecinoArray.get(position));
                 startActivity(intent);
 
             }

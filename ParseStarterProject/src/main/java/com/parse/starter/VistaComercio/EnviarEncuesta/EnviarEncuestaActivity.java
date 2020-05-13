@@ -50,12 +50,16 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
     String nombreCompletoAdmin;
     String correoCliente;
     String recompensaActiva;
+    String distanciaComSelec;
+    String promoVecino;
+    String promoNoVecino;
 
     Boolean ofreceVIP;
     Boolean ofrecePuntos;
     Boolean esVIP;
     Boolean tieneProductosCliente;
     Boolean encuestaEnviada;
+    Boolean esVecinoSelec;
 
     ArrayList<String> consumoEnviadoArray = new ArrayList();
 
@@ -174,10 +178,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                                 }
 
-                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductosCliente");
+                                ParseQuery<ParseObject> query = ParseQuery.getQuery("PromocionesPando");
                                 query.whereEqualTo("comercioId", comercioId);
-                                query.whereEqualTo("usuarioId", usuarioId);
-                                query.whereEqualTo("activo", true);
                                 query.setLimit(1);
                                 query.findInBackground(new FindCallback<ParseObject>() {
                                     @Override
@@ -185,16 +187,18 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                                         if (e == null){
 
-                                            if (objects.size() > 0){
+                                            for (ParseObject object : objects){
 
-                                                tieneProductosCliente = true;
+                                                promoVecino = object.getString("promoVecino");
+                                                promoNoVecino = object.getString("promoNoVecino");
 
                                             }
 
-                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("EncuestaPendiente");
+                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductosCliente");
                                             query.whereEqualTo("comercioId", comercioId);
                                             query.whereEqualTo("usuarioId", usuarioId);
                                             query.whereEqualTo("activo", true);
+                                            query.setLimit(1);
                                             query.findInBackground(new FindCallback<ParseObject>() {
                                                 @Override
                                                 public void done(List<ParseObject> objects, ParseException e) {
@@ -203,80 +207,73 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                                                         if (objects.size() > 0){
 
-                                                            for (ParseObject object : objects){
-
-                                                                long diff = fecha.getTime() - object.getDate("fechaCreacion").getTime();
-                                                                long diffInHours = TimeUnit.MILLISECONDS.toHours(diff);
-
-                                                                if (diffInHours >= 8){
-
-                                                                    object.put("activo", false);
-                                                                    object.put("fechaModificacion", fecha);
-                                                                    object.saveInBackground();
-
-                                                                } else {
-
-                                                                    encuestaEnviada = true;
-
-                                                                }
-                                                            }
+                                                            tieneProductosCliente = true;
 
                                                         }
 
-
-
-                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
+                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("EncuestaPendiente");
                                                         query.whereEqualTo("comercioId", comercioId);
                                                         query.whereEqualTo("usuarioId", usuarioId);
-                                                        query.orderByDescending("fechaCreacion");
-                                                        query.setLimit(5);
+                                                        query.whereEqualTo("activo", true);
                                                         query.findInBackground(new FindCallback<ParseObject>() {
                                                             @Override
                                                             public void done(List<ParseObject> objects, ParseException e) {
 
                                                                 if (e == null){
 
-                                                                    for (ParseObject object : objects){
+                                                                    if (objects.size() > 0){
 
-                                                                        long diff = fecha.getTime() - object.getDate("fechaCreacion").getTime();
-                                                                        long diffInHours = TimeUnit.MILLISECONDS.toHours(diff);
+                                                                        for (ParseObject object : objects){
 
-                                                                        if (diffInHours <= 8 ){
+                                                                            long diff = fecha.getTime() - object.getDate("fechaCreacion").getTime();
+                                                                            long diffInHours = TimeUnit.MILLISECONDS.toHours(diff);
 
-                                                                            consumoEnviadoArray.add(object.getString("consumo"));
-                                                                            puntosEnviadosArray.add(object.getDouble("puntosEnviados"));
+                                                                            if (diffInHours >= 8){
 
+                                                                                object.put("activo", false);
+                                                                                object.put("fechaModificacion", fecha);
+                                                                                object.saveInBackground();
+
+                                                                            } else {
+
+                                                                                encuestaEnviada = true;
+
+                                                                            }
                                                                         }
+
                                                                     }
 
-                                                                    contadorPuntos = consumoEnviadoArray.size();
 
-                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ClubVIP");
+
+                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
                                                                     query.whereEqualTo("comercioId", comercioId);
-                                                                    query.whereEqualTo("activo", true);
-                                                                    query.setLimit(1);
+                                                                    query.whereEqualTo("usuarioId", usuarioId);
+                                                                    query.orderByDescending("fechaCreacion");
+                                                                    query.setLimit(5);
                                                                     query.findInBackground(new FindCallback<ParseObject>() {
                                                                         @Override
                                                                         public void done(List<ParseObject> objects, ParseException e) {
 
                                                                             if (e == null){
 
-                                                                                if (objects.size() > 0){
+                                                                                for (ParseObject object : objects){
 
-                                                                                    ofreceVIP = true;
+                                                                                    long diff = fecha.getTime() - object.getDate("fechaCreacion").getTime();
+                                                                                    long diffInHours = TimeUnit.MILLISECONDS.toHours(diff);
 
-                                                                                    for (ParseObject object : objects){
+                                                                                    if (diffInHours <= 8 ){
 
-                                                                                        nivel1 = object.getInt("nivel1");
-                                                                                        nivel2 = object.getInt("nivel2");
-                                                                                        nivel3 = object.getInt("nivel3");
+                                                                                        consumoEnviadoArray.add(object.getString("consumo"));
+                                                                                        puntosEnviadosArray.add(object.getDouble("puntosEnviados"));
 
                                                                                     }
                                                                                 }
 
-                                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosActivos");
+                                                                                contadorPuntos = consumoEnviadoArray.size();
+
+                                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ClubVIP");
                                                                                 query.whereEqualTo("comercioId", comercioId);
-                                                                                query.whereEqualTo("eliminado", false);
+                                                                                query.whereEqualTo("activo", true);
                                                                                 query.setLimit(1);
                                                                                 query.findInBackground(new FindCallback<ParseObject>() {
                                                                                     @Override
@@ -286,25 +283,21 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                                                                                             if (objects.size() > 0){
 
+                                                                                                ofreceVIP = true;
+
                                                                                                 for (ParseObject object : objects){
 
-                                                                                                    ofrecePuntos = object.getBoolean("activo");
+                                                                                                    nivel1 = object.getInt("nivel1");
+                                                                                                    nivel2 = object.getInt("nivel2");
+                                                                                                    nivel3 = object.getInt("nivel3");
 
-                                                                                                    if (ofrecePuntos){
-
-                                                                                                        porcentajeNivel1 = object.getInt("porcentaje");
-                                                                                                        porcentajeNivel2 = object.getInt("porcentaje2");
-                                                                                                        porcentajeNivel3 = object.getInt("porcentaje3");
-
-                                                                                                    }
                                                                                                 }
                                                                                             }
 
-                                                                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
+                                                                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosActivos");
                                                                                             query.whereEqualTo("comercioId", comercioId);
-                                                                                            query.whereEqualTo("usuarioId", usuarioId);
-                                                                                            query.whereGreaterThanOrEqualTo("fechaCreacion", fechaInicioMes.getTime());
-                                                                                            query.orderByDescending("fechaCreacion");
+                                                                                            query.whereEqualTo("eliminado", false);
+                                                                                            query.setLimit(1);
                                                                                             query.findInBackground(new FindCallback<ParseObject>() {
                                                                                                 @Override
                                                                                                 public void done(List<ParseObject> objects, ParseException e) {
@@ -313,38 +306,77 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                                                                                                         if (objects.size() > 0){
 
-                                                                                                            esVIP = true;
-
                                                                                                             for (ParseObject object : objects){
 
-                                                                                                                if (visitasCliente == 0){
+                                                                                                                ofrecePuntos = object.getBoolean("activo");
 
-                                                                                                                    fechaComparacionVisitas = object.getDate("fechaCreacion");
+                                                                                                                if (ofrecePuntos){
 
-                                                                                                                    visitasCliente = visitasCliente + 1;
-
-                                                                                                                } else {
-
-                                                                                                                    long diff = fechaComparacionVisitas.getTime() - object.getDate("fechaCreacion").getTime();
-                                                                                                                    long diffInDays = TimeUnit.MILLISECONDS.toHours(diff);
-
-                                                                                                                    if (diffInDays >= 8){
-
-                                                                                                                        visitasCliente = visitasCliente + 1;
-
-                                                                                                                    }
-
-                                                                                                                    fechaComparacionVisitas = object.getDate("fechaCreacion");
+                                                                                                                    porcentajeNivel1 = object.getInt("porcentaje");
+                                                                                                                    porcentajeNivel2 = object.getInt("porcentaje2");
+                                                                                                                    porcentajeNivel3 = object.getInt("porcentaje3");
 
                                                                                                                 }
                                                                                                             }
                                                                                                         }
 
-                                                                                                        enviarEncuestaListView.setAdapter(customAdapter);
+                                                                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
+                                                                                                        query.whereEqualTo("comercioId", comercioId);
+                                                                                                        query.whereEqualTo("usuarioId", usuarioId);
+                                                                                                        query.whereGreaterThanOrEqualTo("fechaCreacion", fechaInicioMes.getTime());
+                                                                                                        query.orderByDescending("fechaCreacion");
+                                                                                                        query.findInBackground(new FindCallback<ParseObject>() {
+                                                                                                            @Override
+                                                                                                            public void done(List<ParseObject> objects, ParseException e) {
 
-                                                                                                        swipeRefreshLayout.setRefreshing(false);
+                                                                                                                if (e == null){
 
-                                                                                                        terminarSppiner();
+                                                                                                                    if (objects.size() > 0){
+
+                                                                                                                        esVIP = true;
+
+                                                                                                                        for (ParseObject object : objects){
+
+                                                                                                                            if (visitasCliente == 0){
+
+                                                                                                                                fechaComparacionVisitas = object.getDate("fechaCreacion");
+
+                                                                                                                                visitasCliente = visitasCliente + 1;
+
+                                                                                                                            } else {
+
+                                                                                                                                long diff = fechaComparacionVisitas.getTime() - object.getDate("fechaCreacion").getTime();
+                                                                                                                                long diffInDays = TimeUnit.MILLISECONDS.toHours(diff);
+
+                                                                                                                                if (diffInDays >= 8){
+
+                                                                                                                                    visitasCliente = visitasCliente + 1;
+
+                                                                                                                                }
+
+                                                                                                                                fechaComparacionVisitas = object.getDate("fechaCreacion");
+
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+
+                                                                                                                    enviarEncuestaListView.setAdapter(customAdapter);
+
+                                                                                                                    swipeRefreshLayout.setRefreshing(false);
+
+                                                                                                                    terminarSppiner();
+
+                                                                                                                } else {
+
+                                                                                                                    swipeRefreshLayout.setRefreshing(false);
+
+                                                                                                                    terminarSppiner();
+
+                                                                                                                    Toast.makeText(EnviarEncuestaActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                                                                                                }
+                                                                                                            }
+                                                                                                        });
 
                                                                                                     } else {
 
@@ -382,6 +414,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                                                                         }
                                                                     });
 
+
+
                                                                 } else {
 
                                                                     swipeRefreshLayout.setRefreshing(false);
@@ -393,8 +427,6 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                                                                 }
                                                             }
                                                         });
-
-
 
                                                     } else {
 
@@ -481,12 +513,14 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
         nombreCompletoAdmin = intent.getStringExtra("nombreCompletoAdmin");
         correoCliente = intent.getStringExtra("correoCliente");
         recompensaActiva = intent.getStringExtra("recompensaActiva");
+        distanciaComSelec = intent.getStringExtra("distanciaComSelec");
+        esVecinoSelec = intent.getBooleanExtra("esVecinoSelec", false);
 
         enviarEncuestaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (position == 6){
+                if (position == 7){
 
                     Intent intent = new Intent(getApplicationContext(), EnviarPuntosActivity.class);
                     intent.putExtra("encuestaEnviada", encuestaEnviada);
@@ -505,7 +539,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 }
 
-                if (position == 7){
+                if (position == 8){
 
                     Intent intent = new Intent(getApplicationContext(), ProductosClienteActivity.class);
                     intent.putExtra("usuario", usuario);
@@ -515,7 +549,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 }
 
-                if (position == 8){
+                if (position == 9){
 
                     if (puntosCliente > 0){
 
@@ -557,7 +591,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
         @Override
         public int getViewTypeCount() {
 
-            return 4;
+            return 5;
 
         }
 
@@ -580,9 +614,13 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
             if (position == 0) {
 
+                //Info general cliente
+
                 return 0;
 
             } else if (position == 1){
+
+                //Historial 1
 
                 if (contadorPuntos > 0){
 
@@ -594,6 +632,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
             } else if (position == 2){
 
+                //Historial 2
+
                 if (contadorPuntos > 1){
 
                     return 2;
@@ -603,6 +643,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                 return 3;
 
             } else if (position == 3){
+
+                //Historial 3
 
                 if (contadorPuntos > 2){
 
@@ -614,6 +656,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
             } else if (position == 4){
 
+                //Historial 4
+
                 if (contadorPuntos > 3){
 
                     return 2;
@@ -624,6 +668,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
             } else if (position == 5){
 
+                //Historial 5
+
                 if (contadorPuntos > 4){
 
                     return 2;
@@ -632,7 +678,27 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 return 3;
 
+            } else if (position == 6){
+
+                //Promociones Pando
+
+                if (totalDeVisitas >= 2){
+
+                    return 3;
+
+                }
+
+                if (promoVecino.matches("")){
+
+                    return 3;
+
+                }
+
+                return 4;
+
             } else {
+
+                //Opciones en general: Enviar puntos, Canjear compras, Canjear puntos
 
                 return 1;
 
@@ -677,7 +743,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
         @Override
         public int getCount() {
 
-            return 9;
+            return 10;
 
         }
 
@@ -711,6 +777,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                     ImageView op4ImageView = (ImageView) convertView.findViewById(R.id.op4EnvEncImageView);
                     ImageView op5ImageView = (ImageView) convertView.findViewById(R.id.op5EnvEncImageView);
                     ImageView op6ImageView = (ImageView) convertView.findViewById(R.id.op6EnvEncImageView);
+                    ImageView op7ImageView = (ImageView) convertView.findViewById(R.id.op7EnvEncImageView);
                     TextView op1TextView = (TextView) convertView.findViewById(R.id.op1EnviarEncTextView);
                     TextView op2TextView = (TextView) convertView.findViewById(R.id.op2EnviarEncTextView);
                     TextView op3TextView = (TextView) convertView.findViewById(R.id.op3EnviarEncTextView);
@@ -721,6 +788,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                     TextView op8TextView = (TextView) convertView.findViewById(R.id.op8EnvEncTextView);
                     TextView op9TextView = (TextView) convertView.findViewById(R.id.op9EnvEncTextView);
                     TextView op10TextView = (TextView) convertView.findViewById(R.id.op10EnvEncTextView);
+                    TextView op11TextView = (TextView) convertView.findViewById(R.id.op11EnviarEncTextView);
+                    TextView op12TextView = (TextView) convertView.findViewById(R.id.op12EnviarEncTextView);
 
 
                     op2TextView.setText("Puntos disponibles");
@@ -738,14 +807,28 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                     op4ImageView.setImageResource(R.drawable.percentage);
                     op5ImageView.setImageResource(R.drawable.placeholder);
                     op6ImageView.setImageResource(R.drawable.list);
+                    op7ImageView.setImageResource(R.drawable.motorcycle);
                     op1TextView.setText(usuario);
                     op3TextView.setText(String.valueOf(puntosCliente));
                     op5TextView.setText(String.valueOf(totalDeVisitas));
 
+                    op11TextView.setText("Distancia: " + distanciaComSelec);
+
+                    if (esVecinoSelec){
+
+                        op12TextView.setText("Vecin@");
+                        op12TextView.setTextColor(getResources().getColor(R.color.verde_Pando));
+
+                    } else {
+
+                        op12TextView.setText("No vecin@");
+                        op12TextView.setTextColor(getResources().getColor(R.color.gris_oscuro_pando));
+
+                    }
+
                     porcentaje = Double.valueOf(porcentajeNivel1);
 
                     if (ofreceVIP){
-
 
                         if (esVIP) {
 
@@ -817,7 +900,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 } else if (itemViewType == 1){
 
-                    int pos = position - 6;
+                    int pos = position - 7;
 
                     convertView = mInflater.inflate(R.layout.una_opcion_con_imagen, null);
 
@@ -868,6 +951,34 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                     return convertView;
 
+                } else if (itemViewType == 4){
+
+                    //Promociones Pando
+
+                    convertView = mInflater.inflate(R.layout.descripcion_comercio_cell_6, null);
+                    TextView titVecinoTextView = (TextView) convertView.findViewById(R.id.op1DescCell6TextView);
+                    TextView descVecinoTextView = (TextView) convertView.findViewById(R.id.op2DescCell6TextView);
+                    TextView titNoVecinoTextView = (TextView) convertView.findViewById(R.id.op3DescCell6TextView);
+                    TextView descNoVecinoTextView = (TextView) convertView.findViewById(R.id.op4DescCell6TextView);
+
+                    descVecinoTextView.setText(promoVecino);
+                    descNoVecinoTextView.setText(promoNoVecino);
+
+                    if (esVecinoSelec){
+
+                        //Vecino
+                        titVecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
+                        descVecinoTextView.setTextColor(Color.BLACK);
+
+                    } else  {
+
+                        //No vecino
+                        titNoVecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
+                        descNoVecinoTextView.setTextColor(Color.BLACK);
+
+
+
+                    }
                 }
 
             } else {
@@ -885,6 +996,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                     ImageView op4ImageView = (ImageView) convertView.findViewById(R.id.op4EnvEncImageView);
                     ImageView op5ImageView = (ImageView) convertView.findViewById(R.id.op5EnvEncImageView);
                     ImageView op6ImageView = (ImageView) convertView.findViewById(R.id.op6EnvEncImageView);
+                    ImageView op7ImageView = (ImageView) convertView.findViewById(R.id.op7EnvEncImageView);
                     TextView op1TextView = (TextView) convertView.findViewById(R.id.op1EnviarEncTextView);
                     TextView op2TextView = (TextView) convertView.findViewById(R.id.op2EnviarEncTextView);
                     TextView op3TextView = (TextView) convertView.findViewById(R.id.op3EnviarEncTextView);
@@ -895,7 +1007,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                     TextView op8TextView = (TextView) convertView.findViewById(R.id.op8EnvEncTextView);
                     TextView op9TextView = (TextView) convertView.findViewById(R.id.op9EnvEncTextView);
                     TextView op10TextView = (TextView) convertView.findViewById(R.id.op10EnvEncTextView);
-
+                    TextView op11TextView = (TextView) convertView.findViewById(R.id.op11EnviarEncTextView);
+                    TextView op12TextView = (TextView) convertView.findViewById(R.id.op12EnviarEncTextView);
 
                     op2TextView.setText("Puntos disponibles");
                     op9TextView.setText("# Visitas | Últimos 30 días");
@@ -912,58 +1025,73 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                     op4ImageView.setImageResource(R.drawable.percentage);
                     op5ImageView.setImageResource(R.drawable.placeholder);
                     op6ImageView.setImageResource(R.drawable.list);
+                    op7ImageView.setImageResource(R.drawable.motorcycle);
                     op1TextView.setText(usuario);
                     op3TextView.setText(String.valueOf(puntosCliente));
                     op5TextView.setText(String.valueOf(totalDeVisitas));
 
-                    if (esVIP) {
+                    op11TextView.setText("Distancia: " + distanciaComSelec);
 
-                        if (visitasCliente >= nivel3){
+                    if (esVecinoSelec){
 
-                            op3ImageView.setImageResource(R.drawable.pando_nivel3);
-                            op6TextView.setText("VIP Nivel 3 Titanium");
-                            op8TextView.setText(String.valueOf(porcentajeNivel3) + "%");
-                            porcentaje = Double.valueOf(porcentajeNivel3);
-
-
-                        } else {
-
-                            if (visitasCliente >= nivel2){
-
-                                op3ImageView.setImageResource(R.drawable.pando_nivel2);
-                                op6TextView.setText("VIP Nivel 2 Platino");
-                                op8TextView.setText(String.valueOf(porcentajeNivel2) + "%");
-                                porcentaje = Double.valueOf(porcentajeNivel2);
-
-                            } else {
-
-                                op3ImageView.setImageResource(R.drawable.pando_nivel1);
-                                op6TextView.setText("VIP Nivel 1 Oro");
-                                op8TextView.setText(String.valueOf(porcentajeNivel1) + "%");
-                                porcentaje = Double.valueOf(porcentajeNivel1);
-
-                            }
-                        }
-
+                        op12TextView.setText("Vecin@");
+                        op12TextView.setTextColor(getResources().getColor(R.color.verde_Pando));
 
                     } else {
 
-                        porcentaje = Double.valueOf(porcentajeNivel1);
+                        op12TextView.setText("No vecin@");
+                        op12TextView.setTextColor(getResources().getColor(R.color.gris_oscuro_pando));
 
-                        if (ofreceVIP){
+                    }
+
+                    porcentaje = Double.valueOf(porcentajeNivel1);
+
+                    if (ofreceVIP){
+
+                        if (esVIP) {
+
+                            if (visitasCliente >= nivel3){
+
+                                op3ImageView.setImageResource(R.drawable.pando_nivel3);
+                                op6TextView.setText("VIP Nivel 3 Titanium");
+                                op8TextView.setText(String.valueOf(porcentajeNivel3) + "%");
+                                porcentaje = Double.valueOf(porcentajeNivel3);
+
+
+                            } else {
+
+                                if (visitasCliente >= nivel2){
+
+                                    op3ImageView.setImageResource(R.drawable.pando_nivel2);
+                                    op6TextView.setText("VIP Nivel 2 Platino");
+                                    op8TextView.setText(String.valueOf(porcentajeNivel2) + "%");
+                                    porcentaje = Double.valueOf(porcentajeNivel2);
+
+                                } else {
+
+                                    op3ImageView.setImageResource(R.drawable.pando_nivel1);
+                                    op6TextView.setText("VIP Nivel 1 Oro");
+                                    op8TextView.setText(String.valueOf(porcentajeNivel1) + "%");
+                                    porcentaje = Double.valueOf(porcentajeNivel1);
+
+                                }
+                            }
+
+
+                        } else {
 
                             op3ImageView.setImageResource(R.drawable.pando_nivel1);
                             op6TextView.setText("VIP Nivel 1 Oro");
                             op8TextView.setText(String.valueOf(porcentajeNivel1) + "%");
 
-
-                        } else {
-
-                            op3ImageView.setImageResource(R.drawable.nop);
-                            op6TextView.setText("Programa VIP");
-                            op8TextView.setText("0 %");
-
                         }
+
+                    } else {
+
+                        op3ImageView.setImageResource(R.drawable.nop);
+                        op6TextView.setText("Programa VIP");
+                        op8TextView.setText(String.valueOf(porcentajeNivel1) + "%");
+
                     }
 
                     if (ofrecePuntos) {
@@ -990,7 +1118,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 } else if (itemViewType == 1){
 
-                    int pos = position - 6;
+                    int pos = position - 7;
 
                     convertView = mInflater.inflate(R.layout.una_opcion_con_imagen, null);
 
@@ -1041,6 +1169,34 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                     return convertView;
 
+                } else if (itemViewType == 4){
+
+                    //Promociones Pando
+
+                    convertView = mInflater.inflate(R.layout.descripcion_comercio_cell_6, null);
+                    TextView titVecinoTextView = (TextView) convertView.findViewById(R.id.op1DescCell6TextView);
+                    TextView descVecinoTextView = (TextView) convertView.findViewById(R.id.op2DescCell6TextView);
+                    TextView titNoVecinoTextView = (TextView) convertView.findViewById(R.id.op3DescCell6TextView);
+                    TextView descNoVecinoTextView = (TextView) convertView.findViewById(R.id.op4DescCell6TextView);
+
+                    descVecinoTextView.setText(promoVecino);
+                    descNoVecinoTextView.setText(promoNoVecino);
+
+                    if (esVecinoSelec){
+
+                        //Vecino
+                        titVecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
+                        descVecinoTextView.setTextColor(Color.BLACK);
+
+                    } else  {
+
+                        //No vecino
+                        titNoVecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
+                        descNoVecinoTextView.setTextColor(Color.BLACK);
+
+
+
+                    }
                 }
             }
 

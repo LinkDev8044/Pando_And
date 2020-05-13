@@ -1253,6 +1253,8 @@ public final class R {
      */
     public static final int finderOffset=0x7f0300a0;
     /**
+     * The reference to the font file to be used. This should be a file in the res/font folder
+     * and should therefore have an R reference value. E.g. @font/myfont
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
      * attribute in the form
@@ -1265,11 +1267,17 @@ public final class R {
      */
     public static final int fontFamily=0x7f0300a2;
     /**
+     * The authority of the Font Provider to be used for the request.
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
      */
     public static final int fontProviderAuthority=0x7f0300a3;
     /**
+     * The sets of hashes for the certificates the provider should be signed with. This is
+     * used to verify the identity of the provider, and is only required if the provider is not
+     * part of the system image. This value may point to one list or a list of lists, where each
+     * individual list represents one collection of signature hashes. Refer to your font provider's
+     * documentation for these values.
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
      * attribute in the form
@@ -1277,18 +1285,34 @@ public final class R {
      */
     public static final int fontProviderCerts=0x7f0300a4;
     /**
+     * The strategy to be used when fetching font data from a font provider in XML layouts.
+     * This attribute is ignored when the resource is loaded from code, as it is equivalent to the
+     * choice of API between {@link
+     * androidx.core.content.res.ResourcesCompat#getFont(Context, int)} (blocking) and
+     * {@link
+     * androidx.core.content.res.ResourcesCompat#getFont(Context, int, FontCallback, Handler)}
+     * (async).
      * <p>Must be one of the following constant values.</p>
      * <table>
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>async</td><td>1</td><td></td></tr>
-     * <tr><td>blocking</td><td>0</td><td></td></tr>
+     * <tr><td>async</td><td>1</td><td>The async font fetch works as follows.
+     * First, check the local cache, then if the requeted font is not cached, trigger a
+     * request the font and continue with layout inflation. Once the font fetch succeeds, the
+     * target text view will be refreshed with the downloaded font data. The
+     * fontProviderFetchTimeout will be ignored if async loading is specified.</td></tr>
+     * <tr><td>blocking</td><td>0</td><td>The blocking font fetch works as follows.
+     * First, check the local cache, then if the requested font is not cached, request the
+     * font from the provider and wait until it is finished.  You can change the length of
+     * the timeout by modifying fontProviderFetchTimeout.  If the timeout happens, the
+     * default typeface will be used instead.</td></tr>
      * </table>
      */
     public static final int fontProviderFetchStrategy=0x7f0300a5;
     /**
+     * The length of the timeout during fetching.
      * <p>May be an integer value, such as "<code>100</code>".
      * <p>Must be one of the following constant values.</p>
      * <table>
@@ -1296,21 +1320,29 @@ public final class R {
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>forever</td><td>ffffffff</td><td></td></tr>
+     * <tr><td>forever</td><td>ffffffff</td><td>A special value for the timeout. In this case, the blocking font fetching will not
+     * timeout and wait until a reply is received from the font provider.</td></tr>
      * </table>
      */
     public static final int fontProviderFetchTimeout=0x7f0300a6;
     /**
+     * The package for the Font Provider to be used for the request. This is used to verify
+     * the identity of the provider.
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
      */
     public static final int fontProviderPackage=0x7f0300a7;
     /**
+     * The query to be sent over to the provider. Refer to your font provider's documentation
+     * on the format of this string.
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
      */
     public static final int fontProviderQuery=0x7f0300a8;
     /**
+     * The style of the given font file. This will be used when the font is being loaded into
+     * the font stack and will override any style information in the font's header tables. If
+     * unspecified, the value in the font's header tables will be used.
      * <p>Must be one of the following constant values.</p>
      * <table>
      * <colgroup align="left" />
@@ -1323,11 +1355,20 @@ public final class R {
      */
     public static final int fontStyle=0x7f0300a9;
     /**
+     * The variation settings to be applied to the font. The string should be in the following
+     * format: "'tag1' value1, 'tag2' value2, ...". If the default variation settings should be
+     * used, or the font used does not support variation settings, this attribute needs not be
+     * specified.
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
      */
     public static final int fontVariationSettings=0x7f0300aa;
     /**
+     * The weight of the given font file. This will be used when the font is being loaded into
+     * the font stack and will override any weight information in the font's header tables. Must
+     * be a positive number, a multiple of 100, and between 100 and 900, inclusive. The most
+     * common values are 400 for regular weight and 700 for bold weight. If unspecified, the value
+     * in the font's header tables will be used.
      * <p>May be an integer value, such as "<code>100</code>".
      */
     public static final int fontWeight=0x7f0300ab;
@@ -1505,6 +1546,11 @@ public final class R {
      */
     public static final int itemTextColor=0x7f0300c4;
     /**
+     * A reference to an array of integers representing the
+     * locations of horizontal keylines in dp from the starting edge.
+     * Child views can refer to these keylines for alignment using
+     * layout_keyline="index" where index is a 0-based index into
+     * this array.
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
      * attribute in the form
@@ -1535,6 +1581,7 @@ public final class R {
      */
     public static final int layoutManager=0x7f0300c9;
     /**
+     * The id of an anchor view that this view should position relative to.
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
      * attribute in the form
@@ -1542,30 +1589,40 @@ public final class R {
      */
     public static final int layout_anchor=0x7f0300ca;
     /**
+     * Specifies how an object should position relative to an anchor, on both the X and Y axes,
+     * within its parent's bounds.
      * <p>Must be one or more (separated by '|') of the following constant values.</p>
      * <table>
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>bottom</td><td>50</td><td></td></tr>
-     * <tr><td>center</td><td>11</td><td></td></tr>
-     * <tr><td>center_horizontal</td><td>1</td><td></td></tr>
-     * <tr><td>center_vertical</td><td>10</td><td></td></tr>
-     * <tr><td>clip_horizontal</td><td>8</td><td></td></tr>
-     * <tr><td>clip_vertical</td><td>80</td><td></td></tr>
-     * <tr><td>end</td><td>800005</td><td></td></tr>
-     * <tr><td>fill</td><td>77</td><td></td></tr>
-     * <tr><td>fill_horizontal</td><td>7</td><td></td></tr>
-     * <tr><td>fill_vertical</td><td>70</td><td></td></tr>
-     * <tr><td>left</td><td>3</td><td></td></tr>
-     * <tr><td>right</td><td>5</td><td></td></tr>
-     * <tr><td>start</td><td>800003</td><td></td></tr>
-     * <tr><td>top</td><td>30</td><td></td></tr>
+     * <tr><td>bottom</td><td>50</td><td>Push object to the bottom of its container, not changing its size.</td></tr>
+     * <tr><td>center</td><td>11</td><td>Place the object in the center of its container in both the vertical and horizontal axis, not changing its size.</td></tr>
+     * <tr><td>center_horizontal</td><td>1</td><td>Place object in the horizontal center of its container, not changing its size.</td></tr>
+     * <tr><td>center_vertical</td><td>10</td><td>Place object in the vertical center of its container, not changing its size.</td></tr>
+     * <tr><td>clip_horizontal</td><td>8</td><td>Additional option that can be set to have the left and/or right edges of
+     * the child clipped to its container's bounds.
+     * The clip will be based on the horizontal gravity: a left gravity will clip the right
+     * edge, a right gravity will clip the left edge, and neither will clip both edges.</td></tr>
+     * <tr><td>clip_vertical</td><td>80</td><td>Additional option that can be set to have the top and/or bottom edges of
+     * the child clipped to its container's bounds.
+     * The clip will be based on the vertical gravity: a top gravity will clip the bottom
+     * edge, a bottom gravity will clip the top edge, and neither will clip both edges.</td></tr>
+     * <tr><td>end</td><td>800005</td><td>Push object to the end of its container, not changing its size.</td></tr>
+     * <tr><td>fill</td><td>77</td><td>Grow the horizontal and vertical size of the object if needed so it completely fills its container.</td></tr>
+     * <tr><td>fill_horizontal</td><td>7</td><td>Grow the horizontal size of the object if needed so it completely fills its container.</td></tr>
+     * <tr><td>fill_vertical</td><td>70</td><td>Grow the vertical size of the object if needed so it completely fills its container.</td></tr>
+     * <tr><td>left</td><td>3</td><td>Push object to the left of its container, not changing its size.</td></tr>
+     * <tr><td>right</td><td>5</td><td>Push object to the right of its container, not changing its size.</td></tr>
+     * <tr><td>start</td><td>800003</td><td>Push object to the beginning of its container, not changing its size.</td></tr>
+     * <tr><td>top</td><td>30</td><td>Push object to the top of its container, not changing its size.</td></tr>
      * </table>
      */
     public static final int layout_anchorGravity=0x7f0300cb;
     /**
+     * The class name of a Behavior class defining special runtime behavior
+     * for this child view.
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
      */
@@ -1997,20 +2054,21 @@ public final class R {
      */
     public static final int layout_constraintWidth_percent=0x7f0300f7;
     /**
+     * Specifies how this view dodges the inset edges of the CoordinatorLayout.
      * <p>Must be one or more (separated by '|') of the following constant values.</p>
      * <table>
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>all</td><td>77</td><td></td></tr>
-     * <tr><td>bottom</td><td>50</td><td></td></tr>
-     * <tr><td>end</td><td>800005</td><td></td></tr>
-     * <tr><td>left</td><td>3</td><td></td></tr>
-     * <tr><td>none</td><td>0</td><td></td></tr>
-     * <tr><td>right</td><td>5</td><td></td></tr>
-     * <tr><td>start</td><td>800003</td><td></td></tr>
-     * <tr><td>top</td><td>30</td><td></td></tr>
+     * <tr><td>all</td><td>77</td><td>Dodge all the inset edges.</td></tr>
+     * <tr><td>bottom</td><td>50</td><td>Dodge the bottom inset edge.</td></tr>
+     * <tr><td>end</td><td>800005</td><td>Dodge the end inset edge.</td></tr>
+     * <tr><td>left</td><td>3</td><td>Dodge the left inset edge.</td></tr>
+     * <tr><td>none</td><td>0</td><td>Don't dodge any edges</td></tr>
+     * <tr><td>right</td><td>5</td><td>Dodge the right inset edge.</td></tr>
+     * <tr><td>start</td><td>800003</td><td>Dodge the start inset edge.</td></tr>
+     * <tr><td>top</td><td>30</td><td>Dodge the top inset edge.</td></tr>
      * </table>
      */
     public static final int layout_dodgeInsetEdges=0x7f0300f8;
@@ -2079,23 +2137,28 @@ public final class R {
      */
     public static final int layout_goneMarginTop=0x7f030100;
     /**
+     * Specifies how this view insets the CoordinatorLayout and make some other views
+     * dodge it.
      * <p>Must be one of the following constant values.</p>
      * <table>
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>bottom</td><td>50</td><td></td></tr>
-     * <tr><td>end</td><td>800005</td><td></td></tr>
-     * <tr><td>left</td><td>3</td><td></td></tr>
-     * <tr><td>none</td><td>0</td><td></td></tr>
-     * <tr><td>right</td><td>5</td><td></td></tr>
-     * <tr><td>start</td><td>800003</td><td></td></tr>
-     * <tr><td>top</td><td>30</td><td></td></tr>
+     * <tr><td>bottom</td><td>50</td><td>Inset the bottom edge.</td></tr>
+     * <tr><td>end</td><td>800005</td><td>Inset the end edge.</td></tr>
+     * <tr><td>left</td><td>3</td><td>Inset the left edge.</td></tr>
+     * <tr><td>none</td><td>0</td><td>Don't inset.</td></tr>
+     * <tr><td>right</td><td>5</td><td>Inset the right edge.</td></tr>
+     * <tr><td>start</td><td>800003</td><td>Inset the start edge.</td></tr>
+     * <tr><td>top</td><td>30</td><td>Inset the top edge.</td></tr>
      * </table>
      */
     public static final int layout_insetEdge=0x7f030101;
     /**
+     * The index of a keyline this view should position relative to.
+     * android:layout_gravity will affect how the view aligns to the
+     * specified keyline.
      * <p>May be an integer value, such as "<code>100</code>".
      */
     public static final int layout_keyline=0x7f030102;
@@ -2109,7 +2172,7 @@ public final class R {
      * <tr><td>barrier</td><td>2</td><td></td></tr>
      * <tr><td>chains</td><td>4</td><td></td></tr>
      * <tr><td>dimensions</td><td>8</td><td></td></tr>
-     * <tr><td>direct</td><td>1</td><td></td></tr>
+     * <tr><td>direct</td><td>1</td><td>direct, barriers, chains</td></tr>
      * <tr><td>groups</td><td>20</td><td></td></tr>
      * <tr><td>none</td><td>0</td><td></td></tr>
      * <tr><td>standard</td><td>7</td><td></td></tr>
@@ -2682,6 +2745,7 @@ public final class R {
      */
     public static final int state_collapsible=0x7f030152;
     /**
+     * Drawable to display behind the status bar when the view is set to draw behind it.
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
      * attribute in the form
@@ -3243,6 +3307,8 @@ public final class R {
      */
     public static final int trackTintMode=0x7f030199;
     /**
+     * The index of the font in the tcc font file. If the font file referenced is not in the
+     * tcc format, this attribute needs not be specified.
      * <p>May be an integer value, such as "<code>100</code>".
      */
     public static final int ttcIndex=0x7f03019a;
@@ -3758,45 +3824,49 @@ public final class R {
     public static final int mastercard=0x7f07007e;
     public static final int meh=0x7f07007f;
     public static final int meh_clicked=0x7f070080;
-    public static final int navigation_empty_icon=0x7f070081;
-    public static final int nop=0x7f070082;
-    public static final int notification_action_background=0x7f070083;
-    public static final int notification_bg=0x7f070084;
-    public static final int notification_bg_low=0x7f070085;
-    public static final int notification_bg_low_normal=0x7f070086;
-    public static final int notification_bg_low_pressed=0x7f070087;
-    public static final int notification_bg_normal=0x7f070088;
-    public static final int notification_bg_normal_pressed=0x7f070089;
-    public static final int notification_icon_background=0x7f07008a;
-    public static final int notification_template_icon_bg=0x7f07008b;
-    public static final int notification_template_icon_low_bg=0x7f07008c;
-    public static final int notification_tile_bg=0x7f07008d;
-    public static final int notify_panel_notification_icon_bg=0x7f07008e;
-    public static final int pando_empresa=0x7f07008f;
-    public static final int pando_nivel1=0x7f070090;
-    public static final int pando_nivel2=0x7f070091;
-    public static final int pando_nivel3=0x7f070092;
-    public static final int pando_normal=0x7f070093;
-    public static final int percentage=0x7f070094;
-    public static final int perfil_navigation=0x7f070095;
-    public static final int perfil_provisional=0x7f070096;
-    public static final int placeholder=0x7f070097;
-    public static final int puntos_de_recompensa=0x7f070098;
-    public static final int qr_code=0x7f070099;
-    public static final int sad=0x7f07009a;
-    public static final int sad_clicked=0x7f07009b;
-    public static final int sale=0x7f07009c;
-    public static final int shop=0x7f07009d;
-    public static final int store=0x7f07009e;
-    public static final int success=0x7f07009f;
-    public static final int support=0x7f0700a0;
-    public static final int tooltip_frame_dark=0x7f0700a1;
-    public static final int tooltip_frame_light=0x7f0700a2;
-    public static final int vip=0x7f0700a3;
-    public static final int visa=0x7f0700a4;
-    public static final int welcome=0x7f0700a5;
-    public static final int woman=0x7f0700a6;
-    public static final int womanclicked=0x7f0700a7;
+    public static final int menu=0x7f070081;
+    public static final int menu_ejemplo=0x7f070082;
+    public static final int motorcycle=0x7f070083;
+    public static final int navigation_empty_icon=0x7f070084;
+    public static final int nop=0x7f070085;
+    public static final int notification_action_background=0x7f070086;
+    public static final int notification_bg=0x7f070087;
+    public static final int notification_bg_low=0x7f070088;
+    public static final int notification_bg_low_normal=0x7f070089;
+    public static final int notification_bg_low_pressed=0x7f07008a;
+    public static final int notification_bg_normal=0x7f07008b;
+    public static final int notification_bg_normal_pressed=0x7f07008c;
+    public static final int notification_icon_background=0x7f07008d;
+    public static final int notification_template_icon_bg=0x7f07008e;
+    public static final int notification_template_icon_low_bg=0x7f07008f;
+    public static final int notification_tile_bg=0x7f070090;
+    public static final int notify_panel_notification_icon_bg=0x7f070091;
+    public static final int pando_empresa=0x7f070092;
+    public static final int pando_nivel1=0x7f070093;
+    public static final int pando_nivel2=0x7f070094;
+    public static final int pando_nivel3=0x7f070095;
+    public static final int pando_normal=0x7f070096;
+    public static final int percentage=0x7f070097;
+    public static final int perfil_navigation=0x7f070098;
+    public static final int perfil_provisional=0x7f070099;
+    public static final int placeholder=0x7f07009a;
+    public static final int puntos_de_recompensa=0x7f07009b;
+    public static final int qr_code=0x7f07009c;
+    public static final int sad=0x7f07009d;
+    public static final int sad_clicked=0x7f07009e;
+    public static final int sale=0x7f07009f;
+    public static final int shop=0x7f0700a0;
+    public static final int store=0x7f0700a1;
+    public static final int success=0x7f0700a2;
+    public static final int support=0x7f0700a3;
+    public static final int tooltip_frame_dark=0x7f0700a4;
+    public static final int tooltip_frame_light=0x7f0700a5;
+    public static final int vip=0x7f0700a6;
+    public static final int visa=0x7f0700a7;
+    public static final int welcome=0x7f0700a8;
+    public static final int whatsapp_2=0x7f0700a9;
+    public static final int woman=0x7f0700aa;
+    public static final int womanclicked=0x7f0700ab;
   }
   public static final class id {
     public static final int ALT=0x7f080000;
@@ -3904,386 +3974,407 @@ public final class R {
     public static final int fixed=0x7f080066;
     public static final int forever=0x7f080067;
     public static final int fragment_container=0x7f080068;
-    public static final int ghost_view=0x7f080069;
-    public static final int goToNegociosTextView=0x7f08006a;
-    public static final int gone=0x7f08006b;
-    public static final int groups=0x7f08006c;
-    public static final int historialListView=0x7f08006d;
-    public static final int historialRefreshLayout=0x7f08006e;
-    public static final int home=0x7f08006f;
-    public static final int homeAsUp=0x7f080070;
-    public static final int icon=0x7f080071;
-    public static final int icon_group=0x7f080072;
-    public static final int ifRoom=0x7f080073;
-    public static final int image=0x7f080074;
-    public static final int imageView=0x7f080075;
-    public static final int imageView10=0x7f080076;
-    public static final int imageView11=0x7f080077;
-    public static final int imageView12=0x7f080078;
-    public static final int imageView13=0x7f080079;
-    public static final int imageView14=0x7f08007a;
-    public static final int imageView15=0x7f08007b;
-    public static final int imageView16=0x7f08007c;
-    public static final int imageView17=0x7f08007d;
-    public static final int imageView18=0x7f08007e;
-    public static final int imageView2=0x7f08007f;
-    public static final int imageView20=0x7f080080;
-    public static final int imageView24=0x7f080081;
-    public static final int imageView25=0x7f080082;
-    public static final int imageView26=0x7f080083;
-    public static final int imageView3=0x7f080084;
-    public static final int imageView4=0x7f080085;
-    public static final int imageView5=0x7f080086;
-    public static final int imageView6=0x7f080087;
-    public static final int imageView7=0x7f080088;
-    public static final int imageView8=0x7f080089;
-    public static final int imageView9=0x7f08008a;
-    public static final int info=0x7f08008b;
-    public static final int invisible=0x7f08008c;
-    public static final int italic=0x7f08008d;
-    public static final int item_touch_helper_previous_elevation=0x7f08008e;
-    public static final int largeLabel=0x7f08008f;
-    public static final int left=0x7f080090;
-    public static final int line1=0x7f080091;
-    public static final int line3=0x7f080092;
-    public static final int listMode=0x7f080093;
-    public static final int list_item=0x7f080094;
-    public static final int listaComListView=0x7f080095;
-    public static final int logoBienImageView=0x7f080096;
-    public static final int manImageView=0x7f080097;
-    public static final int masked=0x7f080098;
-    public static final int media_actions=0x7f080099;
-    public static final int mensajeCompraTextView=0x7f08009a;
-    public static final int mensajeEditText=0x7f08009b;
-    public static final int message=0x7f08009c;
-    public static final int middle=0x7f08009d;
-    public static final int mini=0x7f08009e;
-    public static final int misComprasListView=0x7f08009f;
-    public static final int misComprasRefreshLayout=0x7f0800a0;
-    public static final int multiply=0x7f0800a1;
-    public static final int nav_lista_comercios=0x7f0800a2;
-    public static final int nav_perfil=0x7f0800a3;
-    public static final int navigation_header_container=0x7f0800a4;
-    public static final int never=0x7f0800a5;
-    public static final int nombreComEditText=0x7f0800a6;
-    public static final int nombrePerfilTextView=0x7f0800a7;
-    public static final int none=0x7f0800a8;
-    public static final int normal=0x7f0800a9;
-    public static final int notification_background=0x7f0800aa;
-    public static final int notification_main_column=0x7f0800ab;
-    public static final int notification_main_column_container=0x7f0800ac;
-    public static final int op10EnvEncTextView=0x7f0800ad;
-    public static final int op10EnviarPtsTexttView=0x7f0800ae;
-    public static final int op10ValidarTextView=0x7f0800af;
-    public static final int op11EnviarPtsTexttView=0x7f0800b0;
-    public static final int op1AdminCell1ImageView=0x7f0800b1;
-    public static final int op1AdminCell1textView=0x7f0800b2;
-    public static final int op1CanjearProdImageView=0x7f0800b3;
-    public static final int op1CanjearProdTextView=0x7f0800b4;
-    public static final int op1CaritasEditText=0x7f0800b5;
-    public static final int op1CaritasImageView=0x7f0800b6;
-    public static final int op1CaritasTextView=0x7f0800b7;
-    public static final int op1CodComEditText=0x7f0800b8;
-    public static final int op1CodComTextView=0x7f0800b9;
-    public static final int op1ColCell1TextView=0x7f0800ba;
-    public static final int op1CompraTextView=0x7f0800bb;
-    public static final int op1ContratextView=0x7f0800bc;
-    public static final int op1DescCell3ImageView=0x7f0800bd;
-    public static final int op1DescCell3TextView=0x7f0800be;
-    public static final int op1DescImageView=0x7f0800bf;
-    public static final int op1DescTexxtView=0x7f0800c0;
-    public static final int op1EditarComEditText=0x7f0800c1;
-    public static final int op1EditarComImageView=0x7f0800c2;
-    public static final int op1EditarTextView=0x7f0800c3;
-    public static final int op1EnvEncCell2TextView=0x7f0800c4;
-    public static final int op1EnvEncImageView=0x7f0800c5;
-    public static final int op1EnviarEncImageView=0x7f0800c6;
-    public static final int op1EnviarEncTextView=0x7f0800c7;
-    public static final int op1EnviarPtsEditText=0x7f0800c8;
-    public static final int op1EnviarPtsImageView=0x7f0800c9;
-    public static final int op1EnviarPtsTexttView=0x7f0800ca;
-    public static final int op1GeneralTextView=0x7f0800cb;
-    public static final int op1HistTextView=0x7f0800cc;
-    public static final int op1ListCom2ImageView=0x7f0800cd;
-    public static final int op1ListCom2TextView=0x7f0800ce;
-    public static final int op1ListComImageView=0x7f0800cf;
-    public static final int op1ListComTextView=0x7f0800d0;
-    public static final int op1MisCompTextView=0x7f0800d1;
-    public static final int op1NegociosButton=0x7f0800d2;
-    public static final int op1NegociosTextView=0x7f0800d3;
-    public static final int op1NomComTextView=0x7f0800d4;
-    public static final int op1PieChart=0x7f0800d5;
-    public static final int op1ProdCteImageView=0x7f0800d6;
-    public static final int op1ProdCteTextView=0x7f0800d7;
-    public static final int op1QRImageView=0x7f0800d8;
-    public static final int op1RepCel2TextView=0x7f0800d9;
-    public static final int op1ReporteTextView=0x7f0800da;
-    public static final int op1SliderEditText=0x7f0800db;
-    public static final int op1SliderTextView=0x7f0800dc;
-    public static final int op1TiendaTextview=0x7f0800dd;
-    public static final int op1ValidarEditText=0x7f0800de;
-    public static final int op1ValidarImageView=0x7f0800df;
-    public static final int op1ValidarTextView=0x7f0800e0;
-    public static final int op1_Reg_EditText=0x7f0800e1;
-    public static final int op2AdminCell1textView=0x7f0800e2;
-    public static final int op2CanjearProdTextView=0x7f0800e3;
-    public static final int op2CaritasImageView=0x7f0800e4;
-    public static final int op2CaritasTextView=0x7f0800e5;
-    public static final int op2ColCell1TextView=0x7f0800e6;
-    public static final int op2CompraTextView=0x7f0800e7;
-    public static final int op2DescCell3ImageView=0x7f0800e8;
-    public static final int op2DescCell3TextView=0x7f0800e9;
-    public static final int op2DescImageView=0x7f0800ea;
-    public static final int op2EditarTextView=0x7f0800eb;
-    public static final int op2EnvEncCell2TextView=0x7f0800ec;
-    public static final int op2EnvEncImageView=0x7f0800ed;
-    public static final int op2EnviarEncTextView=0x7f0800ee;
-    public static final int op2EnviarPtsTexttView=0x7f0800ef;
-    public static final int op2GeneralTextView=0x7f0800f0;
-    public static final int op2HistTextView=0x7f0800f1;
-    public static final int op2ListCom2TextView=0x7f0800f2;
-    public static final int op2ListComTextView=0x7f0800f3;
-    public static final int op2MisCompTextView=0x7f0800f4;
-    public static final int op2NegociosButton=0x7f0800f5;
-    public static final int op2ProdCteTextView=0x7f0800f6;
-    public static final int op2QRImageView=0x7f0800f7;
-    public static final int op2RepCel2TextView=0x7f0800f8;
-    public static final int op2SliderTextView=0x7f0800f9;
-    public static final int op2TiendaTextView=0x7f0800fa;
-    public static final int op2ValidarTextView=0x7f0800fb;
-    public static final int op2_Reg_EditText=0x7f0800fc;
-    public static final int op2listComImageView=0x7f0800fd;
-    public static final int op3AdminCell1textView=0x7f0800fe;
-    public static final int op3CanjearProdTextView=0x7f0800ff;
-    public static final int op3CaritasImageView=0x7f080100;
-    public static final int op3CaritasTextView=0x7f080101;
-    public static final int op3ColCell1TextView=0x7f080102;
-    public static final int op3CompraTextView=0x7f080103;
-    public static final int op3DescCell3ImageView=0x7f080104;
-    public static final int op3DescCell3TextView=0x7f080105;
-    public static final int op3EnvEncCell2TextView=0x7f080106;
-    public static final int op3EnvEncImageView=0x7f080107;
-    public static final int op3EnviarEncTextView=0x7f080108;
-    public static final int op3EnviarPtsTexttView=0x7f080109;
-    public static final int op3HistTextView=0x7f08010a;
-    public static final int op3ListComTextView=0x7f08010b;
-    public static final int op3MisCompTextView=0x7f08010c;
-    public static final int op3ProdCteTextView=0x7f08010d;
-    public static final int op3RepCel2TextView=0x7f08010e;
-    public static final int op3SliderTextView=0x7f08010f;
-    public static final int op3TiendaTextView=0x7f080110;
-    public static final int op3ValidarTextView=0x7f080111;
-    public static final int op4CanjearProdTextView=0x7f080112;
-    public static final int op4CompraTextView=0x7f080113;
-    public static final int op4DescCell3TextView=0x7f080114;
-    public static final int op4DescTextView=0x7f080115;
-    public static final int op4EnvEncCell2TextView=0x7f080116;
-    public static final int op4EnvEncImageView=0x7f080117;
-    public static final int op4EnviarEncTextView=0x7f080118;
-    public static final int op4EnviarPtsTexttView=0x7f080119;
-    public static final int op4HistTextView=0x7f08011a;
-    public static final int op4MisCompTextView=0x7f08011b;
-    public static final int op4ProdCteTextView=0x7f08011c;
-    public static final int op4RepCel2TextView=0x7f08011d;
-    public static final int op4SliderTextView=0x7f08011e;
-    public static final int op4ValidarTextView=0x7f08011f;
-    public static final int op4ValidartextView=0x7f080120;
-    public static final int op5CanjearProdTextView=0x7f080121;
-    public static final int op5DescTextView=0x7f080122;
-    public static final int op5EnvEncCell2TextView=0x7f080123;
-    public static final int op5EnvEncImageView=0x7f080124;
-    public static final int op5EnviarEncTextView=0x7f080125;
-    public static final int op5EnviarPtsTexttView=0x7f080126;
-    public static final int op5HistTextView=0x7f080127;
-    public static final int op5MisCompTextView=0x7f080128;
-    public static final int op5ProdCteTextView=0x7f080129;
-    public static final int op5RepCel2TextView=0x7f08012a;
-    public static final int op5SliderTextView=0x7f08012b;
-    public static final int op5ValidarTextView=0x7f08012c;
-    public static final int op6DescTextView=0x7f08012d;
-    public static final int op6EnvEncImageView=0x7f08012e;
-    public static final int op6EnvEncTextView=0x7f08012f;
-    public static final int op6EnviarPtsTexttView=0x7f080130;
-    public static final int op6ProdCteTextView=0x7f080131;
-    public static final int op6RepCel2TextView=0x7f080132;
-    public static final int op6SliderTextView=0x7f080133;
-    public static final int op6ValidarTextView=0x7f080134;
-    public static final int op7DescTextView=0x7f080135;
-    public static final int op7EnvEncTextView=0x7f080136;
-    public static final int op7EnviarPtsTexttView=0x7f080137;
-    public static final int op7ValidarTextView=0x7f080138;
-    public static final int op8DescTextView=0x7f080139;
-    public static final int op8EnvEncTextView=0x7f08013a;
-    public static final int op8EnviarPtsTexttView=0x7f08013b;
-    public static final int op8ValidarTextView=0x7f08013c;
-    public static final int op9EnvEncTextView=0x7f08013d;
-    public static final int op9EnviarPtsTexttView=0x7f08013e;
-    public static final int op9ValidarTextView=0x7f08013f;
-    public static final int opc1ImaImageView=0x7f080140;
-    public static final int opc1ImaTextView=0x7f080141;
-    public static final int opc2ImaTextView=0x7f080142;
-    public static final int opcion1FlechaTextView=0x7f080143;
-    public static final int opcionAyudaTextView=0x7f080144;
-    public static final int opcionSolaTextView=0x7f080145;
-    public static final int packed=0x7f080146;
-    public static final int parallax=0x7f080147;
-    public static final int parent=0x7f080148;
-    public static final int parentPanel=0x7f080149;
-    public static final int parent_matrix=0x7f08014a;
-    public static final int percent=0x7f08014b;
-    public static final int perfilListView=0x7f08014c;
-    public static final int periodoSpinner=0x7f08014d;
-    public static final int pin=0x7f08014e;
-    public static final int productosListView=0x7f08014f;
-    public static final int progress_circular=0x7f080150;
-    public static final int progress_horizontal=0x7f080151;
-    public static final int pruebaTextView=0x7f080152;
-    public static final int puntosClienteTextView=0x7f080153;
-    public static final int puntosHistTextView=0x7f080154;
-    public static final int radio=0x7f080155;
-    public static final int refreshDescLayout=0x7f080156;
-    public static final int reporteListView=0x7f080157;
-    public static final int right=0x7f080158;
-    public static final int right_icon=0x7f080159;
-    public static final int right_side=0x7f08015a;
-    public static final int save_image_matrix=0x7f08015b;
-    public static final int save_non_transition_alpha=0x7f08015c;
-    public static final int save_scale_type=0x7f08015d;
-    public static final int screen=0x7f08015e;
-    public static final int scroll=0x7f08015f;
-    public static final int scrollIndicatorDown=0x7f080160;
-    public static final int scrollIndicatorUp=0x7f080161;
-    public static final int scrollView=0x7f080162;
-    public static final int scrollable=0x7f080163;
-    public static final int search_badge=0x7f080164;
-    public static final int search_bar=0x7f080165;
-    public static final int search_button=0x7f080166;
-    public static final int search_close_btn=0x7f080167;
-    public static final int search_edit_frame=0x7f080168;
-    public static final int search_go_btn=0x7f080169;
-    public static final int search_mag_icon=0x7f08016a;
-    public static final int search_plate=0x7f08016b;
-    public static final int search_src_text=0x7f08016c;
-    public static final int search_voice_btn=0x7f08016d;
-    public static final int select_dialog_listview=0x7f08016e;
-    public static final int shortcut=0x7f08016f;
-    public static final int showCustom=0x7f080170;
-    public static final int showHome=0x7f080171;
-    public static final int showTitle=0x7f080172;
-    public static final int sigCorreoRegTextView=0x7f080173;
-    public static final int sigLogInTextView=0x7f080174;
-    public static final int sigNomComTextView=0x7f080175;
-    public static final int sigSexoTexView=0x7f080176;
-    public static final int sig_nom_TextView=0x7f080177;
-    public static final int siguienteAyudaTextView=0x7f080178;
-    public static final int siguienteBienTextView=0x7f080179;
-    public static final int siguienteCompraTextView=0x7f08017a;
-    public static final int siguienteContraTextView=0x7f08017b;
-    public static final int sliderConstraintLayout=0x7f08017c;
-    public static final int sliderSeekBar=0x7f08017d;
-    public static final int smallLabel=0x7f08017e;
-    public static final int snackbar_action=0x7f08017f;
-    public static final int snackbar_text=0x7f080180;
-    public static final int snap=0x7f080181;
-    public static final int spacer=0x7f080182;
-    public static final int split_action_bar=0x7f080183;
-    public static final int spread=0x7f080184;
-    public static final int spread_inside=0x7f080185;
-    public static final int src_atop=0x7f080186;
-    public static final int src_in=0x7f080187;
-    public static final int src_over=0x7f080188;
-    public static final int standard=0x7f080189;
-    public static final int start=0x7f08018a;
-    public static final int status_bar_latest_event_content=0x7f08018b;
-    public static final int submenuarrow=0x7f08018c;
-    public static final int submit_area=0x7f08018d;
-    public static final int tabMode=0x7f08018e;
-    public static final int tag_transition_group=0x7f08018f;
-    public static final int tag_unhandled_key_event_manager=0x7f080190;
-    public static final int tag_unhandled_key_listeners=0x7f080191;
-    public static final int text=0x7f080192;
-    public static final int text2=0x7f080193;
-    public static final int textSpacerNoButtons=0x7f080194;
-    public static final int textSpacerNoTitle=0x7f080195;
-    public static final int textView=0x7f080196;
-    public static final int textView10=0x7f080197;
-    public static final int textView11=0x7f080198;
-    public static final int textView12=0x7f080199;
-    public static final int textView13=0x7f08019a;
-    public static final int textView14=0x7f08019b;
-    public static final int textView15=0x7f08019c;
-    public static final int textView16=0x7f08019d;
-    public static final int textView17=0x7f08019e;
-    public static final int textView18=0x7f08019f;
-    public static final int textView19=0x7f0801a0;
-    public static final int textView2=0x7f0801a1;
-    public static final int textView20=0x7f0801a2;
-    public static final int textView21=0x7f0801a3;
-    public static final int textView22=0x7f0801a4;
-    public static final int textView23=0x7f0801a5;
-    public static final int textView24=0x7f0801a6;
-    public static final int textView26=0x7f0801a7;
-    public static final int textView27=0x7f0801a8;
-    public static final int textView28=0x7f0801a9;
-    public static final int textView29=0x7f0801aa;
-    public static final int textView3=0x7f0801ab;
-    public static final int textView30=0x7f0801ac;
-    public static final int textView31=0x7f0801ad;
-    public static final int textView32=0x7f0801ae;
-    public static final int textView33=0x7f0801af;
-    public static final int textView34=0x7f0801b0;
-    public static final int textView35=0x7f0801b1;
-    public static final int textView36=0x7f0801b2;
-    public static final int textView37=0x7f0801b3;
-    public static final int textView38=0x7f0801b4;
-    public static final int textView39=0x7f0801b5;
-    public static final int textView4=0x7f0801b6;
-    public static final int textView40=0x7f0801b7;
-    public static final int textView41=0x7f0801b8;
-    public static final int textView42=0x7f0801b9;
-    public static final int textView43=0x7f0801ba;
-    public static final int textView44=0x7f0801bb;
-    public static final int textView45=0x7f0801bc;
-    public static final int textView46=0x7f0801bd;
-    public static final int textView47=0x7f0801be;
-    public static final int textView48=0x7f0801bf;
-    public static final int textView49=0x7f0801c0;
-    public static final int textView5=0x7f0801c1;
-    public static final int textView51=0x7f0801c2;
-    public static final int textView6=0x7f0801c3;
-    public static final int textView7=0x7f0801c4;
-    public static final int textView8=0x7f0801c5;
-    public static final int textView9=0x7f0801c6;
-    public static final int text_input_password_toggle=0x7f0801c7;
-    public static final int textinput_counter=0x7f0801c8;
-    public static final int textinput_error=0x7f0801c9;
-    public static final int tiendaListView=0x7f0801ca;
-    public static final int tiendaRefreshLayout=0x7f0801cb;
-    public static final int time=0x7f0801cc;
-    public static final int title=0x7f0801cd;
-    public static final int titleDividerNoCustom=0x7f0801ce;
-    public static final int title_template=0x7f0801cf;
-    public static final int tituloBienTextView=0x7f0801d0;
-    public static final int top=0x7f0801d1;
-    public static final int topPanel=0x7f0801d2;
-    public static final int touch_outside=0x7f0801d3;
-    public static final int transition_current_scene=0x7f0801d4;
-    public static final int transition_layout_save=0x7f0801d5;
-    public static final int transition_position=0x7f0801d6;
-    public static final int transition_scene_layoutid_cache=0x7f0801d7;
-    public static final int transition_transform=0x7f0801d8;
-    public static final int uniform=0x7f0801d9;
-    public static final int up=0x7f0801da;
-    public static final int useLogo=0x7f0801db;
-    public static final int validarConstraintLayout=0x7f0801dc;
-    public static final int verCodigoTextView=0x7f0801dd;
-    public static final int view_offset_helper=0x7f0801de;
-    public static final int visible=0x7f0801df;
-    public static final int withText=0x7f0801e0;
-    public static final int womanImageView=0x7f0801e1;
-    public static final int wrap=0x7f0801e2;
-    public static final int wrap_content=0x7f0801e3;
-    public static final int zxscan=0x7f0801e4;
+    public static final int galerry=0x7f080069;
+    public static final int galleryMenu=0x7f08006a;
+    public static final int ghost_view=0x7f08006b;
+    public static final int goToNegociosTextView=0x7f08006c;
+    public static final int gone=0x7f08006d;
+    public static final int groups=0x7f08006e;
+    public static final int historialListView=0x7f08006f;
+    public static final int historialRefreshLayout=0x7f080070;
+    public static final int home=0x7f080071;
+    public static final int homeAsUp=0x7f080072;
+    public static final int icon=0x7f080073;
+    public static final int icon_group=0x7f080074;
+    public static final int ifRoom=0x7f080075;
+    public static final int image=0x7f080076;
+    public static final int imageView=0x7f080077;
+    public static final int imageView10=0x7f080078;
+    public static final int imageView11=0x7f080079;
+    public static final int imageView12=0x7f08007a;
+    public static final int imageView13=0x7f08007b;
+    public static final int imageView14=0x7f08007c;
+    public static final int imageView15=0x7f08007d;
+    public static final int imageView16=0x7f08007e;
+    public static final int imageView17=0x7f08007f;
+    public static final int imageView18=0x7f080080;
+    public static final int imageView19=0x7f080081;
+    public static final int imageView2=0x7f080082;
+    public static final int imageView20=0x7f080083;
+    public static final int imageView21=0x7f080084;
+    public static final int imageView24=0x7f080085;
+    public static final int imageView25=0x7f080086;
+    public static final int imageView26=0x7f080087;
+    public static final int imageView3=0x7f080088;
+    public static final int imageView4=0x7f080089;
+    public static final int imageView5=0x7f08008a;
+    public static final int imageView6=0x7f08008b;
+    public static final int imageView7=0x7f08008c;
+    public static final int imageView8=0x7f08008d;
+    public static final int imageView9=0x7f08008e;
+    public static final int info=0x7f08008f;
+    public static final int invisible=0x7f080090;
+    public static final int italic=0x7f080091;
+    public static final int itemGalleryImageView=0x7f080092;
+    public static final int item_touch_helper_previous_elevation=0x7f080093;
+    public static final int largeLabel=0x7f080094;
+    public static final int left=0x7f080095;
+    public static final int line1=0x7f080096;
+    public static final int line3=0x7f080097;
+    public static final int listMode=0x7f080098;
+    public static final int list_item=0x7f080099;
+    public static final int listaComListView=0x7f08009a;
+    public static final int logoBienImageView=0x7f08009b;
+    public static final int manImageView=0x7f08009c;
+    public static final int masked=0x7f08009d;
+    public static final int media_actions=0x7f08009e;
+    public static final int mensajeCompraTextView=0x7f08009f;
+    public static final int mensajeEditText=0x7f0800a0;
+    public static final int message=0x7f0800a1;
+    public static final int middle=0x7f0800a2;
+    public static final int mini=0x7f0800a3;
+    public static final int misComprasListView=0x7f0800a4;
+    public static final int misComprasRefreshLayout=0x7f0800a5;
+    public static final int multiply=0x7f0800a6;
+    public static final int nav_lista_comercios=0x7f0800a7;
+    public static final int nav_perfil=0x7f0800a8;
+    public static final int navigation_header_container=0x7f0800a9;
+    public static final int never=0x7f0800aa;
+    public static final int nombreComEditText=0x7f0800ab;
+    public static final int nombrePerfilTextView=0x7f0800ac;
+    public static final int none=0x7f0800ad;
+    public static final int normal=0x7f0800ae;
+    public static final int notification_background=0x7f0800af;
+    public static final int notification_main_column=0x7f0800b0;
+    public static final int notification_main_column_container=0x7f0800b1;
+    public static final int op10EnvEncTextView=0x7f0800b2;
+    public static final int op10EnviarPtsTexttView=0x7f0800b3;
+    public static final int op10ValidarTextView=0x7f0800b4;
+    public static final int op11EnviarEncTextView=0x7f0800b5;
+    public static final int op11EnviarPtsTexttView=0x7f0800b6;
+    public static final int op12EnviarEncTextView=0x7f0800b7;
+    public static final int op1AdminCell1ImageView=0x7f0800b8;
+    public static final int op1AdminCell1textView=0x7f0800b9;
+    public static final int op1CanjearProdImageView=0x7f0800ba;
+    public static final int op1CanjearProdTextView=0x7f0800bb;
+    public static final int op1CaritasEditText=0x7f0800bc;
+    public static final int op1CaritasImageView=0x7f0800bd;
+    public static final int op1CaritasTextView=0x7f0800be;
+    public static final int op1CodComEditText=0x7f0800bf;
+    public static final int op1CodComTextView=0x7f0800c0;
+    public static final int op1ColCell1TextView=0x7f0800c1;
+    public static final int op1CompraTextView=0x7f0800c2;
+    public static final int op1ContratextView=0x7f0800c3;
+    public static final int op1DescCell3ImageView=0x7f0800c4;
+    public static final int op1DescCell3TextView=0x7f0800c5;
+    public static final int op1DescCell5ImageView=0x7f0800c6;
+    public static final int op1DescCell5TextView=0x7f0800c7;
+    public static final int op1DescCell6TextView=0x7f0800c8;
+    public static final int op1DescTexxtView=0x7f0800c9;
+    public static final int op1EditarComEditText=0x7f0800ca;
+    public static final int op1EditarComImageView=0x7f0800cb;
+    public static final int op1EditarTextView=0x7f0800cc;
+    public static final int op1EnvEncCell2TextView=0x7f0800cd;
+    public static final int op1EnvEncImageView=0x7f0800ce;
+    public static final int op1EnviarEncImageView=0x7f0800cf;
+    public static final int op1EnviarEncTextView=0x7f0800d0;
+    public static final int op1EnviarPtsEditText=0x7f0800d1;
+    public static final int op1EnviarPtsImageView=0x7f0800d2;
+    public static final int op1EnviarPtsTexttView=0x7f0800d3;
+    public static final int op1GeneralTextView=0x7f0800d4;
+    public static final int op1HistTextView=0x7f0800d5;
+    public static final int op1ListCom2ImageView=0x7f0800d6;
+    public static final int op1ListCom2TextView=0x7f0800d7;
+    public static final int op1ListComImageView=0x7f0800d8;
+    public static final int op1ListComTextView=0x7f0800d9;
+    public static final int op1MisCompTextView=0x7f0800da;
+    public static final int op1NegociosButton=0x7f0800db;
+    public static final int op1NegociosTextView=0x7f0800dc;
+    public static final int op1NomComTextView=0x7f0800dd;
+    public static final int op1PieChart=0x7f0800de;
+    public static final int op1ProdCteImageView=0x7f0800df;
+    public static final int op1ProdCteTextView=0x7f0800e0;
+    public static final int op1QRImageView=0x7f0800e1;
+    public static final int op1RepCel2TextView=0x7f0800e2;
+    public static final int op1ReporteTextView=0x7f0800e3;
+    public static final int op1SliderEditText=0x7f0800e4;
+    public static final int op1SliderTextView=0x7f0800e5;
+    public static final int op1TiendaTextview=0x7f0800e6;
+    public static final int op1ValidarEditText=0x7f0800e7;
+    public static final int op1ValidarImageView=0x7f0800e8;
+    public static final int op1ValidarTextView=0x7f0800e9;
+    public static final int op1VerMenuImageView=0x7f0800ea;
+    public static final int op1_Reg_EditText=0x7f0800eb;
+    public static final int op2AdminCell1textView=0x7f0800ec;
+    public static final int op2CanjearProdTextView=0x7f0800ed;
+    public static final int op2CaritasImageView=0x7f0800ee;
+    public static final int op2CaritasTextView=0x7f0800ef;
+    public static final int op2ColCell1TextView=0x7f0800f0;
+    public static final int op2CompraTextView=0x7f0800f1;
+    public static final int op2DescCell3ImageView=0x7f0800f2;
+    public static final int op2DescCell3TextView=0x7f0800f3;
+    public static final int op2DescCell5TextView=0x7f0800f4;
+    public static final int op2DescCell6TextView=0x7f0800f5;
+    public static final int op2DescImageView=0x7f0800f6;
+    public static final int op2EditarTextView=0x7f0800f7;
+    public static final int op2EnvEncCell2TextView=0x7f0800f8;
+    public static final int op2EnvEncImageView=0x7f0800f9;
+    public static final int op2EnviarEncTextView=0x7f0800fa;
+    public static final int op2EnviarPtsTexttView=0x7f0800fb;
+    public static final int op2GeneralTextView=0x7f0800fc;
+    public static final int op2HistTextView=0x7f0800fd;
+    public static final int op2ListCom2TextView=0x7f0800fe;
+    public static final int op2ListComTextView=0x7f0800ff;
+    public static final int op2MisCompTextView=0x7f080100;
+    public static final int op2NegociosButton=0x7f080101;
+    public static final int op2ProdCteTextView=0x7f080102;
+    public static final int op2QRImageView=0x7f080103;
+    public static final int op2RepCel2TextView=0x7f080104;
+    public static final int op2SliderTextView=0x7f080105;
+    public static final int op2TiendaTextView=0x7f080106;
+    public static final int op2ValidarTextView=0x7f080107;
+    public static final int op2_Reg_EditText=0x7f080108;
+    public static final int op2listComImageView=0x7f080109;
+    public static final int op3AdminCell1textView=0x7f08010a;
+    public static final int op3CanjearProdTextView=0x7f08010b;
+    public static final int op3CaritasImageView=0x7f08010c;
+    public static final int op3CaritasTextView=0x7f08010d;
+    public static final int op3ColCell1TextView=0x7f08010e;
+    public static final int op3CompraTextView=0x7f08010f;
+    public static final int op3DescCell3ImageView=0x7f080110;
+    public static final int op3DescCell3TextView=0x7f080111;
+    public static final int op3DescCell5TextView=0x7f080112;
+    public static final int op3DescCell6TextView=0x7f080113;
+    public static final int op3EnvEncCell2TextView=0x7f080114;
+    public static final int op3EnvEncImageView=0x7f080115;
+    public static final int op3EnviarEncTextView=0x7f080116;
+    public static final int op3EnviarPtsTexttView=0x7f080117;
+    public static final int op3HistTextView=0x7f080118;
+    public static final int op3ListComTextView=0x7f080119;
+    public static final int op3MisCompTextView=0x7f08011a;
+    public static final int op3ProdCteTextView=0x7f08011b;
+    public static final int op3RepCel2TextView=0x7f08011c;
+    public static final int op3SliderTextView=0x7f08011d;
+    public static final int op3TiendaTextView=0x7f08011e;
+    public static final int op3ValidarTextView=0x7f08011f;
+    public static final int op4CanjearProdTextView=0x7f080120;
+    public static final int op4CompraTextView=0x7f080121;
+    public static final int op4DescCell3TextView=0x7f080122;
+    public static final int op4DescCell5TextView=0x7f080123;
+    public static final int op4DescCell6TextView=0x7f080124;
+    public static final int op4DescTextView=0x7f080125;
+    public static final int op4EnvEncCell2TextView=0x7f080126;
+    public static final int op4EnvEncImageView=0x7f080127;
+    public static final int op4EnviarEncTextView=0x7f080128;
+    public static final int op4EnviarPtsTexttView=0x7f080129;
+    public static final int op4HistTextView=0x7f08012a;
+    public static final int op4MisCompTextView=0x7f08012b;
+    public static final int op4ProdCteTextView=0x7f08012c;
+    public static final int op4RepCel2TextView=0x7f08012d;
+    public static final int op4SliderTextView=0x7f08012e;
+    public static final int op4ValidarTextView=0x7f08012f;
+    public static final int op4ValidartextView=0x7f080130;
+    public static final int op5CanjearProdTextView=0x7f080131;
+    public static final int op5DescTextView=0x7f080132;
+    public static final int op5EnvEncCell2TextView=0x7f080133;
+    public static final int op5EnvEncImageView=0x7f080134;
+    public static final int op5EnviarEncTextView=0x7f080135;
+    public static final int op5EnviarPtsTexttView=0x7f080136;
+    public static final int op5HistTextView=0x7f080137;
+    public static final int op5MisCompTextView=0x7f080138;
+    public static final int op5ProdCteTextView=0x7f080139;
+    public static final int op5RepCel2TextView=0x7f08013a;
+    public static final int op5SliderTextView=0x7f08013b;
+    public static final int op5ValidarTextView=0x7f08013c;
+    public static final int op6DescTextView=0x7f08013d;
+    public static final int op6EnvEncImageView=0x7f08013e;
+    public static final int op6EnvEncTextView=0x7f08013f;
+    public static final int op6EnviarPtsTexttView=0x7f080140;
+    public static final int op6ProdCteTextView=0x7f080141;
+    public static final int op6RepCel2TextView=0x7f080142;
+    public static final int op6SliderTextView=0x7f080143;
+    public static final int op6ValidarTextView=0x7f080144;
+    public static final int op7DescTextView=0x7f080145;
+    public static final int op7EnvEncImageView=0x7f080146;
+    public static final int op7EnvEncTextView=0x7f080147;
+    public static final int op7EnviarPtsTexttView=0x7f080148;
+    public static final int op7ValidarTextView=0x7f080149;
+    public static final int op8DescTextView=0x7f08014a;
+    public static final int op8EnvEncTextView=0x7f08014b;
+    public static final int op8EnviarPtsTexttView=0x7f08014c;
+    public static final int op8ValidarTextView=0x7f08014d;
+    public static final int op9DescTextView=0x7f08014e;
+    public static final int op9EnvEncTextView=0x7f08014f;
+    public static final int op9EnviarPtsTexttView=0x7f080150;
+    public static final int op9ValidarTextView=0x7f080151;
+    public static final int opc1ImaImageView=0x7f080152;
+    public static final int opc1ImaTextView=0x7f080153;
+    public static final int opc2ImaTextView=0x7f080154;
+    public static final int opcion1FlechaTextView=0x7f080155;
+    public static final int opcionAyudaTextView=0x7f080156;
+    public static final int opcionSolaTextView=0x7f080157;
+    public static final int packed=0x7f080158;
+    public static final int parallax=0x7f080159;
+    public static final int parent=0x7f08015a;
+    public static final int parentPanel=0x7f08015b;
+    public static final int parent_matrix=0x7f08015c;
+    public static final int percent=0x7f08015d;
+    public static final int perfilListView=0x7f08015e;
+    public static final int periodoSpinner=0x7f08015f;
+    public static final int pin=0x7f080160;
+    public static final int productosListView=0x7f080161;
+    public static final int progress_circular=0x7f080162;
+    public static final int progress_horizontal=0x7f080163;
+    public static final int pruebaTextView=0x7f080164;
+    public static final int puntosClienteTextView=0x7f080165;
+    public static final int puntosHistTextView=0x7f080166;
+    public static final int radio=0x7f080167;
+    public static final int refreshDescLayout=0x7f080168;
+    public static final int reporteListView=0x7f080169;
+    public static final int right=0x7f08016a;
+    public static final int right_icon=0x7f08016b;
+    public static final int right_side=0x7f08016c;
+    public static final int save_image_matrix=0x7f08016d;
+    public static final int save_non_transition_alpha=0x7f08016e;
+    public static final int save_scale_type=0x7f08016f;
+    public static final int screen=0x7f080170;
+    public static final int scroll=0x7f080171;
+    public static final int scrollIndicatorDown=0x7f080172;
+    public static final int scrollIndicatorUp=0x7f080173;
+    public static final int scrollView=0x7f080174;
+    public static final int scrollable=0x7f080175;
+    public static final int search_badge=0x7f080176;
+    public static final int search_bar=0x7f080177;
+    public static final int search_button=0x7f080178;
+    public static final int search_close_btn=0x7f080179;
+    public static final int search_edit_frame=0x7f08017a;
+    public static final int search_go_btn=0x7f08017b;
+    public static final int search_mag_icon=0x7f08017c;
+    public static final int search_plate=0x7f08017d;
+    public static final int search_src_text=0x7f08017e;
+    public static final int search_voice_btn=0x7f08017f;
+    public static final int select_dialog_listview=0x7f080180;
+    public static final int shortcut=0x7f080181;
+    public static final int showCustom=0x7f080182;
+    public static final int showHome=0x7f080183;
+    public static final int showTitle=0x7f080184;
+    public static final int sigCorreoRegTextView=0x7f080185;
+    public static final int sigLogInTextView=0x7f080186;
+    public static final int sigNomComTextView=0x7f080187;
+    public static final int sigSexoTexView=0x7f080188;
+    public static final int sig_nom_TextView=0x7f080189;
+    public static final int siguienteAyudaTextView=0x7f08018a;
+    public static final int siguienteBienTextView=0x7f08018b;
+    public static final int siguienteCompraTextView=0x7f08018c;
+    public static final int siguienteContraTextView=0x7f08018d;
+    public static final int sliderConstraintLayout=0x7f08018e;
+    public static final int sliderSeekBar=0x7f08018f;
+    public static final int smallLabel=0x7f080190;
+    public static final int snackbar_action=0x7f080191;
+    public static final int snackbar_text=0x7f080192;
+    public static final int snap=0x7f080193;
+    public static final int spacer=0x7f080194;
+    public static final int split_action_bar=0x7f080195;
+    public static final int spread=0x7f080196;
+    public static final int spread_inside=0x7f080197;
+    public static final int src_atop=0x7f080198;
+    public static final int src_in=0x7f080199;
+    public static final int src_over=0x7f08019a;
+    public static final int standard=0x7f08019b;
+    public static final int start=0x7f08019c;
+    public static final int status_bar_latest_event_content=0x7f08019d;
+    public static final int submenuarrow=0x7f08019e;
+    public static final int submit_area=0x7f08019f;
+    public static final int tabMode=0x7f0801a0;
+    public static final int tag_transition_group=0x7f0801a1;
+    public static final int tag_unhandled_key_event_manager=0x7f0801a2;
+    public static final int tag_unhandled_key_listeners=0x7f0801a3;
+    public static final int text=0x7f0801a4;
+    public static final int text2=0x7f0801a5;
+    public static final int textSpacerNoButtons=0x7f0801a6;
+    public static final int textSpacerNoTitle=0x7f0801a7;
+    public static final int textView=0x7f0801a8;
+    public static final int textView10=0x7f0801a9;
+    public static final int textView11=0x7f0801aa;
+    public static final int textView12=0x7f0801ab;
+    public static final int textView13=0x7f0801ac;
+    public static final int textView14=0x7f0801ad;
+    public static final int textView15=0x7f0801ae;
+    public static final int textView16=0x7f0801af;
+    public static final int textView17=0x7f0801b0;
+    public static final int textView18=0x7f0801b1;
+    public static final int textView19=0x7f0801b2;
+    public static final int textView2=0x7f0801b3;
+    public static final int textView20=0x7f0801b4;
+    public static final int textView21=0x7f0801b5;
+    public static final int textView22=0x7f0801b6;
+    public static final int textView23=0x7f0801b7;
+    public static final int textView24=0x7f0801b8;
+    public static final int textView25=0x7f0801b9;
+    public static final int textView26=0x7f0801ba;
+    public static final int textView27=0x7f0801bb;
+    public static final int textView28=0x7f0801bc;
+    public static final int textView29=0x7f0801bd;
+    public static final int textView3=0x7f0801be;
+    public static final int textView30=0x7f0801bf;
+    public static final int textView31=0x7f0801c0;
+    public static final int textView32=0x7f0801c1;
+    public static final int textView33=0x7f0801c2;
+    public static final int textView34=0x7f0801c3;
+    public static final int textView35=0x7f0801c4;
+    public static final int textView36=0x7f0801c5;
+    public static final int textView37=0x7f0801c6;
+    public static final int textView38=0x7f0801c7;
+    public static final int textView39=0x7f0801c8;
+    public static final int textView4=0x7f0801c9;
+    public static final int textView40=0x7f0801ca;
+    public static final int textView41=0x7f0801cb;
+    public static final int textView42=0x7f0801cc;
+    public static final int textView43=0x7f0801cd;
+    public static final int textView44=0x7f0801ce;
+    public static final int textView45=0x7f0801cf;
+    public static final int textView46=0x7f0801d0;
+    public static final int textView47=0x7f0801d1;
+    public static final int textView48=0x7f0801d2;
+    public static final int textView49=0x7f0801d3;
+    public static final int textView5=0x7f0801d4;
+    public static final int textView50=0x7f0801d5;
+    public static final int textView51=0x7f0801d6;
+    public static final int textView52=0x7f0801d7;
+    public static final int textView6=0x7f0801d8;
+    public static final int textView7=0x7f0801d9;
+    public static final int textView8=0x7f0801da;
+    public static final int textView9=0x7f0801db;
+    public static final int text_input_password_toggle=0x7f0801dc;
+    public static final int textinput_counter=0x7f0801dd;
+    public static final int textinput_error=0x7f0801de;
+    public static final int tiendaListView=0x7f0801df;
+    public static final int tiendaRefreshLayout=0x7f0801e0;
+    public static final int time=0x7f0801e1;
+    public static final int title=0x7f0801e2;
+    public static final int titleDividerNoCustom=0x7f0801e3;
+    public static final int title_template=0x7f0801e4;
+    public static final int tituloBienTextView=0x7f0801e5;
+    public static final int top=0x7f0801e6;
+    public static final int topPanel=0x7f0801e7;
+    public static final int touch_outside=0x7f0801e8;
+    public static final int transition_current_scene=0x7f0801e9;
+    public static final int transition_layout_save=0x7f0801ea;
+    public static final int transition_position=0x7f0801eb;
+    public static final int transition_scene_layoutid_cache=0x7f0801ec;
+    public static final int transition_transform=0x7f0801ed;
+    public static final int uniform=0x7f0801ee;
+    public static final int up=0x7f0801ef;
+    public static final int useLogo=0x7f0801f0;
+    public static final int validarConstraintLayout=0x7f0801f1;
+    public static final int verCodigoTextView=0x7f0801f2;
+    public static final int view_offset_helper=0x7f0801f3;
+    public static final int visible=0x7f0801f4;
+    public static final int withText=0x7f0801f5;
+    public static final int womanImageView=0x7f0801f6;
+    public static final int wrap=0x7f0801f7;
+    public static final int wrap_content=0x7f0801f8;
+    public static final int zxscan=0x7f0801f9;
   }
   public static final class integer {
     public static final int abc_config_activityDefaultDur=0x7f090000;
@@ -4360,71 +4451,77 @@ public final class R {
     public static final int activity_sexo=0x7f0a0039;
     public static final int activity_tienda=0x7f0a003a;
     public static final int activity_validar_puntos=0x7f0a003b;
-    public static final int administrador_cell_1=0x7f0a003c;
-    public static final int canjear_productos_cell_1=0x7f0a003d;
-    public static final int canjear_productos_cell_2=0x7f0a003e;
-    public static final int colaborador_cell_1=0x7f0a003f;
-    public static final int compra_tienda_cell_1=0x7f0a0040;
-    public static final int descripcion_comercio_cell_1=0x7f0a0041;
-    public static final int descripcion_comercio_cell_2=0x7f0a0042;
-    public static final int descripcion_comercio_cell_3=0x7f0a0043;
-    public static final int design_bottom_navigation_item=0x7f0a0044;
-    public static final int design_bottom_sheet_dialog=0x7f0a0045;
-    public static final int design_layout_snackbar=0x7f0a0046;
-    public static final int design_layout_snackbar_include=0x7f0a0047;
-    public static final int design_layout_tab_icon=0x7f0a0048;
-    public static final int design_layout_tab_text=0x7f0a0049;
-    public static final int design_menu_item_action_area=0x7f0a004a;
-    public static final int design_navigation_item=0x7f0a004b;
-    public static final int design_navigation_item_header=0x7f0a004c;
-    public static final int design_navigation_item_separator=0x7f0a004d;
-    public static final int design_navigation_item_subheader=0x7f0a004e;
-    public static final int design_navigation_menu=0x7f0a004f;
-    public static final int design_navigation_menu_item=0x7f0a0050;
-    public static final int design_text_input_password_icon=0x7f0a0051;
-    public static final int detalle_ayuda_sugerencia=0x7f0a0052;
-    public static final int detalle_canjear_puntos=0x7f0a0053;
-    public static final int detalle_enviar_puntos=0x7f0a0054;
-    public static final int detalle_pregunta_caritas=0x7f0a0055;
-    public static final int detalle_pregunta_slider=0x7f0a0056;
-    public static final int enviar_encuesta_cell_1=0x7f0a0057;
-    public static final int enviar_encuesta_cell_2=0x7f0a0058;
-    public static final int fragment_descripcion_comercio=0x7f0a0059;
-    public static final int fragment_lista_comercios=0x7f0a005a;
-    public static final int fragment_perfil_usuario=0x7f0a005b;
-    public static final int general_celda_vacia=0x7f0a005c;
-    public static final int general_titulo_descripcion=0x7f0a005d;
-    public static final int general_una_opcion_sola=0x7f0a005e;
-    public static final int historial_puntos_cell_1=0x7f0a005f;
-    public static final int lista_comercios_cell_1=0x7f0a0060;
-    public static final int lista_comercios_cell_1_op2=0x7f0a0061;
-    public static final int mis_compras_cell_1=0x7f0a0062;
-    public static final int notification_action=0x7f0a0063;
-    public static final int notification_action_tombstone=0x7f0a0064;
-    public static final int notification_media_action=0x7f0a0065;
-    public static final int notification_media_cancel_action=0x7f0a0066;
-    public static final int notification_template_big_media=0x7f0a0067;
-    public static final int notification_template_big_media_custom=0x7f0a0068;
-    public static final int notification_template_big_media_narrow=0x7f0a0069;
-    public static final int notification_template_big_media_narrow_custom=0x7f0a006a;
-    public static final int notification_template_custom_big=0x7f0a006b;
-    public static final int notification_template_icon_group=0x7f0a006c;
-    public static final int notification_template_lines_media=0x7f0a006d;
-    public static final int notification_template_media=0x7f0a006e;
-    public static final int notification_template_media_custom=0x7f0a006f;
-    public static final int notification_template_part_chronometer=0x7f0a0070;
-    public static final int notification_template_part_time=0x7f0a0071;
-    public static final int productos_cliente_cell_1=0x7f0a0072;
-    public static final int prueba_1=0x7f0a0073;
-    public static final int reporte_general_cell_1=0x7f0a0074;
-    public static final int reporte_general_cell_2=0x7f0a0075;
-    public static final int select_dialog_item_material=0x7f0a0076;
-    public static final int select_dialog_multichoice_material=0x7f0a0077;
-    public static final int select_dialog_singlechoice_material=0x7f0a0078;
-    public static final int support_simple_spinner_dropdown_item=0x7f0a0079;
-    public static final int tienda_cell_1=0x7f0a007a;
-    public static final int una_opcion_con_flecha=0x7f0a007b;
-    public static final int una_opcion_con_imagen=0x7f0a007c;
+    public static final int activity_ver_menu=0x7f0a003c;
+    public static final int administrador_cell_1=0x7f0a003d;
+    public static final int canjear_productos_cell_1=0x7f0a003e;
+    public static final int canjear_productos_cell_2=0x7f0a003f;
+    public static final int colaborador_cell_1=0x7f0a0040;
+    public static final int compra_tienda_cell_1=0x7f0a0041;
+    public static final int descripcion_comercio_cell_1=0x7f0a0042;
+    public static final int descripcion_comercio_cell_2=0x7f0a0043;
+    public static final int descripcion_comercio_cell_3=0x7f0a0044;
+    public static final int descripcion_comercio_cell_4=0x7f0a0045;
+    public static final int descripcion_comercio_cell_5=0x7f0a0046;
+    public static final int descripcion_comercio_cell_6=0x7f0a0047;
+    public static final int descripcion_comercio_item_gallery=0x7f0a0048;
+    public static final int design_bottom_navigation_item=0x7f0a0049;
+    public static final int design_bottom_sheet_dialog=0x7f0a004a;
+    public static final int design_layout_snackbar=0x7f0a004b;
+    public static final int design_layout_snackbar_include=0x7f0a004c;
+    public static final int design_layout_tab_icon=0x7f0a004d;
+    public static final int design_layout_tab_text=0x7f0a004e;
+    public static final int design_menu_item_action_area=0x7f0a004f;
+    public static final int design_navigation_item=0x7f0a0050;
+    public static final int design_navigation_item_header=0x7f0a0051;
+    public static final int design_navigation_item_separator=0x7f0a0052;
+    public static final int design_navigation_item_subheader=0x7f0a0053;
+    public static final int design_navigation_menu=0x7f0a0054;
+    public static final int design_navigation_menu_item=0x7f0a0055;
+    public static final int design_text_input_password_icon=0x7f0a0056;
+    public static final int detalle_ayuda_sugerencia=0x7f0a0057;
+    public static final int detalle_canjear_puntos=0x7f0a0058;
+    public static final int detalle_enviar_puntos=0x7f0a0059;
+    public static final int detalle_pregunta_caritas=0x7f0a005a;
+    public static final int detalle_pregunta_slider=0x7f0a005b;
+    public static final int enviar_encuesta_cell_1=0x7f0a005c;
+    public static final int enviar_encuesta_cell_2=0x7f0a005d;
+    public static final int fragment_descripcion_comercio=0x7f0a005e;
+    public static final int fragment_lista_comercios=0x7f0a005f;
+    public static final int fragment_perfil_usuario=0x7f0a0060;
+    public static final int general_celda_vacia=0x7f0a0061;
+    public static final int general_titulo_descripcion=0x7f0a0062;
+    public static final int general_una_opcion_sola=0x7f0a0063;
+    public static final int historial_puntos_cell_1=0x7f0a0064;
+    public static final int lista_comercios_cell_1=0x7f0a0065;
+    public static final int lista_comercios_cell_1_op2=0x7f0a0066;
+    public static final int mis_compras_cell_1=0x7f0a0067;
+    public static final int notification_action=0x7f0a0068;
+    public static final int notification_action_tombstone=0x7f0a0069;
+    public static final int notification_media_action=0x7f0a006a;
+    public static final int notification_media_cancel_action=0x7f0a006b;
+    public static final int notification_template_big_media=0x7f0a006c;
+    public static final int notification_template_big_media_custom=0x7f0a006d;
+    public static final int notification_template_big_media_narrow=0x7f0a006e;
+    public static final int notification_template_big_media_narrow_custom=0x7f0a006f;
+    public static final int notification_template_custom_big=0x7f0a0070;
+    public static final int notification_template_icon_group=0x7f0a0071;
+    public static final int notification_template_lines_media=0x7f0a0072;
+    public static final int notification_template_media=0x7f0a0073;
+    public static final int notification_template_media_custom=0x7f0a0074;
+    public static final int notification_template_part_chronometer=0x7f0a0075;
+    public static final int notification_template_part_time=0x7f0a0076;
+    public static final int productos_cliente_cell_1=0x7f0a0077;
+    public static final int prueba_1=0x7f0a0078;
+    public static final int reporte_general_cell_1=0x7f0a0079;
+    public static final int reporte_general_cell_2=0x7f0a007a;
+    public static final int select_dialog_item_material=0x7f0a007b;
+    public static final int select_dialog_multichoice_material=0x7f0a007c;
+    public static final int select_dialog_singlechoice_material=0x7f0a007d;
+    public static final int support_simple_spinner_dropdown_item=0x7f0a007e;
+    public static final int tienda_cell_1=0x7f0a007f;
+    public static final int una_opcion_con_flecha=0x7f0a0080;
+    public static final int una_opcion_con_imagen=0x7f0a0081;
+    public static final int ver_menu_item=0x7f0a0082;
   }
   public static final class menu {
     public static final int bottom_navigation=0x7f0b0000;
@@ -9815,7 +9912,7 @@ public final class R {
      * <tr><td>barrier</td><td>2</td><td></td></tr>
      * <tr><td>chains</td><td>4</td><td></td></tr>
      * <tr><td>dimensions</td><td>8</td><td></td></tr>
-     * <tr><td>direct</td><td>1</td><td></td></tr>
+     * <tr><td>direct</td><td>1</td><td>direct, barriers, chains</td></tr>
      * <tr><td>groups</td><td>20</td><td></td></tr>
      * <tr><td>none</td><td>0</td><td></td></tr>
      * <tr><td>standard</td><td>7</td><td></td></tr>
@@ -11191,8 +11288,9 @@ public final class R {
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Attribute</th><th>Description</th></tr>
-     * <tr><td><code>{@link #CoordinatorLayout_keylines com.parse.pandoapp:keylines}</code></td><td></td></tr>
-     * <tr><td><code>{@link #CoordinatorLayout_statusBarBackground com.parse.pandoapp:statusBarBackground}</code></td><td></td></tr>
+     * <tr><td><code>{@link #CoordinatorLayout_keylines com.parse.pandoapp:keylines}</code></td><td>A reference to an array of integers representing the
+     * locations of horizontal keylines in dp from the starting edge.</td></tr>
+     * <tr><td><code>{@link #CoordinatorLayout_statusBarBackground com.parse.pandoapp:statusBarBackground}</code></td><td>Drawable to display behind the status bar when the view is set to draw behind it.</td></tr>
      * </table>
      * @see #CoordinatorLayout_keylines
      * @see #CoordinatorLayout_statusBarBackground
@@ -11201,8 +11299,13 @@ public final class R {
       0x7f0300c5, 0x7f030153
     };
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#keylines}
-     * attribute's value can be found in the {@link #CoordinatorLayout} array.
+     * <p>
+     * @attr description
+     * A reference to an array of integers representing the
+     * locations of horizontal keylines in dp from the starting edge.
+     * Child views can refer to these keylines for alignment using
+     * layout_keyline="index" where index is a 0-based index into
+     * this array.
      *
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
@@ -11213,8 +11316,9 @@ public final class R {
      */
     public static final int CoordinatorLayout_keylines=0;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#statusBarBackground}
-     * attribute's value can be found in the {@link #CoordinatorLayout} array.
+     * <p>
+     * @attr description
+     * Drawable to display behind the status bar when the view is set to draw behind it.
      *
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
@@ -11235,12 +11339,15 @@ public final class R {
      * <colgroup align="left" />
      * <tr><th>Attribute</th><th>Description</th></tr>
      * <tr><td><code>{@link #CoordinatorLayout_Layout_android_layout_gravity android:layout_gravity}</code></td><td></td></tr>
-     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_anchor com.parse.pandoapp:layout_anchor}</code></td><td></td></tr>
-     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_anchorGravity com.parse.pandoapp:layout_anchorGravity}</code></td><td></td></tr>
-     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_behavior com.parse.pandoapp:layout_behavior}</code></td><td></td></tr>
-     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_dodgeInsetEdges com.parse.pandoapp:layout_dodgeInsetEdges}</code></td><td></td></tr>
-     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_insetEdge com.parse.pandoapp:layout_insetEdge}</code></td><td></td></tr>
-     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_keyline com.parse.pandoapp:layout_keyline}</code></td><td></td></tr>
+     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_anchor com.parse.pandoapp:layout_anchor}</code></td><td>The id of an anchor view that this view should position relative to.</td></tr>
+     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_anchorGravity com.parse.pandoapp:layout_anchorGravity}</code></td><td>Specifies how an object should position relative to an anchor, on both the X and Y axes,
+     * within its parent's bounds.</td></tr>
+     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_behavior com.parse.pandoapp:layout_behavior}</code></td><td>The class name of a Behavior class defining special runtime behavior
+     * for this child view.</td></tr>
+     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_dodgeInsetEdges com.parse.pandoapp:layout_dodgeInsetEdges}</code></td><td>Specifies how this view dodges the inset edges of the CoordinatorLayout.</td></tr>
+     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_insetEdge com.parse.pandoapp:layout_insetEdge}</code></td><td>Specifies how this view insets the CoordinatorLayout and make some other views
+     * dodge it.</td></tr>
+     * <tr><td><code>{@link #CoordinatorLayout_Layout_layout_keyline com.parse.pandoapp:layout_keyline}</code></td><td>The index of a keyline this view should position relative to.</td></tr>
      * </table>
      * @see #CoordinatorLayout_Layout_android_layout_gravity
      * @see #CoordinatorLayout_Layout_layout_anchor
@@ -11284,8 +11391,9 @@ public final class R {
      */
     public static final int CoordinatorLayout_Layout_android_layout_gravity=0;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#layout_anchor}
-     * attribute's value can be found in the {@link #CoordinatorLayout_Layout} array.
+     * <p>
+     * @attr description
+     * The id of an anchor view that this view should position relative to.
      *
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
@@ -11296,8 +11404,10 @@ public final class R {
      */
     public static final int CoordinatorLayout_Layout_layout_anchor=1;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#layout_anchorGravity}
-     * attribute's value can be found in the {@link #CoordinatorLayout_Layout} array.
+     * <p>
+     * @attr description
+     * Specifies how an object should position relative to an anchor, on both the X and Y axes,
+     * within its parent's bounds.
      *
      * <p>Must be one or more (separated by '|') of the following constant values.</p>
      * <table>
@@ -11305,28 +11415,36 @@ public final class R {
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>bottom</td><td>50</td><td></td></tr>
-     * <tr><td>center</td><td>11</td><td></td></tr>
-     * <tr><td>center_horizontal</td><td>1</td><td></td></tr>
-     * <tr><td>center_vertical</td><td>10</td><td></td></tr>
-     * <tr><td>clip_horizontal</td><td>8</td><td></td></tr>
-     * <tr><td>clip_vertical</td><td>80</td><td></td></tr>
-     * <tr><td>end</td><td>800005</td><td></td></tr>
-     * <tr><td>fill</td><td>77</td><td></td></tr>
-     * <tr><td>fill_horizontal</td><td>7</td><td></td></tr>
-     * <tr><td>fill_vertical</td><td>70</td><td></td></tr>
-     * <tr><td>left</td><td>3</td><td></td></tr>
-     * <tr><td>right</td><td>5</td><td></td></tr>
-     * <tr><td>start</td><td>800003</td><td></td></tr>
-     * <tr><td>top</td><td>30</td><td></td></tr>
+     * <tr><td>bottom</td><td>50</td><td>Push object to the bottom of its container, not changing its size.</td></tr>
+     * <tr><td>center</td><td>11</td><td>Place the object in the center of its container in both the vertical and horizontal axis, not changing its size.</td></tr>
+     * <tr><td>center_horizontal</td><td>1</td><td>Place object in the horizontal center of its container, not changing its size.</td></tr>
+     * <tr><td>center_vertical</td><td>10</td><td>Place object in the vertical center of its container, not changing its size.</td></tr>
+     * <tr><td>clip_horizontal</td><td>8</td><td>Additional option that can be set to have the left and/or right edges of
+     * the child clipped to its container's bounds.
+     * The clip will be based on the horizontal gravity: a left gravity will clip the right
+     * edge, a right gravity will clip the left edge, and neither will clip both edges.</td></tr>
+     * <tr><td>clip_vertical</td><td>80</td><td>Additional option that can be set to have the top and/or bottom edges of
+     * the child clipped to its container's bounds.
+     * The clip will be based on the vertical gravity: a top gravity will clip the bottom
+     * edge, a bottom gravity will clip the top edge, and neither will clip both edges.</td></tr>
+     * <tr><td>end</td><td>800005</td><td>Push object to the end of its container, not changing its size.</td></tr>
+     * <tr><td>fill</td><td>77</td><td>Grow the horizontal and vertical size of the object if needed so it completely fills its container.</td></tr>
+     * <tr><td>fill_horizontal</td><td>7</td><td>Grow the horizontal size of the object if needed so it completely fills its container.</td></tr>
+     * <tr><td>fill_vertical</td><td>70</td><td>Grow the vertical size of the object if needed so it completely fills its container.</td></tr>
+     * <tr><td>left</td><td>3</td><td>Push object to the left of its container, not changing its size.</td></tr>
+     * <tr><td>right</td><td>5</td><td>Push object to the right of its container, not changing its size.</td></tr>
+     * <tr><td>start</td><td>800003</td><td>Push object to the beginning of its container, not changing its size.</td></tr>
+     * <tr><td>top</td><td>30</td><td>Push object to the top of its container, not changing its size.</td></tr>
      * </table>
      *
      * @attr name com.parse.pandoapp:layout_anchorGravity
      */
     public static final int CoordinatorLayout_Layout_layout_anchorGravity=2;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#layout_behavior}
-     * attribute's value can be found in the {@link #CoordinatorLayout_Layout} array.
+     * <p>
+     * @attr description
+     * The class name of a Behavior class defining special runtime behavior
+     * for this child view.
      *
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
@@ -11335,8 +11453,9 @@ public final class R {
      */
     public static final int CoordinatorLayout_Layout_layout_behavior=3;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#layout_dodgeInsetEdges}
-     * attribute's value can be found in the {@link #CoordinatorLayout_Layout} array.
+     * <p>
+     * @attr description
+     * Specifies how this view dodges the inset edges of the CoordinatorLayout.
      *
      * <p>Must be one or more (separated by '|') of the following constant values.</p>
      * <table>
@@ -11344,22 +11463,24 @@ public final class R {
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>all</td><td>77</td><td></td></tr>
-     * <tr><td>bottom</td><td>50</td><td></td></tr>
-     * <tr><td>end</td><td>800005</td><td></td></tr>
-     * <tr><td>left</td><td>3</td><td></td></tr>
-     * <tr><td>none</td><td>0</td><td></td></tr>
-     * <tr><td>right</td><td>5</td><td></td></tr>
-     * <tr><td>start</td><td>800003</td><td></td></tr>
-     * <tr><td>top</td><td>30</td><td></td></tr>
+     * <tr><td>all</td><td>77</td><td>Dodge all the inset edges.</td></tr>
+     * <tr><td>bottom</td><td>50</td><td>Dodge the bottom inset edge.</td></tr>
+     * <tr><td>end</td><td>800005</td><td>Dodge the end inset edge.</td></tr>
+     * <tr><td>left</td><td>3</td><td>Dodge the left inset edge.</td></tr>
+     * <tr><td>none</td><td>0</td><td>Don't dodge any edges</td></tr>
+     * <tr><td>right</td><td>5</td><td>Dodge the right inset edge.</td></tr>
+     * <tr><td>start</td><td>800003</td><td>Dodge the start inset edge.</td></tr>
+     * <tr><td>top</td><td>30</td><td>Dodge the top inset edge.</td></tr>
      * </table>
      *
      * @attr name com.parse.pandoapp:layout_dodgeInsetEdges
      */
     public static final int CoordinatorLayout_Layout_layout_dodgeInsetEdges=4;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#layout_insetEdge}
-     * attribute's value can be found in the {@link #CoordinatorLayout_Layout} array.
+     * <p>
+     * @attr description
+     * Specifies how this view insets the CoordinatorLayout and make some other views
+     * dodge it.
      *
      * <p>Must be one of the following constant values.</p>
      * <table>
@@ -11367,21 +11488,24 @@ public final class R {
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>bottom</td><td>50</td><td></td></tr>
-     * <tr><td>end</td><td>800005</td><td></td></tr>
-     * <tr><td>left</td><td>3</td><td></td></tr>
-     * <tr><td>none</td><td>0</td><td></td></tr>
-     * <tr><td>right</td><td>5</td><td></td></tr>
-     * <tr><td>start</td><td>800003</td><td></td></tr>
-     * <tr><td>top</td><td>30</td><td></td></tr>
+     * <tr><td>bottom</td><td>50</td><td>Inset the bottom edge.</td></tr>
+     * <tr><td>end</td><td>800005</td><td>Inset the end edge.</td></tr>
+     * <tr><td>left</td><td>3</td><td>Inset the left edge.</td></tr>
+     * <tr><td>none</td><td>0</td><td>Don't inset.</td></tr>
+     * <tr><td>right</td><td>5</td><td>Inset the right edge.</td></tr>
+     * <tr><td>start</td><td>800003</td><td>Inset the start edge.</td></tr>
+     * <tr><td>top</td><td>30</td><td>Inset the top edge.</td></tr>
      * </table>
      *
      * @attr name com.parse.pandoapp:layout_insetEdge
      */
     public static final int CoordinatorLayout_Layout_layout_insetEdge=5;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#layout_keyline}
-     * attribute's value can be found in the {@link #CoordinatorLayout_Layout} array.
+     * <p>
+     * @attr description
+     * The index of a keyline this view should position relative to.
+     * android:layout_gravity will affect how the view aligns to the
+     * specified keyline.
      *
      * <p>May be an integer value, such as "<code>100</code>".
      *
@@ -11759,12 +11883,12 @@ public final class R {
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Attribute</th><th>Description</th></tr>
-     * <tr><td><code>{@link #FontFamily_fontProviderAuthority com.parse.pandoapp:fontProviderAuthority}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamily_fontProviderCerts com.parse.pandoapp:fontProviderCerts}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamily_fontProviderFetchStrategy com.parse.pandoapp:fontProviderFetchStrategy}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamily_fontProviderFetchTimeout com.parse.pandoapp:fontProviderFetchTimeout}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamily_fontProviderPackage com.parse.pandoapp:fontProviderPackage}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamily_fontProviderQuery com.parse.pandoapp:fontProviderQuery}</code></td><td></td></tr>
+     * <tr><td><code>{@link #FontFamily_fontProviderAuthority com.parse.pandoapp:fontProviderAuthority}</code></td><td>The authority of the Font Provider to be used for the request.</td></tr>
+     * <tr><td><code>{@link #FontFamily_fontProviderCerts com.parse.pandoapp:fontProviderCerts}</code></td><td>The sets of hashes for the certificates the provider should be signed with.</td></tr>
+     * <tr><td><code>{@link #FontFamily_fontProviderFetchStrategy com.parse.pandoapp:fontProviderFetchStrategy}</code></td><td>The strategy to be used when fetching font data from a font provider in XML layouts.</td></tr>
+     * <tr><td><code>{@link #FontFamily_fontProviderFetchTimeout com.parse.pandoapp:fontProviderFetchTimeout}</code></td><td>The length of the timeout during fetching.</td></tr>
+     * <tr><td><code>{@link #FontFamily_fontProviderPackage com.parse.pandoapp:fontProviderPackage}</code></td><td>The package for the Font Provider to be used for the request.</td></tr>
+     * <tr><td><code>{@link #FontFamily_fontProviderQuery com.parse.pandoapp:fontProviderQuery}</code></td><td>The query to be sent over to the provider.</td></tr>
      * </table>
      * @see #FontFamily_fontProviderAuthority
      * @see #FontFamily_fontProviderCerts
@@ -11778,8 +11902,9 @@ public final class R {
       0x7f0300a7, 0x7f0300a8
     };
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontProviderAuthority}
-     * attribute's value can be found in the {@link #FontFamily} array.
+     * <p>
+     * @attr description
+     * The authority of the Font Provider to be used for the request.
      *
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
@@ -11788,8 +11913,13 @@ public final class R {
      */
     public static final int FontFamily_fontProviderAuthority=0;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontProviderCerts}
-     * attribute's value can be found in the {@link #FontFamily} array.
+     * <p>
+     * @attr description
+     * The sets of hashes for the certificates the provider should be signed with. This is
+     * used to verify the identity of the provider, and is only required if the provider is not
+     * part of the system image. This value may point to one list or a list of lists, where each
+     * individual list represents one collection of signature hashes. Refer to your font provider's
+     * documentation for these values.
      *
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
@@ -11800,8 +11930,15 @@ public final class R {
      */
     public static final int FontFamily_fontProviderCerts=1;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontProviderFetchStrategy}
-     * attribute's value can be found in the {@link #FontFamily} array.
+     * <p>
+     * @attr description
+     * The strategy to be used when fetching font data from a font provider in XML layouts.
+     * This attribute is ignored when the resource is loaded from code, as it is equivalent to the
+     * choice of API between {@link
+     * androidx.core.content.res.ResourcesCompat#getFont(Context, int)} (blocking) and
+     * {@link
+     * androidx.core.content.res.ResourcesCompat#getFont(Context, int, FontCallback, Handler)}
+     * (async).
      *
      * <p>Must be one of the following constant values.</p>
      * <table>
@@ -11809,16 +11946,25 @@ public final class R {
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>async</td><td>1</td><td></td></tr>
-     * <tr><td>blocking</td><td>0</td><td></td></tr>
+     * <tr><td>async</td><td>1</td><td>The async font fetch works as follows.
+     * First, check the local cache, then if the requeted font is not cached, trigger a
+     * request the font and continue with layout inflation. Once the font fetch succeeds, the
+     * target text view will be refreshed with the downloaded font data. The
+     * fontProviderFetchTimeout will be ignored if async loading is specified.</td></tr>
+     * <tr><td>blocking</td><td>0</td><td>The blocking font fetch works as follows.
+     * First, check the local cache, then if the requested font is not cached, request the
+     * font from the provider and wait until it is finished.  You can change the length of
+     * the timeout by modifying fontProviderFetchTimeout.  If the timeout happens, the
+     * default typeface will be used instead.</td></tr>
      * </table>
      *
      * @attr name com.parse.pandoapp:fontProviderFetchStrategy
      */
     public static final int FontFamily_fontProviderFetchStrategy=2;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontProviderFetchTimeout}
-     * attribute's value can be found in the {@link #FontFamily} array.
+     * <p>
+     * @attr description
+     * The length of the timeout during fetching.
      *
      * <p>May be an integer value, such as "<code>100</code>".
      * <p>Must be one of the following constant values.</p>
@@ -11827,15 +11973,18 @@ public final class R {
      * <colgroup align="left" />
      * <colgroup align="left" />
      * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-     * <tr><td>forever</td><td>ffffffff</td><td></td></tr>
+     * <tr><td>forever</td><td>ffffffff</td><td>A special value for the timeout. In this case, the blocking font fetching will not
+     * timeout and wait until a reply is received from the font provider.</td></tr>
      * </table>
      *
      * @attr name com.parse.pandoapp:fontProviderFetchTimeout
      */
     public static final int FontFamily_fontProviderFetchTimeout=3;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontProviderPackage}
-     * attribute's value can be found in the {@link #FontFamily} array.
+     * <p>
+     * @attr description
+     * The package for the Font Provider to be used for the request. This is used to verify
+     * the identity of the provider.
      *
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
@@ -11844,8 +11993,10 @@ public final class R {
      */
     public static final int FontFamily_fontProviderPackage=4;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontProviderQuery}
-     * attribute's value can be found in the {@link #FontFamily} array.
+     * <p>
+     * @attr description
+     * The query to be sent over to the provider. Refer to your font provider's documentation
+     * on the format of this string.
      *
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
@@ -11865,11 +12016,11 @@ public final class R {
      * <tr><td><code>{@link #FontFamilyFont_android_fontStyle android:fontStyle}</code></td><td></td></tr>
      * <tr><td><code>{@link #FontFamilyFont_android_ttcIndex android:ttcIndex}</code></td><td></td></tr>
      * <tr><td><code>{@link #FontFamilyFont_android_fontVariationSettings android:fontVariationSettings}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamilyFont_font com.parse.pandoapp:font}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamilyFont_fontStyle com.parse.pandoapp:fontStyle}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamilyFont_fontVariationSettings com.parse.pandoapp:fontVariationSettings}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamilyFont_fontWeight com.parse.pandoapp:fontWeight}</code></td><td></td></tr>
-     * <tr><td><code>{@link #FontFamilyFont_ttcIndex com.parse.pandoapp:ttcIndex}</code></td><td></td></tr>
+     * <tr><td><code>{@link #FontFamilyFont_font com.parse.pandoapp:font}</code></td><td>The reference to the font file to be used.</td></tr>
+     * <tr><td><code>{@link #FontFamilyFont_fontStyle com.parse.pandoapp:fontStyle}</code></td><td>The style of the given font file.</td></tr>
+     * <tr><td><code>{@link #FontFamilyFont_fontVariationSettings com.parse.pandoapp:fontVariationSettings}</code></td><td>The variation settings to be applied to the font.</td></tr>
+     * <tr><td><code>{@link #FontFamilyFont_fontWeight com.parse.pandoapp:fontWeight}</code></td><td>The weight of the given font file.</td></tr>
+     * <tr><td><code>{@link #FontFamilyFont_ttcIndex com.parse.pandoapp:ttcIndex}</code></td><td>The index of the font in the tcc font file.</td></tr>
      * </table>
      * @see #FontFamilyFont_android_font
      * @see #FontFamilyFont_android_fontWeight
@@ -11909,8 +12060,9 @@ public final class R {
      */
     public static final int FontFamilyFont_android_fontWeight=1;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#fontStyle}
-     * attribute's value can be found in the {@link #FontFamilyFont} array.
+     * <p>
+     * @attr description
+     * References to the framework attrs
      *
      * <p>Must be one of the following constant values.</p>
      * <table>
@@ -11945,8 +12097,10 @@ public final class R {
      */
     public static final int FontFamilyFont_android_fontVariationSettings=4;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#font}
-     * attribute's value can be found in the {@link #FontFamilyFont} array.
+     * <p>
+     * @attr description
+     * The reference to the font file to be used. This should be a file in the res/font folder
+     * and should therefore have an R reference value. E.g. @font/myfont
      *
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
@@ -11957,8 +12111,11 @@ public final class R {
      */
     public static final int FontFamilyFont_font=5;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontStyle}
-     * attribute's value can be found in the {@link #FontFamilyFont} array.
+     * <p>
+     * @attr description
+     * The style of the given font file. This will be used when the font is being loaded into
+     * the font stack and will override any style information in the font's header tables. If
+     * unspecified, the value in the font's header tables will be used.
      *
      * <p>Must be one of the following constant values.</p>
      * <table>
@@ -11974,8 +12131,12 @@ public final class R {
      */
     public static final int FontFamilyFont_fontStyle=6;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontVariationSettings}
-     * attribute's value can be found in the {@link #FontFamilyFont} array.
+     * <p>
+     * @attr description
+     * The variation settings to be applied to the font. The string should be in the following
+     * format: "'tag1' value1, 'tag2' value2, ...". If the default variation settings should be
+     * used, or the font used does not support variation settings, this attribute needs not be
+     * specified.
      *
      * <p>May be a string value, using '\\;' to escape characters such as
      * '\\n' or '\\uxxxx' for a unicode character;
@@ -11984,8 +12145,13 @@ public final class R {
      */
     public static final int FontFamilyFont_fontVariationSettings=7;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#fontWeight}
-     * attribute's value can be found in the {@link #FontFamilyFont} array.
+     * <p>
+     * @attr description
+     * The weight of the given font file. This will be used when the font is being loaded into
+     * the font stack and will override any weight information in the font's header tables. Must
+     * be a positive number, a multiple of 100, and between 100 and 900, inclusive. The most
+     * common values are 400 for regular weight and 700 for bold weight. If unspecified, the value
+     * in the font's header tables will be used.
      *
      * <p>May be an integer value, such as "<code>100</code>".
      *
@@ -11993,8 +12159,10 @@ public final class R {
      */
     public static final int FontFamilyFont_fontWeight=8;
     /**
-     * <p>This symbol is the offset where the {@link com.parse.pandoapp.R.attr#ttcIndex}
-     * attribute's value can be found in the {@link #FontFamilyFont} array.
+     * <p>
+     * @attr description
+     * The index of the font in the tcc font file. If the font file referenced is not in the
+     * tcc format, this attribute needs not be specified.
      *
      * <p>May be an integer value, such as "<code>100</code>".
      *
@@ -12110,8 +12278,9 @@ public final class R {
       0x01010510, 0x01010511, 0x01010512, 0x01010513
     };
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#startColor}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * Start color of the gradient.
      *
      * <p>May be a color value, in the form of "<code>#<i>rgb</i></code>",
      * "<code>#<i>argb</i></code>", "<code>#<i>rrggbb</i></code>", or
@@ -12121,8 +12290,9 @@ public final class R {
      */
     public static final int GradientColor_android_startColor=0;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#endColor}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * End color of the gradient.
      *
      * <p>May be a color value, in the form of "<code>#<i>rgb</i></code>",
      * "<code>#<i>argb</i></code>", "<code>#<i>rrggbb</i></code>", or
@@ -12132,8 +12302,9 @@ public final class R {
      */
     public static final int GradientColor_android_endColor=1;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#type}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * Type of gradient. The default type is linear.
      *
      * <p>Must be one of the following constant values.</p>
      * <table>
@@ -12150,8 +12321,9 @@ public final class R {
      */
     public static final int GradientColor_android_type=2;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#centerX}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * X coordinate of the center of the gradient within the path.
      *
      * <p>May be a floating point value, such as "<code>1.2</code>".
      * <p>May be a fractional value, which is a floating point number appended with
@@ -12163,8 +12335,9 @@ public final class R {
      */
     public static final int GradientColor_android_centerX=3;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#centerY}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * Y coordinate of the center of the gradient within the path.
      *
      * <p>May be a floating point value, such as "<code>1.2</code>".
      * <p>May be a fractional value, which is a floating point number appended with
@@ -12176,8 +12349,9 @@ public final class R {
      */
     public static final int GradientColor_android_centerY=4;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#gradientRadius}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * Radius of the gradient, used only with radial gradient.
      *
      * <p>May be a floating point value, such as "<code>1.2</code>".
      * <p>May be a dimension value, which is a floating point number appended with a
@@ -12194,8 +12368,9 @@ public final class R {
      */
     public static final int GradientColor_android_gradientRadius=5;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#tileMode}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * Defines the tile mode of the gradient. SweepGradient doesn't support tiling.
      *
      * <p>Must be one of the following constant values.</p>
      * <table>
@@ -12213,8 +12388,9 @@ public final class R {
      */
     public static final int GradientColor_android_tileMode=6;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#centerColor}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * Optional center color.
      *
      * <p>May be a color value, in the form of "<code>#<i>rgb</i></code>",
      * "<code>#<i>argb</i></code>", "<code>#<i>rrggbb</i></code>", or
@@ -12224,8 +12400,10 @@ public final class R {
      */
     public static final int GradientColor_android_centerColor=7;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#startX}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * X coordinate of the start point origin of the gradient.
+     * Defined in same coordinates as the path itself
      *
      * <p>May be a floating point value, such as "<code>1.2</code>".
      *
@@ -12233,8 +12411,10 @@ public final class R {
      */
     public static final int GradientColor_android_startX=8;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#startY}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * Y coordinate of the start point of the gradient within the shape.
+     * Defined in same coordinates as the path itself
      *
      * <p>May be a floating point value, such as "<code>1.2</code>".
      *
@@ -12242,8 +12422,10 @@ public final class R {
      */
     public static final int GradientColor_android_startY=9;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#endX}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * X coordinate of the end point origin of the gradient.
+     * Defined in same coordinates as the path itself
      *
      * <p>May be a floating point value, such as "<code>1.2</code>".
      *
@@ -12251,8 +12433,10 @@ public final class R {
      */
     public static final int GradientColor_android_endX=10;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#endY}
-     * attribute's value can be found in the {@link #GradientColor} array.
+     * <p>
+     * @attr description
+     * Y coordinate of the end point of the gradient within the shape.
+     * Defined in same coordinates as the path itself
      *
      * <p>May be a floating point value, such as "<code>1.2</code>".
      *
@@ -12276,8 +12460,9 @@ public final class R {
       0x010101a5, 0x01010514
     };
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#color}
-     * attribute's value can be found in the {@link #GradientColorItem} array.
+     * <p>
+     * @attr description
+     * The current color for the offset inside the gradient.
      *
      * <p>May be a color value, in the form of "<code>#<i>rgb</i></code>",
      * "<code>#<i>argb</i></code>", "<code>#<i>rrggbb</i></code>", or
@@ -12287,8 +12472,10 @@ public final class R {
      */
     public static final int GradientColorItem_android_color=0;
     /**
-     * <p>This symbol is the offset where the {@link android.R.attr#offset}
-     * attribute's value can be found in the {@link #GradientColorItem} array.
+     * <p>
+     * @attr description
+     * The offset (or ratio) of this current color item inside the gradient.
+     * The value is only meaningful when it is between 0 and 1.
      *
      * <p>May be a floating point value, such as "<code>1.2</code>".
      *

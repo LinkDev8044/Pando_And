@@ -1,14 +1,23 @@
 package com.parse.starter.VistaClientes.ListaComercios;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +35,7 @@ import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -68,6 +78,9 @@ public class ListaComerciosFragment extends Fragment {
     Bitmap bmp1;
 
     ProgressDialog progressDialog;
+
+    LocationManager locationManager;
+    LocationListener locationListener;
 
     public void iniciarSppiner() {
         this.progressDialog = new ProgressDialog(getContext());
@@ -230,7 +243,10 @@ public class ListaComerciosFragment extends Fragment {
 
     private void cargarComercios() {
 
-        ParseQuery.getQuery("Comercios").findInBackground(new FindCallback<ParseObject>() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Comercios");
+        query.whereEqualTo("activo", true);
+        query.orderByAscending("orden");
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
 
@@ -331,6 +347,28 @@ public class ListaComerciosFragment extends Fragment {
 
     }
 
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+                    Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+
+                }
+            }
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -339,6 +377,51 @@ public class ListaComerciosFragment extends Fragment {
 
         listaComercioListView = (ListView) inflate.findViewById(R.id.listaComListView);
         goToQRCodeTextView = (TextView) inflate.findViewById(R.id.verCodigoTextView);
+
+        locationListener = new LocationListener() {
+
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        try {
+
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+            } else {
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+                Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+            }
+
+        } catch (Exception m) {
+
+            Log.i("GeoPoint Logging Error", m.getMessage());
+
+        }
 
         listaComercioListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

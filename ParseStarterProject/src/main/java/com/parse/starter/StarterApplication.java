@@ -38,7 +38,7 @@ public class StarterApplication extends Application {
             .build()
     );*/
 
-    //Servidor NUEVO Donburi
+    //Servidor NUEVO Pando
     Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
             .applicationId("7a325ea5685c7beb2706e03504ff1fb6eea50edd")
             .clientKey("c06bb4045115361ac70411c1141f78e2a447b976")
