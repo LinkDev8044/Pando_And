@@ -52,6 +52,7 @@ import com.parse.starter.VistaClientes.VerMenu.VerMenuActivity;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -104,7 +105,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
     int[] IMAGES = {R.drawable.menu, R.drawable.whatsapp_2, R.drawable.call, R.drawable.shop, R.drawable.configurar_recompensas, R.drawable.list};
 
     Double puntosCliente;
-    Double distanciaKM;
+    Double distanceKm;
 
     ArrayList<Double> puntosEnviadosArray = new ArrayList();
 
@@ -170,6 +171,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
                     Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+                    Log.i("Prueba", String.valueOf(parseLocation));
 
                     reloadData();
 
@@ -312,6 +315,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
         Log.i("Prueba", "Cuantas");
 
+        distanceKm = 0.0;
+
         final ParseGeoPoint geoPointLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comercios");
@@ -329,10 +334,10 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                         for (ParseObject object : objects) {
 
-                            Double distanceKm = geoPointLocation.distanceInKilometersTo(object.getParseGeoPoint("location"));
+                            distanceKm = geoPointLocation.distanceInKilometersTo(object.getParseGeoPoint("location"));
                             String str = String.format("%1.2f", distanceKm);
                             Log.i("Prueba distancia Km:", str);
-                            distanciaKM = Double.valueOf(str);
+
                             locationManager.removeUpdates(locationListener);
 
                             if (cargaCompleta){
@@ -409,7 +414,6 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
         numeroContacto = 0;
         totalDeVisitas = 0;
         distanciaEnvio = 0;
-        distanciaKM = 0.0;
         consumoEnviadoArray.clear();
         puntosEnviadosArray.clear();
         imagenesPortadaArray.clear();
@@ -450,7 +454,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-
+        Log.i("Prueba", "PAN");
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comercios");
         query.whereEqualTo("nombreComercio", nombreComercio);
@@ -935,6 +939,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                                                                                                                                                                                                                                         @Override
                                                                                                                                                                                                                                         public void done(List<ParseObject> objects, ParseException e) {
 
+                                                                                                                                                                                                                                            Log.i("Prueba", "CON JAMON");
+
                                                                                                                                                                                                                                             if (e == null){
 
                                                                                                                                                                                                                                                 if (objects.size() > 0){
@@ -971,6 +977,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                                                                                                                                                                                                                         if (ContextCompat.checkSelfPermission(DescripcionComercioActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
+
+                                                                                                                                                                                                                                                                            Log.i("Prueba", "Capitan");
                                                                                                                                                                                                                                                                             ActivityCompat.requestPermissions(DescripcionComercioActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
                                                                                                                                                                                                                                                                         } else {
@@ -978,6 +986,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                                                                                                                                                                                                                                                                             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
                                                                                                                                                                                                                                                                             Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+                                                                                                                                                                                                                                                                            Log.i("Prueba", "America");
 
                                                                                                                                                                                                                                                                             cargaCompleta = true;
                                                                                                                                                                                                                                                                             updateUserLocation(parseLocation);
@@ -1002,6 +1012,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                                                                                                                                                                                                         if (ContextCompat.checkSelfPermission(DescripcionComercioActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
+                                                                                                                                                                                                                                                            Log.i("Prueba", "Scarlet");
                                                                                                                                                                                                                                                             ActivityCompat.requestPermissions(DescripcionComercioActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
                                                                                                                                                                                                                                                         } else {
@@ -1010,6 +1021,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                                                                                                                                                                                                             Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
 
+                                                                                                                                                                                                                                                            Log.i("Prueba", "Johanson");
                                                                                                                                                                                                                                                             cargaCompleta = true;
                                                                                                                                                                                                                                                             updateUserLocation(parseLocation);
 
@@ -2428,7 +2440,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     TextView envioTextView = (TextView) view.findViewById(R.id.op4DescCell5TextView);
 
                     nombreComTextView.setText(nombreComercio);
-                    distKmTextView.setText(String.valueOf(distanciaKM) + " Km");
+                    distKmTextView.setText(String.format("%1.2f", distanceKm) + " Km");
                     distanciaComGuardar = distKmTextView.getText().toString();
 
                     if (tieneLogo) {
@@ -2443,12 +2455,12 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     if (distanciaEnvio > 0){
 
-                        if (distanciaKM > distanciaEnvio){
+                        if (distanceKm > distanciaEnvio){
 
                             //No vecino
                             esVecinoGuardar = false;
                             vecinoTextView.setText("No vecin@");
-                            envioTextView.setText("📞Haz tu pedido, pasa por el y disfruta \n☝️Envío gratis en distancia menor a " + String.valueOf(distanciaEnvio) + " Km");
+                            envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!\n☝️Envío gratis en distancia menor a " + String.valueOf(distanciaEnvio) + " Km");
 
                         } else {
 
@@ -2464,7 +2476,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                         esVecinoGuardar = false;
                         vecinoTextView.setText("");
-                        envioTextView.setText("📞Haz tu pedido, pasa por el y disfruta");
+                        envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!");
 
                     }
 
@@ -2483,7 +2495,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     descVecinoTextView.setText(promoVecino);
                     descNoVecinoTextView.setText(promoNoVecino);
 
-                    if (distanciaKM > distanciaEnvio){
+                    if (distanceKm > distanciaEnvio){
 
                         //No vecino
                         titNoVecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
@@ -2821,7 +2833,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     TextView envioTextView = (TextView) view.findViewById(R.id.op4DescCell5TextView);
 
                     nombreComTextView.setText(nombreComercio);
-                    distKmTextView.setText(String.valueOf(distanciaKM) + " Km");
+                    distKmTextView.setText(String.format("%1.2f", distanceKm) + " Km");
                     distanciaComGuardar = distKmTextView.getText().toString();
 
                     if (tieneLogo) {
@@ -2836,12 +2848,12 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     if (distanciaEnvio > 0){
 
-                        if (distanciaKM > distanciaEnvio){
+                        if (distanceKm > distanciaEnvio){
 
                             //No vecino
                             esVecinoGuardar = false;
                             vecinoTextView.setText("No vecin@");
-                            envioTextView.setText("📞Haz tu pedido, pasa por el y disfruta\n☝️Envío gratis en distancia menor a " + String.valueOf(distanciaEnvio) + "Km");
+                            envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!\n☝️Envío gratis en distancia menor a " + String.valueOf(distanciaEnvio) + "Km");
 
                         } else {
 
@@ -2857,7 +2869,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                         esVecinoGuardar = false;
                         vecinoTextView.setText("");
-                        envioTextView.setText("📞Haz tu pedido, pasa por el y disfruta");
+                        envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!");
 
                     }
 
@@ -2876,7 +2888,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     descVecinoTextView.setText(promoVecino);
                     descNoVecinoTextView.setText(promoNoVecino);
 
-                    if (distanciaKM > distanciaEnvio){
+                    if (distanceKm > distanciaEnvio){
 
                         //No vecino
                         titNoVecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
