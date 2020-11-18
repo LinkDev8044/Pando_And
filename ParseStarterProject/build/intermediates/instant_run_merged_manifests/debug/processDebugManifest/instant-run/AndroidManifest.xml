@@ -9,8 +9,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.parse.pandoapp"
-    android:versionCode="15"
-    android:versionName="1.3.5" >
+    android:versionCode="19"
+    android:versionName="1.4.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -149,6 +149,52 @@
         <activity
             android:name="com.parse.starter.VistaClientes.VerMenu.VerMenuActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.ValidarPedido.ValidarPedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.ValidarPedido.DomicilioCliente.DomicilioClienteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaComercio.ListaPedidos.ListaPedidosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.VerNewMenu.VerNewMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.Platillos.PlatillosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.DetallePlatillo.DetallePlatilloActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.CarritoPedidos.CarritoPedidosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.OpcionesEntrega.OpcionesEntregaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.OpcionesEntrega.DetalleDomicilio.DomicilioGeneralActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.OpcionesEntrega.DetalleDomicilio.DetalleDomicilioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.OpcionesEntrega.RecogerPedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.OpcionesEntrega.NumeroContacto.NumeroContactoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.CarritoPedidos.ConfirmacionPedido.ConfirmacionPedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.DetallePedido.DetallePedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.parse.starter.VistaClientes.VerPedidos.VerPedidosActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.parse.starter.VistaClientes.CarritoPedidos.EliminarPedido.EliminarPedidoActivity" />
 
         <provider
             android:name="com.android.tools.ir.server.InstantRunContentProvider"

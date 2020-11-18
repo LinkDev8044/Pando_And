@@ -47,14 +47,21 @@ import com.parse.starter.VistaComercio.Administrador.AdministradorActivity;
 import net.glxn.qrgen.android.QRCode;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class ListaComerciosFragment extends Fragment {
 
     String usuarioId;
+    String nombreCliente;
+    String apellidoCliente;
 
     int contador;
     int contador2;
@@ -76,6 +83,10 @@ public class ListaComerciosFragment extends Fragment {
     ArrayList<ParseFile> parseImageArray = new ArrayList();
 
     Bitmap bmp1;
+
+    Date fecha;
+
+    CustomAdapter customAdapter;
 
     ProgressDialog progressDialog;
 
@@ -105,11 +116,46 @@ public class ListaComerciosFragment extends Fragment {
                     bmp1 = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                     logoArray.add(bmp1);
 
+                    Log.i("Prueba2", String.valueOf(logoArray));
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    private void cargarNombreCliente(){
+
+        nombreCliente = "";
+        apellidoCliente = "";
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+        query.setLimit(1);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+
+                if (e == null){
+
+                    for (ParseObject object : objects){
+
+                        nombreCliente = object.getString("nombre");
+                        apellidoCliente = object.getString("apellido");
+
+                    }
+
+                    terminarSppiner();
+                    listaComercioListView.setAdapter(customAdapter);
+
+                } else {
+
+                    terminarSppiner();
+
+                }
+            }
+        });
     }
 
     private void cargarPromos(){
@@ -163,14 +209,9 @@ public class ListaComerciosFragment extends Fragment {
 
                         if (contador2 >= comercioIdArray.size()){
 
-                            final CustomAdapter customAdapter = new CustomAdapter();
-
                             convertFileArray(parseImageArray);
 
-                            listaComercioListView.setAdapter(customAdapter);
-
-                            terminarSppiner();
-
+                            cargarNombreCliente();
 
                         }
 
@@ -289,6 +330,8 @@ public class ListaComerciosFragment extends Fragment {
 
         usuarioId = ParseUser.getCurrentUser().getObjectId();
 
+        customAdapter = new CustomAdapter();
+
         Bitmap myBitmap = QRCode.from(usuarioId).withSize(600, 600).bitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -344,10 +387,7 @@ public class ListaComerciosFragment extends Fragment {
                 }
             }
         });
-
     }
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -427,11 +467,56 @@ public class ListaComerciosFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Intent intent = new Intent(getContext(), DescripcionComercioActivity.class);
-                intent.putExtra("nombreComercio", COMERCIOS.get(i));
-                intent.putExtra("usarQR", false);
-                startActivity(intent);
+                Integer valueOf;
+                Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+                String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+                String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+                String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+                String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
+                Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
+                Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
 
+                if (valueOf7.intValue() == 0) {
+                    valueOf = Integer.valueOf(valueOf8.intValue() - 11);
+                } else {
+                    valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
+                }
+                try {
+                    fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+
+                final int pos = i;
+
+                iniciarSppiner();
+
+                ParseObject object = new ParseObject("RegistroActividad");
+                object.put("comercioId", comercioIdArray.get(i));
+                object.put("nombreComercio", COMERCIOS.get(i));
+                object.put("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                object.put("nombreUsuario", nombreCliente + " " + apellidoCliente);
+                object.put("fechaCreacion", fecha);
+                object.put("actividad", "Info");
+                object.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null){
+
+                            Intent intent = new Intent(getContext(), DescripcionComercioActivity.class);
+                            intent.putExtra("nombreComercio", COMERCIOS.get(pos));
+                            intent.putExtra("usarQR", false);
+                            startActivity(intent);
+
+                        } else {
+
+                            terminarSppiner();
+
+                        }
+                    }
+                });
             }
         });
 

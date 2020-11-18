@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +31,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,14 +46,18 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.starter.MainActivity;
 import com.parse.starter.R;
+import com.parse.starter.VistaClientes.DetallePedido.DetallePedidoActivity;
 import com.parse.starter.VistaClientes.Encuestas.PreguntaCaritasActivity;
 import com.parse.starter.VistaClientes.HistorialPuntos.HistorialPuntosActivity;
 import com.parse.starter.VistaClientes.MisCompras.MisComprasActivity;
 import com.parse.starter.VistaClientes.TiendaComercio.TiendaActivity;
 import com.parse.starter.VistaClientes.VerMenu.VerMenuActivity;
+import com.parse.starter.VistaClientes.VerNewMenu.VerNewMenuActivity;
+import com.parse.starter.VistaClientes.VerPedidos.VerPedidosActivity;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,6 +89,11 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
     String distanciaComGuardar;
     String promoVecino;
     String promoNoVecino;
+    String urlServidor;
+    String opcionEntrega;
+    String horaRecoger;
+    String tiempoString;
+    String fechaPedido;
 
     Boolean ofreceVIP;
     Boolean esVIP;
@@ -91,6 +102,10 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
     Boolean mastercard;
     Boolean esVecinoGuardar;
     Boolean tieneMenu;
+    Boolean gps_enabled;
+    Boolean tieneNuevoMenu;
+    Boolean envioDisponible;
+    Boolean tieneHistPedidos;
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -99,13 +114,15 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
     ArrayList<String> consumoEnviadoArray = new ArrayList();
 
-    String[] TITULOS = {"Ver menú", "Enviar WhatsApp", "Llamar", "Comprar cupones", "Ver mis cupones", "Ver historial de puntos"};
-    String[] DESCRIPCIONES = {"", "", "", "Compra productos o servicios con puntos aquí", "", ""};
+    String[] TITULOS = {"Ver menú", "Enviar WhatsApp", "Llamar", "Comprar cupones", "Ver mis cupones", "Ver historial de pedidos", "Ver historial de puntos"};
+    String[] DESCRIPCIONES = {"", "", "", "Compra productos o servicios con puntos aquí", "",  "", ""};
 
-    int[] IMAGES = {R.drawable.menu, R.drawable.whatsapp_2, R.drawable.call, R.drawable.shop, R.drawable.configurar_recompensas, R.drawable.list};
+    int[] IMAGES = {R.drawable.menu, R.drawable.whatsapp_2, R.drawable.call, R.drawable.shop, R.drawable.configurar_recompensas, R.drawable.take_away, R.drawable.list};
 
     Double puntosCliente;
     Double distanceKm;
+    Double segundosPedido;
+    Double totalFinal;
 
     ArrayList<Double> puntosEnviadosArray = new ArrayList();
 
@@ -125,6 +142,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
     int numeroContacto;
     int totalDeVisitas;
     int distanciaEnvio;
+    int etapa;
+    int numDePedido;
 
     Boolean tieneLogo;
     Boolean usuarioActivo;
@@ -147,6 +166,8 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
     Date fecha;
     Date fechaComparacion;
     Date fechaComparacionVisitas;
+
+    Handler handler =  new Handler();
 
     ListView descripcionListView;
 
@@ -313,8 +334,6 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
     private void updateUserLocation(final Location location){
 
-        Log.i("Prueba", "Cuantas");
-
         distanceKm = 0.0;
 
         final ParseGeoPoint geoPointLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
@@ -322,11 +341,10 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comercios");
         query.whereEqualTo("objectId", comercioId);
         query.setLimit(1);
+
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-
-                Log.i("Prueba", "Veces");
 
                 if (e == null) {
 
@@ -344,21 +362,879 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                 Log.i("Prueba", "Pasa");
 
-                                descripcionListView.setAdapter(customAdapter);
-
-                                swipeRefreshLayout.setRefreshing(false);
-
-                                terminarSppiner();
+                                validarPedidoCliente();
 
                             }
                         }
+
+                    } else {
+
+                        validarPedidoCliente();
+
                     }
                 }
             }
         });
     }
 
+    private void updateView(int index){
+        View v = descripcionListView.getChildAt(index -
+                descripcionListView.getFirstVisiblePosition());
+
+        if(v == null)
+            return;
+
+        TextView someText = (TextView) v.findViewById(R.id.op5ValidarPTextView);
+
+        someText.setText(tiempoString);
+
+    }
+
+    private void runTimer(){
+
+        segundosPedido += 1;
+
+        Integer flooredCounter = Integer.valueOf((int) Math.floor(segundosPedido));
+        Integer minute = (flooredCounter) / 60;
+        String minuteString = String.valueOf(minute);
+        if (minute < 10) {
+            minuteString = "0" + minute;
+        }
+
+        Integer second = (flooredCounter % 3600) % 60;
+        String secondString = String.valueOf(second);
+        if (second < 10) {
+            secondString = "0" + String.valueOf(second);
+        }
+
+        tiempoString = String.valueOf(minuteString) + ":" + String.valueOf(secondString);
+
+        updateView(3);
+
+        //customAdapter.notifyDataSetChanged();
+
+    }
+
+    private Runnable timerRunnableSeg = new Runnable() {
+        @Override
+        public void run() {
+
+            runTimer();
+            handler.postDelayed(this, 1000);
+
+        }
+
+        //handler.postDelayed(r, 1000);
+
+    };
+
+    private void revisarHistorialPedidos(){
+
+        Log.i("Prueba", "Llega");
+
+        tieneHistPedidos = false;
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("PedidoConfirmado");
+        query.whereEqualTo("comercioId", comercioId);
+        query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+        query.whereEqualTo("activo", false);
+        query.orderByDescending("fechaCreacion");
+        query.setLimit(1);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+
+                    if (objects.size() > 0){
+
+                        tieneHistPedidos = true;
+
+                    }
+
+                    descripcionListView.setAdapter(customAdapter);
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                } else {
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                }
+            }
+        });
+
+    }
+
+    private void validarPedidoCliente(){
+
+        opcionEntrega = "";
+        horaRecoger = "";
+        tiempoString = "";
+        fechaPedido = "";
+        etapa = 0;
+        segundosPedido = 0.0;
+        totalFinal = 0.0;
+        numDePedido = 0;
+
+        //Habilitar Button
+        estoyAquiTextView.setEnabled(true);
+
+        Integer valueOf;
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+        String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+        String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+        String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
+        Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
+        Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
+
+        if (valueOf7.intValue() == 0) {
+            valueOf = Integer.valueOf(valueOf8.intValue() - 11);
+        } else {
+            valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
+        }
+        try {
+            this.fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("PedidoConfirmado");
+        query.whereEqualTo("comercioId", comercioId);
+        query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+        query.whereEqualTo("activo", true);
+        query.orderByDescending("fechaCreacion");
+        query.setLimit(1);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+
+                    if (objects.size() > 0){
+
+                        estoyAquiTextView.setEnabled(false);
+
+                        for (ParseObject object : objects){
+
+                            opcionEntrega = object.getString("opcionEntrega");
+                            etapa = object.getInt("etapa");
+                            numDePedido = object.getInt("numDePedido");
+                            horaRecoger = object.getString("horaRecoger");
+                            totalFinal = object.getDouble("totalFinal");
+
+                            Log.i("Prueba", "Hasta");
+
+                            //Datos para validar el tiempo desde que se hizo el pedido
+                            long diff = fecha.getTime() - object.getDate("fechaModificacion").getTime();
+                            long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(diff);
+                            segundosPedido = Double.valueOf(diffInSeconds);
+                            //Iniciar Timer
+                            handler.removeCallbacks(timerRunnableSeg);
+                            handler.postDelayed(timerRunnableSeg, 1000);
+
+                            DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy");
+                            String convertedDate = dateFormat.format(object.getDate("fechaCreacion"));
+                            fechaPedido = convertedDate;
+
+                            Log.i("Prueba", "Donde");
+
+                        }
+
+                        revisarHistorialPedidos();
+
+                    } else {
+
+                        revisarHistorialPedidos();
+
+                    }
+
+                } else {
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                }
+            }
+        });
+    }
+
+    private void cargarDatos5(){
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ImagenPortada");
+        query.whereEqualTo("comercioId", comercioId);
+        query.orderByAscending("orden");
+        query.setLimit(5);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                Log.i("Prueba", "CON JAMON");
+
+                if (e == null){
+
+                    if (objects.size() > 0){
+
+                        final int contadorImagenes = objects.size();
+
+                        tieneImagenPortada = true;
+
+                        for (ParseObject object : objects){
+
+                            ParseFile parseFile1 = (ParseFile) object.get("imagenPortada");
+                            parseFileArray.add(parseFile1);
+                            parseFile1.getDataInBackground(new GetDataCallback() {
+                                @Override
+                                public void done(byte[] data, ParseException e) {
+
+                                    if (e == null){
+
+                                        imagenesPortadaArray.add(BitmapFactory.decodeByteArray(data, 0, data.length));
+
+                                    } else  {
+
+                                        swipeRefreshLayout.setRefreshing(false);
+
+                                        terminarSppiner();
+
+                                        Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    if (imagenesPortadaArray.size() == contadorImagenes){
+
+                                        try {
+
+                                            if (ContextCompat.checkSelfPermission(DescripcionComercioActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+
+                                                Log.i("Prueba", "Capitan");
+                                                ActivityCompat.requestPermissions(DescripcionComercioActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+                                            } else {
+
+                                                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+                                                Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+                                                Log.i("Prueba", "America");
+
+                                                gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+                                                if (gps_enabled){
+
+                                                    cargaCompleta = true;
+                                                    updateUserLocation(parseLocation);
+
+                                                } else {
+
+                                                    validarPedidoCliente();
+
+                                                }
+                                            }
+
+                                        } catch (Exception m) {
+
+                                            Log.i("GeoPoint Logging Error", m.getMessage());
+
+                                        }
+                                    }
+                                }
+
+                            });
+                        }
+
+                    } else {
+
+                        try {
+
+                            if (ContextCompat.checkSelfPermission(DescripcionComercioActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                                Log.i("Prueba", "Scarlet");
+                                ActivityCompat.requestPermissions(DescripcionComercioActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+                            } else {
+
+                                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+                                Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+                                Log.i("Prueba", "Johanson");
+                                gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+                                if (gps_enabled){
+
+                                    cargaCompleta = true;
+                                    updateUserLocation(parseLocation);
+
+                                } else {
+
+                                    validarPedidoCliente();
+
+                                }
+                            }
+
+                        } catch (Exception m) {
+
+                            Log.i("GeoPoint Logging Error", m.getMessage());
+
+                        }
+                    }
+
+                } else {
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+    }
+
+    private void cargarDatos4(){
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("CodigoQRCliente");
+        query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+        query.setLimit(1);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+
+                    for (ParseObject object : objects){
+
+                        ParseFile parseFile = (ParseFile) object.get("codigoQRCliente");
+                        parseFile.getDataInBackground(new GetDataCallback() {
+                            @Override
+                            public void done(byte[] data, ParseException e) {
+
+                                if (e == null){
+
+                                    qrClienteImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+
+                                } else {
+
+                                    swipeRefreshLayout.setRefreshing(false);
+
+                                    terminarSppiner();
+
+                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
+
+                    }
+                    Log.i("Prueba", "Imagen aqui");
+                    Log.i("Prueba", String.valueOf(qrClienteImage));
+
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
+                    query.whereEqualTo("comercioId", comercioId);
+                    query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                    query.whereGreaterThanOrEqualTo("fechaCreacion", fechaInicioMes.getTime());
+                    query.orderByDescending("fechaCreacion");
+                    query.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> objects, ParseException e) {
+
+                            if (e == null){
+
+                                if (objects.size() > 0){
+
+                                    esVIP = true;
+
+                                    for (ParseObject object : objects){
+
+                                        if (visitasCliente == 0){
+
+                                            fechaComparacionVisitas = object.getDate("fechaCreacion");
+
+                                            visitasCliente = visitasCliente + 1;
+
+                                        } else {
+
+                                            long diff = fechaComparacionVisitas.getTime() - object.getDate("fechaCreacion").getTime();
+                                            long diffInDays = TimeUnit.MILLISECONDS.toHours(diff);
+
+                                            if (diffInDays >= 8){
+
+                                                visitasCliente = visitasCliente + 1;
+
+                                            }
+
+                                            fechaComparacionVisitas = object.getDate("fechaCreacion");
+
+                                        }
+                                    }
+                                }
+
+                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ImagenComercio");
+                                query.whereEqualTo("comercioId", comercioId);
+                                query.setLimit(1);
+                                query.findInBackground(new FindCallback<ParseObject>() {
+                                    @Override
+                                    public void done(List<ParseObject> objects, ParseException e) {
+
+                                        if (e == null){
+
+                                            if (objects.size() > 0) {
+
+                                                tieneLogo = true;
+
+                                                for (ParseObject object : objects) {
+
+                                                    final ParseFile parseFile = (ParseFile) object.get("imagenPerfil");
+                                                    parseFile.getDataInBackground(new GetDataCallback() {
+                                                        @Override
+                                                        public void done(byte[] data, ParseException e) {
+
+                                                            if (e == null) {
+
+                                                                logoComercio = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                                                            } else {
+
+                                                                swipeRefreshLayout.setRefreshing(false);
+
+                                                                terminarSppiner();
+
+                                                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            }
+
+                                            cargarDatos5();
+
+
+                                        } else {
+
+                                            swipeRefreshLayout.setRefreshing(false);
+
+                                            terminarSppiner();
+
+                                            Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                });
+
+                            } else {
+
+                                swipeRefreshLayout.setRefreshing(false);
+
+                                terminarSppiner();
+
+                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+
+                            }
+                        }
+                    });
+
+                } else {
+
+                    descripcionListView.setAdapter(customAdapter);
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                }
+            }
+        });
+
+    }
+
+    private void cargarDatos3(){
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductosTienda");
+        query.whereEqualTo("comercioId", comercioId);
+        query.whereGreaterThan("cantidadDisponible", 0);
+        query.whereEqualTo("eliminado", false);
+        query.setLimit(1);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+
+                    if (objects.size() >0){
+
+                        tieneTienda = true;
+
+                    }
+
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductosCliente");
+                    query.whereEqualTo("comercioId", comercioId);
+                    query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                    query.setLimit(1);
+                    query.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> objects, ParseException e) {
+
+                            if (e == null){
+
+                                if (objects.size() > 0){
+
+                                    clienteTieneProduc = true;
+
+                                }
+
+                                ParseQuery<ParseObject> query = ParseQuery.getQuery("HistorialPuntos");
+                                query.whereEqualTo("comercioId", comercioId);
+                                query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                                query.setLimit(1);
+                                query.findInBackground(new FindCallback<ParseObject>() {
+                                    @Override
+                                    public void done(List<ParseObject> objects, ParseException e) {
+
+                                        if (e == null){
+
+                                            if (objects.size() > 0){
+
+                                                tieneHistorial = true;
+
+                                            }
+
+                                            ParseQuery<ParseUser> query = ParseUser.getQuery();
+                                            query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+                                            query.setLimit(1);
+                                            query.findInBackground(new FindCallback<ParseUser>() {
+                                                @Override
+                                                public void done(List<ParseUser> objects, ParseException e) {
+
+                                                    if (e == null){
+
+                                                        for (ParseObject object : objects){
+
+                                                            nombreCliente = object.getString("nombre");
+                                                            apellidoCliente = object.getString("apellido");
+                                                            correoCliente = object.getString("email");
+
+                                                        }
+
+                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
+                                                        query.whereEqualTo("comercioId", comercioId);
+                                                        query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                                                        query.orderByDescending("fechaCreacion");
+                                                        query.setLimit(5);
+                                                        query.findInBackground(new FindCallback<ParseObject>() {
+                                                            @Override
+                                                            public void done(List<ParseObject> objects, ParseException e) {
+
+
+                                                                if (e == null){
+
+                                                                    for (ParseObject object : objects){
+
+                                                                        long diff = fechaComparacion.getTime() - object.getDate("fechaCreacion").getTime();
+                                                                        long diffInHours = TimeUnit.MILLISECONDS.toHours(diff);
+
+                                                                        if (diffInHours <= 8){
+
+                                                                            visitaRegistrada = true;
+
+                                                                            consumoEnviadoArray.add(object.getString("consumo"));
+                                                                            puntosEnviadosArray.add(object.getDouble("puntosEnviados"));
+
+                                                                            contadorPuntos = contadorPuntos + 1;
+
+                                                                        }
+                                                                    }
+
+                                                                    cargarDatos4();
+
+                                                                } else {
+
+                                                                    swipeRefreshLayout.setRefreshing(false);
+
+                                                                    terminarSppiner();
+
+                                                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                                                }
+                                                            }
+                                                        });
+
+
+                                                    } else {
+
+                                                        swipeRefreshLayout.setRefreshing(false);
+
+                                                        terminarSppiner();
+
+                                                        Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                                    }
+                                                }
+                                            });
+
+                                        } else {
+
+                                            swipeRefreshLayout.setRefreshing(false);
+
+                                            terminarSppiner();
+
+                                            Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                });
+
+                            } else {
+
+                                swipeRefreshLayout.setRefreshing(false);
+
+                                terminarSppiner();
+
+                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+
+                } else {
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+    }
+
+    private void cardarDatos2(){
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("EncuestaPendiente");
+        query.whereEqualTo("comercioId", comercioId);
+        query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+        query.whereEqualTo("activo", true);
+        query.setLimit(1);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+
+                    if (objects.size() > 0){
+
+                        for (ParseObject object : objects) {
+
+                            long diff = fechaComparacion.getTime() - object.getDate("fechaCreacion").getTime();
+                            long diffInDays = TimeUnit.MILLISECONDS.toHours(diff);
+
+                            if (diffInDays >= 8){
+
+                                object.put("activo", false);
+                                object.put("fechaModificacion", fechaComparacion);
+                                object.saveInBackground();
+
+                                encuestaPendiente = false;
+
+                            } else {
+
+                                encuestaPendiente = true;
+
+                                encuestaActiva = object.getString("nombreEncuesta");
+                                encuestaActivaId = object.getString("encuestaId");
+                                numeroDePreguntas = object.getInt("numeroDePreguntas");
+                                recompensaActiva = object.getString("recompensaActiva");
+                                nombreColaborador = object.getString("nombreColaborador");
+                                colaboradorId = object.getString("colaboradorId");
+                                correoColaborador = object.getString("correoColaborador");
+
+                            }
+                        }
+
+                    } else {
+
+                        encuestaPendiente = false;
+                    }
+
+
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosCliente");
+                    query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                    query.whereEqualTo("comercioId", comercioId);
+                    query.setLimit(1);
+                    query.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> objects, ParseException e) {
+
+                            if (e == null){
+
+                                if (objects.size() > 0){
+
+                                    for (ParseObject object : objects){
+
+                                        puntosCliente = object.getDouble("puntos");
+
+                                    }
+
+                                } else {
+
+                                    puntosCliente = 0.0;
+
+                                }
+
+                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ClubVIP");
+                                query.whereEqualTo("comercioId", comercioId);
+                                query.whereEqualTo("activo", true);
+                                query.setLimit(1);
+                                query.findInBackground(new FindCallback<ParseObject>() {
+                                    @Override
+                                    public void done(List<ParseObject> objects, ParseException e) {
+
+                                        if (e == null){
+
+                                            if (objects.size() > 0){
+
+                                                ofreceVIP = true;
+
+                                                for (ParseObject object : objects){
+
+                                                    nivel1 = object.getInt("nivel1");
+                                                    nivel2 = object.getInt("nivel2");
+                                                    nivel3 = object.getInt("nivel3");
+
+                                                }
+                                            }
+
+                                            Log.i("prueba", String.valueOf(ofreceVIP));
+
+                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosActivos");
+                                            query.whereEqualTo("comercioId", comercioId);
+                                            query.whereEqualTo("eliminado", false);
+                                            query.setLimit(1);
+                                            query.findInBackground(new FindCallback<ParseObject>() {
+                                                @Override
+                                                public void done(List<ParseObject> objects, ParseException e) {
+
+                                                    if (e == null){
+
+                                                        if (objects.size() > 0){
+
+                                                            for (ParseObject object : objects){
+
+                                                                ofrecePuntos = object.getBoolean("activo");
+
+                                                                if (ofrecePuntos){
+
+                                                                    porcentajeNivel1 = object.getInt("porcentaje");
+                                                                    porcentajeNivel2 = object.getInt("porcentaje2");
+                                                                    porcentajeNivel3 = object.getInt("porcentaje3");
+
+                                                                }
+                                                            }
+                                                        }
+
+                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("DescripcionComercio");
+                                                        query.whereEqualTo("comercioId", comercioId);
+                                                        query.setLimit(1);
+                                                        query.findInBackground(new FindCallback<ParseObject>() {
+                                                            @Override
+                                                            public void done(List<ParseObject> objects, ParseException e) {
+
+                                                                if (e == null){
+
+                                                                    if (objects.size() > 0){
+
+                                                                        tieneDescripcion = true;
+
+                                                                        for (ParseObject object : objects){
+
+                                                                            descripcionCom = object.getString("descripcion");
+
+                                                                        }
+                                                                    }
+
+                                                                    cargarDatos3();
+
+                                                                } else {
+
+                                                                    swipeRefreshLayout.setRefreshing(false);
+
+                                                                    terminarSppiner();
+
+                                                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                                                }
+                                                            }
+                                                        });
+
+                                                    } else {
+
+                                                        swipeRefreshLayout.setRefreshing(false);
+
+                                                        terminarSppiner();
+
+                                                        Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+
+                                                    }
+                                                }
+                                            });
+
+                                        } else {
+
+                                            swipeRefreshLayout.setRefreshing(false);
+
+                                            terminarSppiner();
+
+                                            Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                });
+
+                            } else {
+
+                                swipeRefreshLayout.setRefreshing(false);
+
+                                terminarSppiner();
+
+                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+
+                } else {
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+    }
+
     private void cargaDatosComercio() {
+
+
+        handler.removeCallbacks(timerRunnableSeg);
 
         iniciarSppiner();
 
@@ -407,6 +1283,9 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
         esVecinoGuardar = false;
         tieneMenu = false;
         cargaCompleta = false;
+        gps_enabled = false;
+        tieneNuevoMenu = false;
+        envioDisponible = false;
         contadorPuntos = 0;
         visitasCliente = 0;
         porcentajeNivel1 = 0;
@@ -414,6 +1293,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
         numeroContacto = 0;
         totalDeVisitas = 0;
         distanciaEnvio = 0;
+        distanceKm = 0.0;
         consumoEnviadoArray.clear();
         puntosEnviadosArray.clear();
         imagenesPortadaArray.clear();
@@ -454,8 +1334,6 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        Log.i("Prueba", "PAN");
-
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comercios");
         query.whereEqualTo("nombreComercio", nombreComercio);
         query.setLimit(1);
@@ -475,6 +1353,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                         numeroContacto = object.getInt("numeroContacto");
                         direccion = object.getString("direccion");
                         horario = object.getString("horario");
+                        urlServidor = object.getString("urlMenu");
 
                         if (object.get("distanciaEnvio") != null) {
 
@@ -500,9 +1379,9 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                 }
 
-                                ParseQuery<ParseObject> query = ParseQuery.getQuery("VisitasCliente");
+                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ConfiguracionComercio");
                                 query.whereEqualTo("comercioId", comercioId);
-                                query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                                query.whereEqualTo("aceptaPedidos", true);
                                 query.setLimit(1);
                                 query.findInBackground(new FindCallback<ParseObject>() {
                                     @Override
@@ -512,15 +1391,13 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                             if (objects.size() > 0){
 
-                                                for (ParseObject object : objects){
+                                                tieneNuevoMenu = true;
 
-                                                    totalDeVisitas = object.getInt("numeroDeVisitas");
-
-                                                }
                                             }
 
-                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("PromocionesPando");
+                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("VisitasCliente");
                                             query.whereEqualTo("comercioId", comercioId);
+                                            query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
                                             query.setLimit(1);
                                             query.findInBackground(new FindCallback<ParseObject>() {
                                                 @Override
@@ -532,16 +1409,13 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                             for (ParseObject object : objects){
 
-                                                                promoVecino = object.getString("promoVecino");
-                                                                promoNoVecino = object.getString("promoNoVecino");
+                                                                totalDeVisitas = object.getInt("numeroDeVisitas");
 
                                                             }
                                                         }
 
-                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("UsuarioActivo");
+                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("PromocionesPando");
                                                         query.whereEqualTo("comercioId", comercioId);
-                                                        query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
-                                                        query.whereEqualTo("activo", true);
                                                         query.setLimit(1);
                                                         query.findInBackground(new FindCallback<ParseObject>() {
                                                             @Override
@@ -553,36 +1427,13 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                         for (ParseObject object : objects){
 
-                                                                            long diff = fechaComparacion.getTime() - object.getDate("fechaCreacion").getTime();
-                                                                            long diffInHours = TimeUnit.MILLISECONDS.toMinutes(diff);
+                                                                            promoVecino = object.getString("promoVecino");
+                                                                            promoNoVecino = object.getString("promoNoVecino");
 
-                                                                            if (diffInHours >= 1440){
-
-                                                                                object.put("activo", false);
-                                                                                object.put("fechaEncuestaTerminada", fechaComparacion);
-                                                                                object.saveInBackground();
-
-                                                                                usuarioActivo = false;
-
-                                                                                buttonClienteInactivo();
-
-                                                                            } else {
-
-                                                                                usuarioActivo = true;
-                                                                                buttonClienteActivo();
-
-                                                                            }
                                                                         }
-
-                                                                    } else {
-
-                                                                        usuarioActivo = false;
-
-                                                                        buttonClienteInactivo();
-
                                                                     }
 
-                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("EncuestaPendiente");
+                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("UsuarioActivo");
                                                                     query.whereEqualTo("comercioId", comercioId);
                                                                     query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
                                                                     query.whereEqualTo("activo", true);
@@ -595,614 +1446,38 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                                                                                 if (objects.size() > 0){
 
-                                                                                    for (ParseObject object : objects) {
+                                                                                    for (ParseObject object : objects){
 
                                                                                         long diff = fechaComparacion.getTime() - object.getDate("fechaCreacion").getTime();
-                                                                                        long diffInDays = TimeUnit.MILLISECONDS.toHours(diff);
+                                                                                        long diffInHours = TimeUnit.MILLISECONDS.toMinutes(diff);
 
-                                                                                        if (diffInDays >= 8){
+                                                                                        if (diffInHours >= 1440){
 
                                                                                             object.put("activo", false);
-                                                                                            object.put("fechaModificacion", fechaComparacion);
+                                                                                            object.put("fechaEncuestaTerminada", fechaComparacion);
                                                                                             object.saveInBackground();
 
-                                                                                            encuestaPendiente = false;
+                                                                                            usuarioActivo = false;
+
+                                                                                            buttonClienteInactivo();
 
                                                                                         } else {
 
-                                                                                            encuestaPendiente = true;
-
-                                                                                            encuestaActiva = object.getString("nombreEncuesta");
-                                                                                            encuestaActivaId = object.getString("encuestaId");
-                                                                                            numeroDePreguntas = object.getInt("numeroDePreguntas");
-                                                                                            recompensaActiva = object.getString("recompensaActiva");
-                                                                                            nombreColaborador = object.getString("nombreColaborador");
-                                                                                            colaboradorId = object.getString("colaboradorId");
-                                                                                            correoColaborador = object.getString("correoColaborador");
+                                                                                            usuarioActivo = true;
+                                                                                            buttonClienteActivo();
 
                                                                                         }
                                                                                     }
 
                                                                                 } else {
 
-                                                                                    encuestaPendiente = false;
+                                                                                    usuarioActivo = false;
+
+                                                                                    buttonClienteInactivo();
+
                                                                                 }
 
-
-                                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosCliente");
-                                                                                query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
-                                                                                query.whereEqualTo("comercioId", comercioId);
-                                                                                query.setLimit(1);
-                                                                                query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                    @Override
-                                                                                    public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                        if (e == null){
-
-                                                                                            if (objects.size() > 0){
-
-                                                                                                for (ParseObject object : objects){
-
-                                                                                                    puntosCliente = object.getDouble("puntos");
-
-                                                                                                }
-
-                                                                                            } else {
-
-                                                                                                puntosCliente = 0.0;
-
-                                                                                            }
-
-                                                                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("ClubVIP");
-                                                                                            query.whereEqualTo("comercioId", comercioId);
-                                                                                            query.whereEqualTo("activo", true);
-                                                                                            query.setLimit(1);
-                                                                                            query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                @Override
-                                                                                                public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                    if (e == null){
-
-                                                                                                        if (objects.size() > 0){
-
-                                                                                                            ofreceVIP = true;
-
-                                                                                                            for (ParseObject object : objects){
-
-                                                                                                                nivel1 = object.getInt("nivel1");
-                                                                                                                nivel2 = object.getInt("nivel2");
-                                                                                                                nivel3 = object.getInt("nivel3");
-
-                                                                                                            }
-                                                                                                        }
-
-                                                                                                        Log.i("prueba", String.valueOf(ofreceVIP));
-
-                                                                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosActivos");
-                                                                                                        query.whereEqualTo("comercioId", comercioId);
-                                                                                                        query.whereEqualTo("eliminado", false);
-                                                                                                        query.setLimit(1);
-                                                                                                        query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                            @Override
-                                                                                                            public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                if (e == null){
-
-                                                                                                                    if (objects.size() > 0){
-
-                                                                                                                        for (ParseObject object : objects){
-
-                                                                                                                            ofrecePuntos = object.getBoolean("activo");
-
-                                                                                                                            if (ofrecePuntos){
-
-                                                                                                                                porcentajeNivel1 = object.getInt("porcentaje");
-                                                                                                                                porcentajeNivel2 = object.getInt("porcentaje2");
-                                                                                                                                porcentajeNivel3 = object.getInt("porcentaje3");
-
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-
-                                                                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("DescripcionComercio");
-                                                                                                                    query.whereEqualTo("comercioId", comercioId);
-                                                                                                                    query.setLimit(1);
-                                                                                                                    query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                        @Override
-                                                                                                                        public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                            if (e == null){
-
-                                                                                                                                if (objects.size() > 0){
-
-                                                                                                                                    tieneDescripcion = true;
-
-                                                                                                                                    for (ParseObject object : objects){
-
-                                                                                                                                        descripcionCom = object.getString("descripcion");
-
-                                                                                                                                    }
-                                                                                                                                }
-
-                                                                                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductosTienda");
-                                                                                                                                query.whereEqualTo("comercioId", comercioId);
-                                                                                                                                query.whereGreaterThan("cantidadDisponible", 0);
-                                                                                                                                query.whereEqualTo("eliminado", false);
-                                                                                                                                query.setLimit(1);
-                                                                                                                                query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                                    @Override
-                                                                                                                                    public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                                        if (e == null){
-
-                                                                                                                                            if (objects.size() >0){
-
-                                                                                                                                                tieneTienda = true;
-
-                                                                                                                                            }
-
-                                                                                                                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductosCliente");
-                                                                                                                                            query.whereEqualTo("comercioId", comercioId);
-                                                                                                                                            query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
-                                                                                                                                            query.setLimit(1);
-                                                                                                                                            query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                                                @Override
-                                                                                                                                                public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                                                    if (e == null){
-
-                                                                                                                                                        if (objects.size() > 0){
-
-                                                                                                                                                            clienteTieneProduc = true;
-
-                                                                                                                                                        }
-
-                                                                                                                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("HistorialPuntos");
-                                                                                                                                                        query.whereEqualTo("comercioId", comercioId);
-                                                                                                                                                        query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
-                                                                                                                                                        query.setLimit(1);
-                                                                                                                                                        query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                                                            @Override
-                                                                                                                                                            public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                                                                if (e == null){
-
-                                                                                                                                                                    if (objects.size() > 0){
-
-                                                                                                                                                                        tieneHistorial = true;
-
-                                                                                                                                                                    }
-
-                                                                                                                                                                    ParseQuery<ParseUser> query = ParseUser.getQuery();
-                                                                                                                                                                    query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-                                                                                                                                                                    query.setLimit(1);
-                                                                                                                                                                    query.findInBackground(new FindCallback<ParseUser>() {
-                                                                                                                                                                        @Override
-                                                                                                                                                                        public void done(List<ParseUser> objects, ParseException e) {
-
-                                                                                                                                                                            if (e == null){
-
-                                                                                                                                                                                for (ParseObject object : objects){
-
-                                                                                                                                                                                    nombreCliente = object.getString("nombre");
-                                                                                                                                                                                    apellidoCliente = object.getString("apellido");
-                                                                                                                                                                                    correoCliente = object.getString("email");
-
-                                                                                                                                                                                }
-
-                                                                                                                                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
-                                                                                                                                                                                query.whereEqualTo("comercioId", comercioId);
-                                                                                                                                                                                query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
-                                                                                                                                                                                query.orderByDescending("fechaCreacion");
-                                                                                                                                                                                query.setLimit(5);
-                                                                                                                                                                                query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                                                                                    @Override
-                                                                                                                                                                                    public void done(List<ParseObject> objects, ParseException e) {
-
-
-                                                                                                                                                                                        if (e == null){
-
-                                                                                                                                                                                            for (ParseObject object : objects){
-
-                                                                                                                                                                                                long diff = fechaComparacion.getTime() - object.getDate("fechaCreacion").getTime();
-                                                                                                                                                                                                long diffInHours = TimeUnit.MILLISECONDS.toHours(diff);
-
-                                                                                                                                                                                                if (diffInHours <= 8){
-
-                                                                                                                                                                                                    visitaRegistrada = true;
-
-                                                                                                                                                                                                    consumoEnviadoArray.add(object.getString("consumo"));
-                                                                                                                                                                                                    puntosEnviadosArray.add(object.getDouble("puntosEnviados"));
-
-                                                                                                                                                                                                    contadorPuntos = contadorPuntos + 1;
-
-                                                                                                                                                                                                }
-                                                                                                                                                                                            }
-
-                                                                                                                                                                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("CodigoQRCliente");
-                                                                                                                                                                                            query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
-                                                                                                                                                                                            query.setLimit(1);
-                                                                                                                                                                                            query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                                                                                                @Override
-                                                                                                                                                                                                public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                                                                                                    if (e == null){
-
-                                                                                                                                                                                                        for (ParseObject object : objects){
-
-                                                                                                                                                                                                            ParseFile parseFile = (ParseFile) object.get("codigoQRCliente");
-                                                                                                                                                                                                            parseFile.getDataInBackground(new GetDataCallback() {
-                                                                                                                                                                                                                @Override
-                                                                                                                                                                                                                public void done(byte[] data, ParseException e) {
-
-                                                                                                                                                                                                                    if (e == null){
-
-                                                                                                                                                                                                                        qrClienteImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-
-                                                                                                                                                                                                                    } else {
-
-                                                                                                                                                                                                                        swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                                        terminarSppiner();
-
-                                                                                                                                                                                                                        Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                }
-                                                                                                                                                                                                            });
-
-                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosEnviados");
-                                                                                                                                                                                                        query.whereEqualTo("comercioId", comercioId);
-                                                                                                                                                                                                        query.whereEqualTo("usuarioId", ParseUser.getCurrentUser().getObjectId());
-                                                                                                                                                                                                        query.whereGreaterThanOrEqualTo("fechaCreacion", fechaInicioMes.getTime());
-                                                                                                                                                                                                        query.orderByDescending("fechaCreacion");
-                                                                                                                                                                                                        query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                                                                                                            @Override
-                                                                                                                                                                                                            public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                                                                                                                if (e == null){
-
-                                                                                                                                                                                                                    if (objects.size() > 0){
-
-                                                                                                                                                                                                                        esVIP = true;
-
-                                                                                                                                                                                                                        for (ParseObject object : objects){
-
-                                                                                                                                                                                                                            if (visitasCliente == 0){
-
-                                                                                                                                                                                                                                fechaComparacionVisitas = object.getDate("fechaCreacion");
-
-                                                                                                                                                                                                                                visitasCliente = visitasCliente + 1;
-
-                                                                                                                                                                                                                            } else {
-
-                                                                                                                                                                                                                                long diff = fechaComparacionVisitas.getTime() - object.getDate("fechaCreacion").getTime();
-                                                                                                                                                                                                                                long diffInDays = TimeUnit.MILLISECONDS.toHours(diff);
-
-                                                                                                                                                                                                                                if (diffInDays >= 8){
-
-                                                                                                                                                                                                                                    visitasCliente = visitasCliente + 1;
-
-                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                fechaComparacionVisitas = object.getDate("fechaCreacion");
-
-                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ImagenComercio");
-                                                                                                                                                                                                                    query.whereEqualTo("comercioId", comercioId);
-                                                                                                                                                                                                                    query.setLimit(1);
-                                                                                                                                                                                                                    query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                                                                                                                        @Override
-                                                                                                                                                                                                                        public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                                                                                                                            if (e == null){
-
-                                                                                                                                                                                                                                if (objects.size() > 0){
-
-                                                                                                                                                                                                                                    tieneLogo = true;
-
-                                                                                                                                                                                                                                    for (ParseObject object : objects){
-
-                                                                                                                                                                                                                                        final ParseFile parseFile = (ParseFile) object.get("imagenPerfil");
-                                                                                                                                                                                                                                        parseFile.getDataInBackground(new GetDataCallback() {
-                                                                                                                                                                                                                                            @Override
-                                                                                                                                                                                                                                            public void done(byte[] data, ParseException e) {
-
-                                                                                                                                                                                                                                                if (e == null){
-
-                                                                                                                                                                                                                                                    logoComercio = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-                                                                                                                                                                                                                                                } else {
-
-                                                                                                                                                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                                                                    terminarSppiner();
-
-                                                                                                                                                                                                                                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                        });
-                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ImagenPortada");
-                                                                                                                                                                                                                                    query.whereEqualTo("comercioId", comercioId);
-                                                                                                                                                                                                                                    query.orderByAscending("orden");
-                                                                                                                                                                                                                                    query.setLimit(5);
-                                                                                                                                                                                                                                    query.findInBackground(new FindCallback<ParseObject>() {
-                                                                                                                                                                                                                                        @Override
-                                                                                                                                                                                                                                        public void done(List<ParseObject> objects, ParseException e) {
-
-                                                                                                                                                                                                                                            Log.i("Prueba", "CON JAMON");
-
-                                                                                                                                                                                                                                            if (e == null){
-
-                                                                                                                                                                                                                                                if (objects.size() > 0){
-
-                                                                                                                                                                                                                                                    final int contadorImagenes = objects.size();
-
-                                                                                                                                                                                                                                                    tieneImagenPortada = true;
-
-                                                                                                                                                                                                                                                    for (ParseObject object : objects){
-
-                                                                                                                                                                                                                                                        ParseFile parseFile1 = (ParseFile) object.get("imagenPortada");
-                                                                                                                                                                                                                                                        parseFileArray.add(parseFile1);
-                                                                                                                                                                                                                                                        parseFile1.getDataInBackground(new GetDataCallback() {
-                                                                                                                                                                                                                                                            @Override
-                                                                                                                                                                                                                                                            public void done(byte[] data, ParseException e) {
-
-                                                                                                                                                                                                                                                                if (e == null){
-
-                                                                                                                                                                                                                                                                    imagenesPortadaArray.add(BitmapFactory.decodeByteArray(data, 0, data.length));
-
-                                                                                                                                                                                                                                                                } else  {
-
-                                                                                                                                                                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                                                                                    terminarSppiner();
-
-                                                                                                                                                                                                                                                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                                                if (imagenesPortadaArray.size() == contadorImagenes){
-
-                                                                                                                                                                                                                                                                    try {
-
-                                                                                                                                                                                                                                                                        if (ContextCompat.checkSelfPermission(DescripcionComercioActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-
-                                                                                                                                                                                                                                                                            Log.i("Prueba", "Capitan");
-                                                                                                                                                                                                                                                                            ActivityCompat.requestPermissions(DescripcionComercioActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-                                                                                                                                                                                                                                                                        } else {
-
-                                                                                                                                                                                                                                                                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-                                                                                                                                                                                                                                                                            Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-
-                                                                                                                                                                                                                                                                            Log.i("Prueba", "America");
-
-                                                                                                                                                                                                                                                                            cargaCompleta = true;
-                                                                                                                                                                                                                                                                            updateUserLocation(parseLocation);
-
-                                                                                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                                                                                    } catch (Exception m) {
-
-                                                                                                                                                                                                                                                                        Log.i("GeoPoint Logging Error", m.getMessage());
-
-                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                                            }
-
-                                                                                                                                                                                                                                                        });
-                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                } else {
-
-                                                                                                                                                                                                                                                    try {
-
-                                                                                                                                                                                                                                                        if (ContextCompat.checkSelfPermission(DescripcionComercioActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                                                                                                                                                                                                                                                            Log.i("Prueba", "Scarlet");
-                                                                                                                                                                                                                                                            ActivityCompat.requestPermissions(DescripcionComercioActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-                                                                                                                                                                                                                                                        } else {
-
-                                                                                                                                                                                                                                                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-                                                                                                                                                                                                                                                            Location parseLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-
-                                                                                                                                                                                                                                                            Log.i("Prueba", "Johanson");
-                                                                                                                                                                                                                                                            cargaCompleta = true;
-                                                                                                                                                                                                                                                            updateUserLocation(parseLocation);
-
-                                                                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                                                                    } catch (Exception m) {
-
-                                                                                                                                                                                                                                                        Log.i("GeoPoint Logging Error", m.getMessage());
-
-                                                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                            } else {
-
-                                                                                                                                                                                                                                                swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                                                                terminarSppiner();
-
-                                                                                                                                                                                                                                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                    });
-
-                                                                                                                                                                                                                                } else {
-
-                                                                                                                                                                                                                                    descripcionListView.setAdapter(customAdapter);
-
-                                                                                                                                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                                                    terminarSppiner();
-
-                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                            } else {
-
-                                                                                                                                                                                                                                swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                                                terminarSppiner();
-
-                                                                                                                                                                                                                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                    });
-
-                                                                                                                                                                                                                } else {
-
-                                                                                                                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                                    terminarSppiner();
-
-                                                                                                                                                                                                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-
-                                                                                                                                                                                                                }
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                        });
-
-                                                                                                                                                                                                    } else {
-
-                                                                                                                                                                                                        descripcionListView.setAdapter(customAdapter);
-
-                                                                                                                                                                                                        swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                                        terminarSppiner();
-
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                }
-                                                                                                                                                                                            });
-
-                                                                                                                                                                                        } else {
-
-                                                                                                                                                                                            swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                            terminarSppiner();
-
-                                                                                                                                                                                            Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                });
-
-
-                                                                                                                                                                            } else {
-
-                                                                                                                                                                                swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                                terminarSppiner();
-
-                                                                                                                                                                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    });
-
-                                                                                                                                                                } else {
-
-                                                                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                                    terminarSppiner();
-
-                                                                                                                                                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        });
-
-                                                                                                                                                    } else {
-
-                                                                                                                                                        swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                                        terminarSppiner();
-
-                                                                                                                                                        Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            });
-
-                                                                                                                                        } else {
-
-                                                                                                                                            swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                            terminarSppiner();
-
-                                                                                                                                            Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                });
-
-                                                                                                                            } else {
-
-                                                                                                                                swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                                terminarSppiner();
-
-                                                                                                                                Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    });
-
-                                                                                                                } else {
-
-                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                    terminarSppiner();
-
-                                                                                                                    Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-
-                                                                                                                }
-                                                                                                            }
-                                                                                                        });
-
-                                                                                                    } else {
-
-                                                                                                        swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                        terminarSppiner();
-
-                                                                                                        Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                                    }
-                                                                                                }
-                                                                                            });
-
-                                                                                        } else {
-
-                                                                                            swipeRefreshLayout.setRefreshing(false);
-
-                                                                                            terminarSppiner();
-
-                                                                                            Toast.makeText(DescripcionComercioActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
-
-                                                                                        }
-                                                                                    }
-                                                                                });
+                                                                                cardarDatos2();
 
                                                                             } else {
 
@@ -1399,7 +1674,23 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                 Intent intent;
 
-                if (i == 5){
+                if (i == 3){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
+
+                    Intent intent1 = new Intent(getApplicationContext(), DetallePedidoActivity.class);
+                    intent1.putExtra("comercioId", comercioId);
+                    intent1.putExtra("tiempoString", tiempoString);
+                    intent1.putExtra("numDePedido", numDePedido);
+                    startActivity(intent1);
+
+                }
+
+                if (i == 6){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
 
                     intent = new Intent(getApplicationContext(), PreguntaCaritasActivity.class);
                     intent.putExtra("comercioId", comercioId);
@@ -1417,41 +1708,218 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                 }
 
-                if (i == 11){
-
-                    intent = new Intent(getApplicationContext(), VerMenuActivity.class);
-                    intent.putExtra("comercioId", comercioId);
-                    startActivity(intent);
-
-                }
-
                 if (i == 12){
 
-                    String phoneNumberWithCountryCode = "521" + numeroWhats;
-                    String message = "";
+                    //IMPORTANTE Quitar cuando ya este el nuevo menu
+                    /*intent = new Intent(getApplicationContext(), VerMenuActivity.class);
+                    intent.putExtra("comercioId", comercioId);
+                    startActivity(intent);*/
 
-                    startActivity(
-                            new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse(
-                                            String.format("https://api.whatsapp.com/send?phone=%s&text=%s", phoneNumberWithCountryCode, message)
-                                    )
-                            )
-                    );
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
 
+                    Integer valueOf;
+                    Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+                    String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+                    String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+                    String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+                    String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
+                    Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
+                    Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
+
+                    if (valueOf7.intValue() == 0) {
+                        valueOf = Integer.valueOf(valueOf8.intValue() - 11);
+                    } else {
+                        valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
+                    }
+                    try {
+                        fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
+                    } catch (java.text.ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    iniciarSppiner();
+
+                    ParseObject object = new ParseObject("RegistroActividad");
+                    object.put("comercioId", comercioId);
+                    object.put("nombreComercio", nombreComercio);
+                    object.put("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                    object.put("nombreUsuario", nombreCliente + " " + apellidoCliente);
+                    object.put("fechaCreacion", fecha);
+                    object.put("actividad", "Menu");
+                    object.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+
+                            if (e == null){
+
+                                terminarSppiner();
+
+                                if (tieneNuevoMenu){
+
+                                    Log.i("Prueba", distanciaComGuardar);
+                                    Intent intent = new Intent(getApplicationContext(), VerNewMenuActivity.class);
+                                    intent.putExtra("comercioId", comercioId);
+                                    intent.putExtra("nombreComercio", nombreComercio);
+                                    intent.putExtra("nombreComCliente", nombreCliente + " " + apellidoCliente);
+                                    intent.putExtra("envioDisponible", envioDisponible);
+                                    intent.putExtra("numeroWhats", numeroWhats);
+                                    intent.putExtra("nombreUsuario", nombreCliente);
+                                    intent.putExtra("esVecino", esVecinoGuardar);
+                                    intent.putExtra("distanciaComGuardar", distanciaComGuardar);
+                                    intent.putExtra("usuarioVisible", usuarioActivo);
+                                    startActivity(intent);
+
+                                } else {
+
+                                    startActivity(
+                                            new Intent(Intent.ACTION_VIEW,
+                                                    Uri.parse(
+                                                            urlServidor
+                                                    )
+                                            )
+                                    );
+                                }
+
+                            } else {
+
+                                terminarSppiner();
+
+                                Toast.makeText(DescripcionComercioActivity.this, "Tuvimos un error - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
 
                 if (i == 13){
 
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
+
+                    Integer valueOf;
+                    Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+                    String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+                    String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+                    String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+                    String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
+                    Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
+                    Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
+
+                    if (valueOf7.intValue() == 0) {
+                        valueOf = Integer.valueOf(valueOf8.intValue() - 11);
+                    } else {
+                        valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
+                    }
+                    try {
+                        fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
+                    } catch (java.text.ParseException e) {
+                        e.printStackTrace();
+                    }
+
                     iniciarSppiner();
 
-                    Intent callintent = new Intent(Intent.ACTION_DIAL);
-                    callintent.setData(Uri.parse("tel:" + numeroLlamada));
-                    terminarSppiner();
-                    startActivity(callintent);
+                    ParseObject object = new ParseObject("RegistroActividad");
+                    object.put("comercioId", comercioId);
+                    object.put("nombreComercio", nombreComercio);
+                    object.put("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                    object.put("nombreUsuario", nombreCliente + " " + apellidoCliente);
+                    object.put("fechaCreacion", fecha);
+                    object.put("actividad", "Whats");
+                    object.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
 
+                            if (e == null){
+
+                                terminarSppiner();
+
+                                String phoneNumberWithCountryCode = "521" + numeroWhats;
+                                String message = "";
+
+                                startActivity(
+                                        new Intent(Intent.ACTION_VIEW,
+                                                Uri.parse(
+                                                        String.format("https://api.whatsapp.com/send?phone=%s&text=%s", phoneNumberWithCountryCode, message)
+                                                )
+                                        )
+                                );
+
+                            } else {
+
+                                terminarSppiner();
+
+                                Toast.makeText(DescripcionComercioActivity.this, "Tuvimos un error - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
 
                 if (i == 14){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
+
+                    Integer valueOf;
+                    Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+                    String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+                    String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+                    String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+                    String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
+                    Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
+                    Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
+
+                    if (valueOf7.intValue() == 0) {
+                        valueOf = Integer.valueOf(valueOf8.intValue() - 11);
+                    } else {
+                        valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
+                    }
+                    try {
+                        fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
+                    } catch (java.text.ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    iniciarSppiner();
+
+                    ParseObject object = new ParseObject("RegistroActividad");
+                    object.put("comercioId", comercioId);
+                    object.put("nombreComercio", nombreComercio);
+                    object.put("usuarioId", ParseUser.getCurrentUser().getObjectId());
+                    object.put("nombreUsuario", nombreCliente + " " + apellidoCliente);
+                    object.put("fechaCreacion", fecha);
+                    object.put("actividad", "Llamada");
+                    object.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+
+                            if (e == null){
+
+                                Intent callintent = new Intent(Intent.ACTION_DIAL);
+                                callintent.setData(Uri.parse("tel:" + numeroLlamada));
+                                terminarSppiner();
+                                startActivity(callintent);
+
+                            } else {
+
+                                terminarSppiner();
+
+                                Toast.makeText(DescripcionComercioActivity.this, "Tuvimos un error - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+                }
+
+                if (i == 15){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
 
                     intent = new Intent(getApplicationContext(), TiendaActivity.class);
                     intent.putExtra("comercioId", comercioId);
@@ -1459,7 +1927,10 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                 }
 
-                if (i == 15){
+                if (i == 16){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
 
                     intent = new Intent(getApplicationContext(), MisComprasActivity.class);
                     intent.putExtra("comercioId", comercioId);
@@ -1467,7 +1938,21 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                 }
 
-                if (i == 16){
+                if (i == 17){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
+
+                    Intent intent1 = new Intent(getApplicationContext(), VerPedidosActivity.class);
+                    intent1.putExtra("comercioId", comercioId);
+                    startActivity(intent1);
+
+                }
+
+                if (i == 18){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
 
                     intent = new Intent(getApplicationContext(), HistorialPuntosActivity.class);
                     intent.putExtra("comercioId", comercioId);
@@ -1507,7 +1992,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
         @Override
         public int getViewTypeCount() {
-            return 11;
+            return 12;
 
         }
 
@@ -1583,6 +2068,38 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             if (position == 3){
 
+                //Pedido pendiente
+
+                if (usarQR){
+
+                    if (usuarioActivoQR){
+
+                        if (etapa == 0){
+
+                            return 3;
+
+                        }
+
+                        return 11;
+
+                    }
+
+                    return 3;
+
+                }
+
+                if (etapa == 0){
+
+                    return 3;
+
+                }
+
+                return 11;
+
+            }
+
+            if (position == 4){
+
                 //Promociones Pando
 
                 if (usarQR){
@@ -1625,7 +2142,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 4){
+            if (position == 5){
 
                 //Programa de Lealtad
 
@@ -1644,7 +2161,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 5){
+            if (position == 6){
 
                 //Encuesta pendiente
 
@@ -1676,7 +2193,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 6){
+            if (position == 7){
 
                 //Puntos recien enviados 1
 
@@ -1714,7 +2231,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 7){
+            if (position == 8){
 
                 //Puntos recien enviados 2
 
@@ -1750,7 +2267,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                 return 3;
             }
 
-            if (position == 8){
+            if (position == 9){
 
                 //Puntos recien enviados 3
 
@@ -1787,7 +2304,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 9){
+            if (position == 10){
 
                 //Puntos recien enviados 4
 
@@ -1824,7 +2341,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 10){
+            if (position == 11){
 
                 //Puntos recien enviados 5
 
@@ -1862,7 +2379,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 11){
+            if (position == 12){
 
                 //Ver Menú
 
@@ -1870,13 +2387,13 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     if (usuarioActivoQR){
 
-                        if (tieneMenu) {
+                        if (urlServidor.matches("") && !tieneNuevoMenu) {
 
-                            return 1;
+                            return 3;
 
                         }
 
-                        return 3;
+                        return 1;
 
                     }
 
@@ -1884,17 +2401,17 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                 }
 
-                if (tieneMenu) {
+                if (urlServidor.matches("") && !tieneNuevoMenu) {
 
-                    return 1;
+                    return 3;
 
                 }
 
-                return 3;
+                return 1;
 
             }
 
-            if (position == 12){
+            if (position == 13){
 
                 //Enviar Whats
 
@@ -1927,7 +2444,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 13){
+            if (position == 14){
 
                 //Llamar
 
@@ -1959,7 +2476,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 14){
+            if (position == 15){
 
                 //Comprar cupones
 
@@ -1991,7 +2508,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 15){
+            if (position == 16){
 
                 //Cupones usuario
 
@@ -2022,7 +2539,39 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 16){
+            if (position == 17){
+
+                //Historial pedidos
+
+                if (usarQR){
+
+                    if (usuarioActivoQR){
+
+                        if (tieneHistPedidos){
+
+                            return 1;
+
+                        }
+
+                        return 3;
+
+                    }
+
+                    return 3;
+
+                }
+
+                if (tieneHistPedidos){
+
+                    return 1;
+
+                }
+
+                return 3;
+
+            }
+
+            if (position == 18){
 
                 //Historial de puntos
 
@@ -2054,7 +2603,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 17){
+            if (position == 19){
 
                 //Info general
 
@@ -2074,7 +2623,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
             }
 
-            if (position == 18){
+            if (position == 20){
 
                 //Descripcion comercio
 
@@ -2099,7 +2648,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
         @Override
         public int getCount() {
-            return 19;
+            return 21;
         }
 
         @Override
@@ -2213,7 +2762,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     //Opciones: Ver menú - Enviar whats - Llamar - Comprar cupones
 
-                    int pos = i - 11;
+                    int pos = i - 12;
 
                     view = mInflater.inflate(R.layout.una_opcion_con_imagen, null);
 
@@ -2246,6 +2795,9 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                         opcion2TextView.setTypeface(null, Typeface.ITALIC);
 
                     }
+
+                    return view;
+
                 } else if (itemViewType == 3){
 
                     //Celda vacia
@@ -2272,7 +2824,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     //Puntos recien enviados
 
-                    int pos = i - 6;
+                    int pos = i - 7;
 
                     view = mInflater.inflate(R.layout.historial_puntos_cell_1, null);
 
@@ -2440,8 +2992,6 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     TextView envioTextView = (TextView) view.findViewById(R.id.op4DescCell5TextView);
 
                     nombreComTextView.setText(nombreComercio);
-                    distKmTextView.setText(String.format("%1.2f", distanceKm) + " Km");
-                    distanciaComGuardar = distKmTextView.getText().toString();
 
                     if (tieneLogo) {
 
@@ -2453,32 +3003,52 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     }
 
-                    if (distanciaEnvio > 0){
+                    if (gps_enabled) {
 
-                        if (distanceKm > distanciaEnvio){
+                        distKmTextView.setText(String.format("%1.2f", distanceKm) + " Km");
 
-                            //No vecino
-                            esVecinoGuardar = false;
-                            vecinoTextView.setText("No vecin@");
-                            envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!\n☝️Envío gratis en distancia menor a " + String.valueOf(distanciaEnvio) + " Km");
+                        if (distanciaEnvio > 0) {
+
+                            if (distanceKm > distanciaEnvio) {
+
+                                //No vecino
+                                esVecinoGuardar = false;
+                                vecinoTextView.setText("No vecin@");
+                                envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!\n☝️Envío gratis en distancia menor a " + String.valueOf(distanciaEnvio) + " Km");
+
+                            } else {
+
+                                //Vecino
+                                esVecinoGuardar = true;
+                                vecinoTextView.setText("Vecin@");
+                                vecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
+                                envioTextView.setText("🛵 ¡Envío gratis!");
+
+                                //Verificar si se puede enviar a domicilio
+                                envioDisponible = true;
+
+                            }
 
                         } else {
 
-                            //Vecino
-                            esVecinoGuardar = true;
-                            vecinoTextView.setText("Vecin@");
-                            vecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
-                            envioTextView.setText("🛵 ¡Envío gratis!");
+                            esVecinoGuardar = false;
+                            vecinoTextView.setText("");
+                            envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!");
 
                         }
 
-                    } else  {
+                    } else {
 
+                        distKmTextView.setText("(GPS no disponible)");
+
+                        //NO gps enabled
                         esVecinoGuardar = false;
                         vecinoTextView.setText("");
                         envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!");
 
                     }
+
+                    distanciaComGuardar = distKmTextView.getText().toString();
 
                     return view;
 
@@ -2508,6 +3078,101 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                         descVecinoTextView.setTextColor(Color.BLACK);
 
                     }
+
+                } else if (itemViewType == 11){
+
+                    //Pedido pendiente
+
+                    view = mInflater.inflate(R.layout.validar_pedido_cell_1, null);
+
+                    TextView op1numPedidosTextView = (TextView) view.findViewById(R.id.op1ValidarPTextView);
+                    TextView op2fechaTextView = (TextView) view.findViewById(R.id.op2ValidarPTextView);
+                    TextView op3OpcionEntregaTextView = (TextView) view.findViewById(R.id.op3ValidarPTextView);
+                    TextView op4HoraTextView = (TextView) view.findViewById(R.id.op4ValidarPTextView);
+                    TextView op5TiempoTextView = (TextView) view.findViewById(R.id.op5ValidarPTextView);
+                    TextView op6AvanceTextView = (TextView) view.findViewById(R.id.op6ValidarPTextView);
+                    TextView op7EtapaTextView = (TextView) view.findViewById(R.id.op7ValidarPTextView);
+                    TextView op8TotalTextView = (TextView) view.findViewById(R.id.op8ValidarPTextView);
+                    TextView op9FlechaTextView = (TextView) view.findViewById(R.id.op9ValidarPTextView);
+                    ImageView op1ImageView = (ImageView) view.findViewById(R.id.op1ValidarPImageView);
+                    ProgressBar op1ProgressBar = (ProgressBar) view.findViewById(R.id.op1ValidarPProgressBar);
+
+                    op1numPedidosTextView.setText("");
+                    op2fechaTextView.setText(fechaPedido);
+                    op4HoraTextView.setText(horaRecoger);
+                    op5TiempoTextView.setText(tiempoString);
+                    op8TotalTextView.setText("$" + String.valueOf(totalFinal));
+
+                    if (opcionEntrega.matches("Domicilio")){
+
+                        op3OpcionEntregaTextView.setText("Pedido a domicilio");
+
+                        op1ProgressBar.setMax(4);
+                        op1ProgressBar.setProgress(etapa);
+
+                        op1ImageView.setImageResource(R.drawable.food_delivery);
+
+                        if (etapa == 1){
+
+                            op7EtapaTextView.setText("Pedido enviado");
+                            op6AvanceTextView.setText("1/4");
+
+
+                        } else if (etapa == 2){
+
+                            op7EtapaTextView.setText("En preparación");
+                            op6AvanceTextView.setText("2/4");
+
+                        } else if (etapa == 3){
+
+                            op7EtapaTextView.setText("En ruta");
+                            op6AvanceTextView.setText("3/4");
+
+                        } else if (etapa == 4){
+
+                            op7EtapaTextView.setText("Entregado");
+                            op6AvanceTextView.setText("4/4");
+
+                        }
+
+
+                    } else if (opcionEntrega.matches("Recoger") || opcionEntrega.matches("Restaurante")){
+
+                        op1ProgressBar.setMax(3);
+                        op1ProgressBar.setProgress(etapa);
+
+                        if (opcionEntrega.matches("Recoger")){
+
+                            op3OpcionEntregaTextView.setText("Recoger pedido");
+                            op1ImageView.setImageResource(R.drawable.take_away);
+
+                        } else {
+
+                            op3OpcionEntregaTextView.setText("Pedido en restaurante");
+                            op1ImageView.setImageResource(R.drawable.spoon);
+
+                        }
+
+                        if (etapa == 1){
+
+                            op7EtapaTextView.setText("Pedido enviado");
+                            op6AvanceTextView.setText("1/3");
+
+                        } else if (etapa == 2) {
+
+                            op7EtapaTextView.setText("En preparación");
+                            op6AvanceTextView.setText("2/3");
+
+                        } else if (etapa == 3){
+
+                            op7EtapaTextView.setText("Entregado");
+                            op6AvanceTextView.setText("3/3");
+
+                        }
+                    }
+
+                    return view;
+
                 }
 
             } else {
@@ -2606,7 +3271,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     //Opciones: Ver menú - Enviar whats - Llamar - Comprar cupones
 
-                    int pos = i - 11;
+                    int pos = i - 12;
 
                     view = mInflater.inflate(R.layout.una_opcion_con_imagen, null);
 
@@ -2639,6 +3304,9 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                         opcion2TextView.setTypeface(null, Typeface.ITALIC);
 
                     }
+
+                    return view;
+
                 } else if (itemViewType == 3){
 
                     //Celda vacia
@@ -2665,7 +3333,7 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     //Puntos recien enviados
 
-                    int pos = i - 6;
+                    int pos = i - 7;
 
                     view = mInflater.inflate(R.layout.historial_puntos_cell_1, null);
 
@@ -2833,8 +3501,6 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                     TextView envioTextView = (TextView) view.findViewById(R.id.op4DescCell5TextView);
 
                     nombreComTextView.setText(nombreComercio);
-                    distKmTextView.setText(String.format("%1.2f", distanceKm) + " Km");
-                    distanciaComGuardar = distKmTextView.getText().toString();
 
                     if (tieneLogo) {
 
@@ -2846,32 +3512,51 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
                     }
 
-                    if (distanciaEnvio > 0){
+                    if (gps_enabled) {
 
-                        if (distanceKm > distanciaEnvio){
+                        distKmTextView.setText(String.format("%1.2f", distanceKm) + " Km");
 
-                            //No vecino
-                            esVecinoGuardar = false;
-                            vecinoTextView.setText("No vecin@");
-                            envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!\n☝️Envío gratis en distancia menor a " + String.valueOf(distanciaEnvio) + "Km");
+                        if (distanciaEnvio > 0) {
+
+                            if (distanceKm > distanciaEnvio) {
+
+                                //No vecino
+                                esVecinoGuardar = false;
+                                vecinoTextView.setText("No vecin@");
+                                envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!\n☝️Envío gratis en distancia menor a " + String.valueOf(distanciaEnvio) + "Km");
+
+                            } else {
+
+                                //Vecino
+                                esVecinoGuardar = true;
+                                vecinoTextView.setText("Vecin@");
+                                vecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
+                                envioTextView.setText("🛵 ¡Envío gratis!");
+
+                                //Verificar si se puede enviar a domicilio
+                                envioDisponible = true;
+
+                            }
 
                         } else {
 
-                            //Vecino
-                            esVecinoGuardar = true;
-                            vecinoTextView.setText("Vecin@");
-                            vecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
-                            envioTextView.setText("🛵 ¡Envío gratis!");
+                            esVecinoGuardar = false;
+                            vecinoTextView.setText("");
+                            envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!");
 
                         }
 
-                    } else  {
+                    } else {
 
+                        distKmTextView.setText("(GPS no disponible)");
+
+                        //NO gps enabled
                         esVecinoGuardar = false;
                         vecinoTextView.setText("");
                         envioTextView.setText("📞Haz tu pedido, pasa por el y ¡Disfruta!");
-
                     }
+
+                    distanciaComGuardar = distKmTextView.getText().toString();
 
                     return view;
 
@@ -2901,6 +3586,103 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
                         descVecinoTextView.setTextColor(Color.BLACK);
 
                     }
+
+                    return view;
+
+                } else if (itemViewType == 11){
+
+                    //Pedido pendiente
+
+                    view = mInflater.inflate(R.layout.validar_pedido_cell_1, null);
+
+                    TextView op1numPedidosTextView = (TextView) view.findViewById(R.id.op1ValidarPTextView);
+                    TextView op2fechaTextView = (TextView) view.findViewById(R.id.op2ValidarPTextView);
+                    TextView op3OpcionEntregaTextView = (TextView) view.findViewById(R.id.op3ValidarPTextView);
+                    TextView op4HoraTextView = (TextView) view.findViewById(R.id.op4ValidarPTextView);
+                    TextView op5TiempoTextView = (TextView) view.findViewById(R.id.op5ValidarPTextView);
+                    TextView op6AvanceTextView = (TextView) view.findViewById(R.id.op6ValidarPTextView);
+                    TextView op7EtapaTextView = (TextView) view.findViewById(R.id.op7ValidarPTextView);
+                    TextView op8TotalTextView = (TextView) view.findViewById(R.id.op8ValidarPTextView);
+                    TextView op9FlechaTextView = (TextView) view.findViewById(R.id.op9ValidarPTextView);
+                    ImageView op1ImageView = (ImageView) view.findViewById(R.id.op1ValidarPImageView);
+                    ProgressBar op1ProgressBar = (ProgressBar) view.findViewById(R.id.op1ValidarPProgressBar);
+
+                    op1numPedidosTextView.setText("");
+                    op2fechaTextView.setText(fechaPedido);
+                    op4HoraTextView.setText(horaRecoger);
+                    op5TiempoTextView.setText(tiempoString);
+                    op8TotalTextView.setText("$" + String.valueOf(totalFinal));
+
+                    if (opcionEntrega.matches("Domicilio")){
+
+                        op3OpcionEntregaTextView.setText("Pedido a domicilio");
+
+                        op1ProgressBar.setMax(4);
+                        op1ProgressBar.setProgress(etapa);
+
+                        op1ImageView.setImageResource(R.drawable.food_delivery);
+
+                        if (etapa == 1){
+
+                            op7EtapaTextView.setText("Pedido enviado");
+                            op6AvanceTextView.setText("1/4");
+
+
+                        } else if (etapa == 2){
+
+                            op7EtapaTextView.setText("En preparación");
+                            op6AvanceTextView.setText("2/4");
+
+                        } else if (etapa == 3){
+
+                            op7EtapaTextView.setText("En ruta");
+                            op6AvanceTextView.setText("3/4");
+
+                        } else if (etapa == 4){
+
+                            op7EtapaTextView.setText("Entregado");
+                            op6AvanceTextView.setText("4/4");
+
+                        }
+
+
+                    } else if (opcionEntrega.matches("Recoger") || opcionEntrega.matches("Restaurante")){
+
+                        op1ProgressBar.setMax(3);
+                        op1ProgressBar.setProgress(etapa);
+
+                        if (opcionEntrega.matches("Recoger")){
+
+                            op3OpcionEntregaTextView.setText("Recoger pedido");
+                            op1ImageView.setImageResource(R.drawable.take_away);
+
+                        } else {
+
+                            op3OpcionEntregaTextView.setText("Pedido en restaurante");
+                            op1ImageView.setImageResource(R.drawable.spoon);
+
+                        }
+
+                        if (etapa == 1){
+
+                            op7EtapaTextView.setText("Pedido enviado");
+                            op6AvanceTextView.setText("1/3");
+
+                        } else if (etapa == 2) {
+
+                            op7EtapaTextView.setText("En preparación");
+                            op6AvanceTextView.setText("2/3");
+
+                        } else if (etapa == 3){
+
+                            op7EtapaTextView.setText("Entregado");
+                            op6AvanceTextView.setText("3/3");
+
+                        }
+                    }
+
+                    return view;
+
                 }
             }
 
@@ -2911,6 +3693,10 @@ public class DescripcionComercioActivity extends AppCompatActivity implements Sw
 
     @Override
     public boolean onSupportNavigateUp() {
+
+        //Detener timers
+        handler.removeCallbacks(timerRunnableSeg);
+
         finish();
         return true;
     }

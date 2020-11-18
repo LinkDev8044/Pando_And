@@ -3,7 +3,7 @@ package com.parse.starter.VistaComercio.EnviarEncuesta;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +24,14 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.starter.R;
 import com.parse.starter.VistaClientes.ValidarPuntos.ValidarPuntosActivity;
-import com.parse.starter.VistaComercio.ClientesActivos.ClientesActivosActivity;
 import com.parse.starter.VistaComercio.EnviarPuntos.EnviarPuntosActivity;
+import com.parse.starter.VistaComercio.ListaPedidos.ListaPedidosActivity;
 import com.parse.starter.VistaComercio.ProductosCliente.ProductosClienteActivity;
+import com.parse.starter.VistaComercio.ValidarPedido.ValidarPedidoActivity;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,6 +55,10 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
     String distanciaComSelec;
     String promoVecino;
     String promoNoVecino;
+    String opcionEntrega;
+    String horaRecoger;
+    String tiempoString;
+    String fechaPedido;
 
     Boolean ofreceVIP;
     Boolean ofrecePuntos;
@@ -75,18 +81,24 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
     int porcentajeNivel2;
     int porcentajeNivel3;
     int visitasCliente;
+    int etapa;
+    int numDePedido;
 
     Double porcentaje;
     Double puntosCliente;
+    Double segundosPedido;
+    Double totalFinal;
+
+    Handler handler =  new Handler();
 
     Calendar fechaInicioMes;
 
     Date fecha;
     Date fechaComparacionVisitas;
 
-    String[] TITULOS = {"Enviar puntos", "Canjear compras", "Canjear puntos"};
+    String[] TITULOS = {"Enviar puntos", "Historial pedidos", "Canjear compras", "Canjear puntos"};
 
-    int[] IMAGES = {R.drawable.enviar_puntos, R.drawable.nop, R.drawable.puntos_de_recompensa};
+    int[] IMAGES = {R.drawable.enviar_puntos, R.drawable.list, R.drawable.nop, R.drawable.puntos_de_recompensa};
 
     ListView enviarEncuestaListView;
 
@@ -95,6 +107,154 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
     CustomAdapter customAdapter;
 
     ProgressDialog progressDialog;
+
+    private void updateView(int index){
+        View v = enviarEncuestaListView.getChildAt(index -
+                enviarEncuestaListView.getFirstVisiblePosition());
+
+        if(v == null)
+            return;
+
+        TextView someText = (TextView) v.findViewById(R.id.op5ValidarPTextView);
+
+        someText.setText(tiempoString);
+
+    }
+
+    private void runTimer(){
+
+        segundosPedido += 1;
+
+        Integer flooredCounter = Integer.valueOf((int) Math.floor(segundosPedido));
+        Integer minute = (flooredCounter) / 60;
+        String minuteString = String.valueOf(minute);
+        if (minute < 10) {
+            minuteString = "0" + minute;
+        }
+
+        Integer second = (flooredCounter % 3600) % 60;
+        String secondString = String.valueOf(second);
+        if (second < 10) {
+            secondString = "0" + String.valueOf(second);
+        }
+
+        tiempoString = String.valueOf(minuteString) + ":" + String.valueOf(secondString);
+
+        updateView(1);
+
+    }
+
+    private Runnable timerRunnableSeg = new Runnable() {
+        @Override
+        public void run() {
+
+            runTimer();
+            handler.postDelayed(this, 1000);
+
+        }
+
+        //handler.postDelayed(r, 1000);
+
+    };
+
+    private void validarPedidoCliente(){
+
+        Integer valueOf;
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String valueOf2 = String.valueOf(calendar.get(Calendar.YEAR));
+        String valueOf3 = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String valueOf4 = String.valueOf(calendar.get(Calendar.DATE));
+        String valueOf5 = String.valueOf(calendar.get(Calendar.MINUTE));
+        String valueOf6 = String.valueOf(calendar.get(Calendar.SECOND));
+        Integer valueOf7 = Integer.valueOf(calendar.get(Calendar.AM_PM));
+        Integer valueOf8 = Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY) + 6);
+
+        if (valueOf7.intValue() == 0) {
+            valueOf = Integer.valueOf(valueOf8.intValue() - 11);
+        } else {
+            valueOf = Integer.valueOf(calendar.get(Calendar.HOUR) + 7);
+        }
+        try {
+            this.fecha = dateFormat.parse(valueOf4 + "/" + valueOf3 + "/" + valueOf2 + " " + valueOf + ":" + valueOf5 + ":" + valueOf6);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        opcionEntrega = "";
+        horaRecoger = "";
+        fechaPedido = "";
+        etapa = 0;
+        numDePedido = 0;
+        segundosPedido = 0.0;
+        totalFinal = 0.0;
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("PedidoConfirmado");
+        query.whereEqualTo("comercioId", comercioId);
+        query.whereEqualTo("usuarioId", usuarioId);
+        query.whereEqualTo("activo", true);
+        query.orderByDescending("fechaCreacion");
+        query.setLimit(1);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null) {
+
+                    if (objects.size() > 0) {
+
+                        for (ParseObject object : objects){
+
+                            opcionEntrega = object.getString("opcionEntrega");
+                            etapa = object.getInt("etapa");
+                            numDePedido = object.getInt("numDePedido");
+                            horaRecoger = object.getString("horaRecoger");
+
+                            //Datos para validar el tiempo desde que se hizo el pedido
+                            long diff = fecha.getTime() - object.getDate("fechaModificacion").getTime();
+                            long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(diff);
+                            segundosPedido = Double.valueOf(diffInSeconds);
+
+                            DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy");
+                            String convertedDate = dateFormat.format(object.getDate("fechaCreacion"));
+                            fechaPedido = convertedDate;
+
+                            totalFinal = object.getDouble("totalFinal");
+
+                            //Iniciar Timer
+                            handler.removeCallbacks(timerRunnableSeg);
+                            handler.postDelayed(timerRunnableSeg, 1000);
+
+                        }
+
+                        enviarEncuestaListView.setAdapter(customAdapter);
+
+                        swipeRefreshLayout.setRefreshing(false);
+
+                        terminarSppiner();
+
+                    } else {
+
+                        enviarEncuestaListView.setAdapter(customAdapter);
+
+                        swipeRefreshLayout.setRefreshing(false);
+
+                        terminarSppiner();
+
+                    }
+
+                } else {
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    terminarSppiner();
+
+                    Toast.makeText(EnviarEncuestaActivity.this, "Parece que tuvimos un problema - Intenta de nuevo", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+    }
 
     private void reloadData(){
 
@@ -126,6 +286,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
         fechaInicioMes = Calendar.getInstance();
         fechaInicioMes.set(Calendar.DATE, -30);
 
+        //Detener timer
         customAdapter = new CustomAdapter();
 
         puntosCliente = 0.0;
@@ -145,6 +306,8 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
         porcentajeNivel3 = 0;
         esVIP = false;
         visitasCliente = 0;
+
+        handler.removeCallbacks(timerRunnableSeg);
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("PuntosCliente");
         query.whereEqualTo("comercioId", comercioId);
@@ -360,11 +523,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                                                                                                                         }
                                                                                                                     }
 
-                                                                                                                    enviarEncuestaListView.setAdapter(customAdapter);
-
-                                                                                                                    swipeRefreshLayout.setRefreshing(false);
-
-                                                                                                                    terminarSppiner();
+                                                                                                                    validarPedidoCliente();
 
                                                                                                                 } else {
 
@@ -515,12 +674,42 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
         recompensaActiva = intent.getStringExtra("recompensaActiva");
         distanciaComSelec = intent.getStringExtra("distanciaComSelec");
         esVecinoSelec = intent.getBooleanExtra("esVecinoSelec", false);
+        tiempoString = intent.getStringExtra("tiempoString");
 
         enviarEncuestaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (position == 7){
+                if (position == 1){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
+
+                    Intent intent = new Intent(getApplicationContext(), ValidarPedidoActivity.class);
+                    intent.putExtra("nomUsuarioCom", usuario);
+                    intent.putExtra("comercioId", comercioId);
+                    intent.putExtra("numDePedido", numDePedido);
+                    intent.putExtra("usuarioId", usuarioId);
+                    intent.putExtra("tiempoString", tiempoString);
+                    intent.putExtra("porcentaje", porcentaje);
+                    intent.putExtra("ofrecePuntos", ofrecePuntos);
+                    intent.putExtra("nombreComercio", nombreComercio);
+                    intent.putExtra("nombreCompleto", nombreCompletoAdmin);
+                    intent.putExtra("usuario", usuario);
+                    intent.putExtra("correoCliente", correoCliente);
+                    intent.putExtra("encuestaEnviada", encuestaEnviada);
+                    intent.putExtra("encuestaActiva", encuestaActiva);
+                    intent.putExtra("encuestaActivaId", encuestaActivaId);
+                    intent.putExtra("recompensaActiva", recompensaActiva);
+                    intent.putExtra("numeroDePreguntas", numeroDePreguntas);
+                    startActivity(intent);
+
+                }
+
+                if (position == 8){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
 
                     Intent intent = new Intent(getApplicationContext(), EnviarPuntosActivity.class);
                     intent.putExtra("encuestaEnviada", encuestaEnviada);
@@ -539,7 +728,22 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 }
 
-                if (position == 8){
+                if (position == 9){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
+
+                    Intent intent = new Intent(getApplicationContext(), ListaPedidosActivity.class);
+                    intent.putExtra("usuarioId", usuarioId);
+                    intent.putExtra("comercioId", comercioId);
+                    startActivity(intent);
+
+                }
+
+                if (position == 10){
+
+                    //Detener timers
+                    handler.removeCallbacks(timerRunnableSeg);
 
                     Intent intent = new Intent(getApplicationContext(), ProductosClienteActivity.class);
                     intent.putExtra("usuario", usuario);
@@ -549,9 +753,12 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 }
 
-                if (position == 9){
+                if (position == 11){
 
                     if (puntosCliente > 0){
+
+                        //Detener timers
+                        handler.removeCallbacks(timerRunnableSeg);
 
                         Intent intent = new Intent(getApplicationContext(), ValidarPuntosActivity.class);
                         intent.putExtra("usuario", usuario);
@@ -591,26 +798,12 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
         @Override
         public int getViewTypeCount() {
 
-            return 5;
+            return 6;
 
         }
 
         @Override
         public int getItemViewType(int position) {
-
-            /*if (position == 0) {
-
-                return 0;
-
-            } else if (position >= 0 && position <= 3){
-
-                return 1;
-
-            } else {
-
-                return 2;
-
-            }*/
 
             if (position == 0) {
 
@@ -619,6 +812,18 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                 return 0;
 
             } else if (position == 1){
+
+                //Pedidos
+
+                if (etapa == 0){
+
+                    return 3;
+
+                }
+
+                return  5;
+
+            } else if (position == 2){
 
                 //Historial 1
 
@@ -630,7 +835,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 return 3;
 
-            } else if (position == 2){
+            } else if (position == 3){
 
                 //Historial 2
 
@@ -642,7 +847,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 return 3;
 
-            } else if (position == 3){
+            } else if (position == 4){
 
                 //Historial 3
 
@@ -654,7 +859,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 return 3;
 
-            } else if (position == 4){
+            } else if (position == 5){
 
                 //Historial 4
 
@@ -666,7 +871,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 return 3;
 
-            } else if (position == 5){
+            } else if (position == 6){
 
                 //Historial 5
 
@@ -678,7 +883,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 return 3;
 
-            } else if (position == 6){
+            } else if (position == 7){
 
                 //Promociones Pando
 
@@ -703,47 +908,12 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                 return 1;
 
             }
-
-            /*if (position == 0){
-
-                 return 0;
-
-            } else {
-
-                if (consumoEnviadoArray.size() > 0){
-
-                    if (position == 1){
-
-                        return 2;
-
-                    }
-
-                    if (position == 2){
-
-                        if (consumoEnviadoArray.size() > 1){
-
-
-                        } else {
-
-
-                        }
-
-                    }
-
-
-
-                } else {
-
-                    return 1;
-
-                }
-            }*/
         }
 
         @Override
         public int getCount() {
 
-            return 10;
+            return 12;
 
         }
 
@@ -900,7 +1070,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 } else if (itemViewType == 1){
 
-                    int pos = position - 7;
+                    int pos = position - 8;
 
                     convertView = mInflater.inflate(R.layout.una_opcion_con_imagen, null);
 
@@ -923,7 +1093,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 } else if (itemViewType == 2){
 
-                    int pos = position - 1;
+                    int pos = position - 2;
 
                     convertView = mInflater.inflate(R.layout.enviar_encuesta_cell_2, null);
 
@@ -976,9 +1146,102 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
                         titNoVecinoTextView.setTextColor(getResources().getColor(R.color.verde_Pando));
                         descNoVecinoTextView.setTextColor(Color.BLACK);
 
-
-
                     }
+
+                } else if (itemViewType == 5) {
+
+                    //Pedidos cliente
+
+                    convertView = mInflater.inflate(R.layout.validar_pedido_cell_1, null);
+
+                    TextView op1numPedidosTextView = (TextView) convertView.findViewById(R.id.op1ValidarPTextView);
+                    TextView op2fechaTextView = (TextView) convertView.findViewById(R.id.op2ValidarPTextView);
+                    TextView op3OpcionEntregaTextView = (TextView) convertView.findViewById(R.id.op3ValidarPTextView);
+                    TextView op4HoraTextView = (TextView) convertView.findViewById(R.id.op4ValidarPTextView);
+                    TextView op5TiempoTextView = (TextView) convertView.findViewById(R.id.op5ValidarPTextView);
+                    TextView op6AvanceTextView = (TextView) convertView.findViewById(R.id.op6ValidarPTextView);
+                    TextView op7EtapaTextView = (TextView) convertView.findViewById(R.id.op7ValidarPTextView);
+                    TextView op8TotalTextView = (TextView) convertView.findViewById(R.id.op8ValidarPTextView);
+                    TextView op9FlechaTextView = (TextView) convertView.findViewById(R.id.op9ValidarPTextView);
+                    ImageView op1ImageView = (ImageView) convertView.findViewById(R.id.op1ValidarPImageView);
+                    ProgressBar op1ProgressBar = (ProgressBar) convertView.findViewById(R.id.op1ValidarPProgressBar);
+
+                    op1numPedidosTextView.setText("");
+                    op2fechaTextView.setText(fechaPedido);
+                    op4HoraTextView.setText(horaRecoger);
+                    op5TiempoTextView.setText(tiempoString);
+                    op8TotalTextView.setText("$" + String.valueOf(totalFinal));
+
+                    if (opcionEntrega.matches("Domicilio")){
+
+                        op3OpcionEntregaTextView.setText("Pedido a domicilio");
+
+                        op1ProgressBar.setMax(4);
+                        op1ProgressBar.setProgress(etapa);
+
+                        op1ImageView.setImageResource(R.drawable.food_delivery);
+
+                        if (etapa == 1){
+
+                            op7EtapaTextView.setText("Pedido enviado");
+                            op6AvanceTextView.setText("1/4");
+
+
+                        } else if (etapa == 2){
+
+                            op7EtapaTextView.setText("En preparación");
+                            op6AvanceTextView.setText("2/4");
+
+                        } else if (etapa == 3){
+
+                            op7EtapaTextView.setText("En ruta");
+                            op6AvanceTextView.setText("3/4");
+
+                        } else if (etapa == 4){
+
+                            op7EtapaTextView.setText("Entregado");
+                            op6AvanceTextView.setText("4/4");
+
+                        }
+
+
+                    } else if (opcionEntrega.matches("Recoger") || opcionEntrega.matches("Restaurante")){
+
+                        op1ProgressBar.setMax(3);
+                        op1ProgressBar.setProgress(etapa);
+
+                        if (opcionEntrega.matches("Recoger")){
+
+                            op3OpcionEntregaTextView.setText("Recoger pedido");
+                            op1ImageView.setImageResource(R.drawable.take_away);
+
+                        } else {
+
+                            op3OpcionEntregaTextView.setText("Pedido en restaurante");
+                            op1ImageView.setImageResource(R.drawable.spoon);
+
+                        }
+
+                        if (etapa == 1){
+
+                            op7EtapaTextView.setText("Pedido enviado");
+                            op6AvanceTextView.setText("1/3");
+
+                        } else if (etapa == 2) {
+
+                            op7EtapaTextView.setText("En preparación");
+                            op6AvanceTextView.setText("2/3");
+
+                        } else if (etapa == 3){
+
+                            op7EtapaTextView.setText("Entregado");
+                            op6AvanceTextView.setText("3/3");
+
+                        }
+                    }
+
+                    return convertView;
+
                 }
 
             } else {
@@ -1118,7 +1381,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 } else if (itemViewType == 1){
 
-                    int pos = position - 7;
+                    int pos = position - 8;
 
                     convertView = mInflater.inflate(R.layout.una_opcion_con_imagen, null);
 
@@ -1141,7 +1404,7 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
                 } else if (itemViewType == 2){
 
-                    int pos = position - 1;
+                    int pos = position - 2;
 
                     convertView = mInflater.inflate(R.layout.enviar_encuesta_cell_2, null);
 
@@ -1197,6 +1460,103 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
 
                     }
+
+                } else if (itemViewType == 5) {
+
+                    //Pedidos cliente
+
+                    convertView = mInflater.inflate(R.layout.validar_pedido_cell_1, null);
+
+                    TextView op1numPedidosTextView = (TextView) convertView.findViewById(R.id.op1ValidarPTextView);
+                    TextView op2fechaTextView = (TextView) convertView.findViewById(R.id.op2ValidarPTextView);
+                    TextView op3OpcionEntregaTextView = (TextView) convertView.findViewById(R.id.op3ValidarPTextView);
+                    TextView op4HoraTextView = (TextView) convertView.findViewById(R.id.op4ValidarPTextView);
+                    TextView op5TiempoTextView = (TextView) convertView.findViewById(R.id.op5ValidarPTextView);
+                    TextView op6AvanceTextView = (TextView) convertView.findViewById(R.id.op6ValidarPTextView);
+                    TextView op7EtapaTextView = (TextView) convertView.findViewById(R.id.op7ValidarPTextView);
+                    TextView op8TotalTextView = (TextView) convertView.findViewById(R.id.op8ValidarPTextView);
+                    TextView op9FlechaTextView = (TextView) convertView.findViewById(R.id.op9ValidarPTextView);
+                    ImageView op1ImageView = (ImageView) convertView.findViewById(R.id.op1ValidarPImageView);
+                    ProgressBar op1ProgressBar = (ProgressBar) convertView.findViewById(R.id.op1ValidarPProgressBar);
+
+                    op1numPedidosTextView.setText("");
+                    op2fechaTextView.setText(fechaPedido);
+                    op4HoraTextView.setText(horaRecoger);
+                    op5TiempoTextView.setText(tiempoString);
+                    op8TotalTextView.setText("$" + String.valueOf(totalFinal));
+
+                    Log.i("Prueba", opcionEntrega);
+
+                    if (opcionEntrega.matches("Domicilio")){
+
+                        op3OpcionEntregaTextView.setText("Pedido a domicilio");
+
+                        op1ProgressBar.setMax(4);
+                        op1ProgressBar.setProgress(etapa);
+
+                        op1ImageView.setImageResource(R.drawable.food_delivery);
+
+                        if (etapa == 1){
+
+                            op7EtapaTextView.setText("Pedido enviado");
+                            op6AvanceTextView.setText("1/4");
+
+
+                        } else if (etapa == 2){
+
+                            op7EtapaTextView.setText("En preparación");
+                            op6AvanceTextView.setText("2/4");
+
+                        } else if (etapa == 3){
+
+                            op7EtapaTextView.setText("En ruta");
+                            op6AvanceTextView.setText("3/4");
+
+                        } else if (etapa == 4){
+
+                            op7EtapaTextView.setText("Entregado");
+                            op6AvanceTextView.setText("4/4");
+
+                        }
+
+
+                    } else if (opcionEntrega.matches("Recoger") || opcionEntrega.matches("Restaurante")){
+
+                        op1ProgressBar.setMax(3);
+                        op1ProgressBar.setProgress(etapa);
+
+                        if (opcionEntrega.matches("Recoger")){
+
+                            op3OpcionEntregaTextView.setText("Recoger pedido");
+                            op1ImageView.setImageResource(R.drawable.take_away);
+
+                        } else {
+
+                            op3OpcionEntregaTextView.setText("Pedido en restaurante");
+                            op1ImageView.setImageResource(R.drawable.spoon);
+
+                        }
+
+                        if (etapa == 1){
+
+                            op7EtapaTextView.setText("Pedido enviado");
+                            op6AvanceTextView.setText("1/3");
+
+                        } else if (etapa == 2) {
+
+                            op7EtapaTextView.setText("En preparación");
+                            op6AvanceTextView.setText("2/3");
+
+                        } else if (etapa == 3){
+
+                            op7EtapaTextView.setText("Entregado");
+                            op6AvanceTextView.setText("3/3");
+
+                        }
+                    }
+
+                    return convertView;
+
                 }
             }
 
@@ -1207,12 +1567,19 @@ public class EnviarEncuestaActivity extends AppCompatActivity implements SwipeRe
 
     @Override
     public boolean onSupportNavigateUp() {
+
+        //Detener timers
+        handler.removeCallbacks(timerRunnableSeg);
+
         finish();
         return true;
     }
 
     @Override
     public void onRefresh() {
+
+        //Detener timers
+        handler.removeCallbacks(timerRunnableSeg);
 
         reloadData();
 

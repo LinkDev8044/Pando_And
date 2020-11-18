@@ -1,5 +1,6 @@
 package com.parse.starter.registro_Usuario;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -223,6 +224,7 @@ public void datePicker(View view){
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             Calendar.getInstance();
+
             return new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener)getActivity() , 2000, 7, 1);
 
         }

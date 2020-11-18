@@ -8,7 +8,7 @@
     android:layout_margin="0dp">
 
     <TextView
-        android:id="@+id/op2ValidarTextView"
+        android:id="@+id/op2ValidarPTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/op3ValidarTextView"
+        android:id="@+id/op3ValidarPTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -44,10 +44,10 @@
         android:textColor="@color/gris_oscuro_pando"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/op2ValidarTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/op2ValidarPTextView" />
 
     <TextView
-        android:id="@+id/op5ValidarTextView"
+        android:id="@+id/op5ValidarPTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -57,10 +57,10 @@
         android:textColor="@color/gris_oscuro_pando"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/op3ValidarTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/op3ValidarPTextView" />
 
     <TextView
-        android:id="@+id/op6ValidarTextView"
+        android:id="@+id/op6ValidarPTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -90,10 +90,10 @@
         android:numeric="integer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/op6ValidarTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/op6ValidarPTextView" />
 
     <TextView
-        android:id="@+id/op7ValidarTextView"
+        android:id="@+id/op7ValidarPTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -123,5 +123,5 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/op7ValidarTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/op7ValidarPTextView" />
 </android.support.constraint.ConstraintLayout>

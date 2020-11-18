@@ -137,8 +137,55 @@
         <activity
             android:name=".VistaClientes.ValidarPuntos.ValidarPuntosActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VistaClientes.VerMenu.VerMenuActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".VistaClientes.VerMenu.VerMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.ValidarPedido.ValidarPedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.ValidarPedido.DomicilioCliente.DomicilioClienteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaComercio.ListaPedidos.ListaPedidosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.VerNewMenu.VerNewMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.Platillos.PlatillosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.DetallePlatillo.DetallePlatilloActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.CarritoPedidos.CarritoPedidosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.OpcionesEntrega.OpcionesEntregaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.OpcionesEntrega.DetalleDomicilio.DomicilioGeneralActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.OpcionesEntrega.DetalleDomicilio.DetalleDomicilioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.OpcionesEntrega.RecogerPedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.OpcionesEntrega.NumeroContacto.NumeroContactoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.CarritoPedidos.ConfirmacionPedido.ConfirmacionPedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.DetallePedido.DetallePedidoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VistaClientes.VerPedidos.VerPedidosActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".VistaClientes.CarritoPedidos.EliminarPedido.EliminarPedidoActivity"></activity>
     </application>
 
 </manifest>

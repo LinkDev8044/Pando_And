@@ -8,8 +8,8 @@ android {
         applicationId "com.parse.pandoapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName "1.3.6"
+        versionCode 19
+        versionName "1.4.1"
     }
     buildTypes {
         release {

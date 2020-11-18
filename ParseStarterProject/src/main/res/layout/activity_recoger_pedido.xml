@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.parse.starter.VistaClientes.OpcionesEntrega.RecogerPedidoActivity">
+
+    <TextView
+        android:id="@+id/textView85"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="¿A qué hora pasarías por tu pedido?"
+        android:textColor="@color/gris_oscuro_pando"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/op1RecogerPSpinner"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/textView85"
+        app:layout_constraintTop_toBottomOf="@+id/textView85" />
+
+    <Spinner
+        android:id="@+id/op2RecogerPSpinner"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView85"
+        app:layout_constraintTop_toBottomOf="@+id/textView85" />
+
+    <TextView
+        android:id="@+id/textView87"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Horas"
+        android:textColor="@color/gris_oscuro_pando"
+        app:layout_constraintEnd_toEndOf="@+id/op1RecogerPSpinner"
+        app:layout_constraintStart_toStartOf="@+id/op1RecogerPSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/op1RecogerPSpinner" />
+
+    <TextView
+        android:id="@+id/textView90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Minutos"
+        android:textColor="@color/gris_oscuro_pando"
+        app:layout_constraintEnd_toEndOf="@+id/op2RecogerPSpinner"
+        app:layout_constraintStart_toStartOf="@+id/op2RecogerPSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/op2RecogerPSpinner" />
+
+    <TextView
+        android:id="@+id/op1RecogerPTextView"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:onClick="guardar"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

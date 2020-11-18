@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,7 +29,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.starter.ChatEditText.ChatEditText;
 import com.parse.starter.R;
-import com.parse.starter.VistaComercio.EnviarPuntos.EnviarPuntosActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -298,12 +296,12 @@ public class ValidarPuntosActivity extends AppCompatActivity implements View.OnK
         constraintSet2.clone(this, R.layout.detalle_canjear_puntos);
 
         validarEditText = (ChatEditText) findViewById(R.id.op1ValidarEditText);
-        op1ImageView = (ImageView) findViewById(R.id.op1ValidarImageView);
-        op1TextView = (TextView) findViewById(R.id.op1ValidarTextView);
-        op3TextView = (TextView) findViewById(R.id.op3ValidarTextView);
-        op5TextView = (TextView) findViewById(R.id.op5ValidarTextView);
-        op6TextView = (TextView) findViewById(R.id.op6ValidarTextView);
-        op7TextView = (TextView) findViewById(R.id.op7ValidarTextView);
+        op1ImageView = (ImageView) findViewById(R.id.op1ValidarPImageView);
+        op1TextView = (TextView) findViewById(R.id.op1ValidarPTextView);
+        op3TextView = (TextView) findViewById(R.id.op3ValidarPTextView);
+        op5TextView = (TextView) findViewById(R.id.op5ValidarPTextView);
+        op6TextView = (TextView) findViewById(R.id.op6ValidarPTextView);
+        op7TextView = (TextView) findViewById(R.id.op7ValidarPTextView);
         op8TextView = (TextView) findViewById(R.id.op8ValidarTextView);
         op9TextView = (TextView) findViewById(R.id.op9ValidarTextView);
         op10TextView = (TextView) findViewById(R.id.op10ValidarTextView);

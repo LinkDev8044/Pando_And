@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.parse.starter.VistaClientes.DetallePlatillo.DetallePlatilloActivity">
+
+    <TextView
+        android:id="@+id/op1DetallePTextView"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:onClick="agregarPlatillo"
+        android:paddingLeft="100dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/op2DetallePTextView"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/op2DetallePTextView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:onClick="agregarPlatillo"
+        android:text="$0.00"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ListView
+        android:id="@+id/detallePedidoListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView76"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView64"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gradient_gray_1"
+        app:layout_constraintBottom_toTopOf="@+id/op1DetallePTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView73"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gradient_gray_2"
+        app:layout_constraintBottom_toTopOf="@+id/textView64"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView74"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gradient_gray_3"
+        app:layout_constraintBottom_toTopOf="@+id/textView73"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView75"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gradient_gray_4"
+        app:layout_constraintBottom_toTopOf="@+id/textView74"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView76"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gradient_gray_5"
+        app:layout_constraintBottom_toTopOf="@+id/textView75"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>
